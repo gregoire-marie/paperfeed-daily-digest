@@ -1,0 +1,10 @@
+positive_seeds:
+  - doi: "10.2514/6.2025-98101"
+  - doi: "10.13009/EUCASS2025-284"
+
+negative_seeds: []
+
+preferences:
+  top_k: 5
+  max_candidates_per_seed: 20
+  min_publication_year: 2023
