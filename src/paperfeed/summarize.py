@@ -114,7 +114,7 @@ class DeterministicSummarizer:
         if matched_seed_titles:
             relevance = (
                 f"The strongest title overlap is with {format_title_list(matched_seed_titles)}. "
-                "Review whether the shared problem setting or method matches your current work."
+                "The shared problem setting or method needs to be assessed against my current research."
             )
         else:
             relevance = (
@@ -149,6 +149,8 @@ class LlamaCppSummarizer:
                         "You write concise technical summaries for a weekly research digest. "
                         "Use only the provided title, metadata, abstract, and seed matches. "
                         "Do not claim to have read the full paper. "
+                        "Write in the site owner's voice, using first person for research relevance "
+                        "and never addressing the reader in the second person. "
                         "Return a JSON object and nothing else."
                     ),
                 },

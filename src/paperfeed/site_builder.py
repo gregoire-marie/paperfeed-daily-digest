@@ -220,13 +220,13 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
 
     return _page_shell(
         title="PaperFeed",
-        description="A minimal weekly research digest built from your seed papers.",
+        description="A weekly selection of papers connected to my research, with concise summaries and links to the originals.",
         body=f"""
         <header class="hero">
           <p class="eyebrow">PaperFeed</p>
           <h1>Weekly paper digest</h1>
           <p class="lede">
-            A small, static reading surface for high-signal papers related to your research.
+            A weekly selection of papers connected to my research, with concise summaries and links to the originals.
           </p>
         </header>
         <main class="stack">
