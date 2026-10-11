@@ -46,8 +46,10 @@ repository pages remain available and unchanged.
 - `reports/YYYY-MM-DD.html` is the canonical formatted transcription.
 - `reports/YYYY-MM-DD.txt` is the spatial text extraction from the corresponding
   PDF region, including mathematical glyphs missed by simpler extraction tools.
-- `reports/2026-10-11-repo.html` preserves all five original repository cards
-  byte-for-byte. The manifest records its checksum.
+- `reports/2026-10-11-repo.html` retains the five original repository papers and
+  their summaries. On October 11, 2026, their visible Basis fields were replaced
+  with collapsed Abstract sections containing the complete abstracts retrieved
+  from the Semantic Scholar Graph API. The manifest records the updated checksum.
 - `manifest.json` records dates, source regions, text/HTML checksums, ranked
   titles, source URLs, and exact source-character accounting.
 - `site/assets/backfill/` contains only mathematical formula images, not PDFs or

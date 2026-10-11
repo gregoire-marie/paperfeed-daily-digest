@@ -129,7 +129,6 @@ def build_entry_card(entry: DigestEntry) -> str:
 
     summary = entry.summary
     sections = [
-        ("Basis", summary.basis),
         ("Why it matters", summary.why_it_matters),
         ("Main idea", summary.main_idea),
         ("Method", summary.method),
@@ -147,6 +146,10 @@ def build_entry_card(entry: DigestEntry) -> str:
       <p class="meta">{escape(meta)}</p>
       {matched_seed_line}
       <p class="link-row">{' '.join(links)}</p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>{escape(paper.abstract or 'No abstract available.')}</p>
+      </details>
       <dl class="summary-grid">
         {summary_html}
       </dl>
@@ -316,6 +319,19 @@ def _page_shell(*, title: str, description: str, body: str) -> str:
     .meta {{
       color: var(--muted);
       line-height: 1.5;
+    }}
+    .abstract {{
+      margin-bottom: 20px;
+    }}
+    .abstract summary {{
+      cursor: pointer;
+      font-weight: 700;
+    }}
+    .abstract p {{
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }}
     .summary-grid {{
       display: grid;
