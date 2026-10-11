@@ -73,9 +73,14 @@ For contribution rules and product boundaries, see [`AGENTS.md`](AGENTS.md).
   distinguish stated limitations from inferred concerns and flag insufficient
   evidence. Keep Main idea, Method, and Key results on the deterministic
   extraction path, with discovery and selection based on Semantic Scholar.
-- [ ] **Improve the digest site's visual design**: refine typography, spacing,
-  paper cards, and the archive layout for comfortable reading on iPhone, while
-  keeping the site static and lightweight.
+- [x] **Improve the digest site's visual design**: refine typography, spacing,
+  paper cards, and the archive layout for comfortable reading on desktop and mobile, while
+  keeping the site static and lightweight. Include a dark mode.
+
+The site now matches the portfolio's blue-gray palette, Space Grotesk headings,
+IBM Plex Sans body text, and IBM Plex Mono labels. Dark mode follows the device
+appearance. Fonts load from Google Fonts with system fallbacks; reading requires
+no JavaScript.
 
 The existing optional LLM backend generates all six summary sections; selective
 enrichment is still planned.
