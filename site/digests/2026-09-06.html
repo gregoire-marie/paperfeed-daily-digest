@@ -97,6 +97,19 @@
       color: var(--muted);
       line-height: 1.5;
     }
+    .abstract {
+      margin-bottom: 20px;
+    }
+    .abstract summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .abstract p {
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
     .summary-grid {
       display: grid;
       grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
@@ -133,36 +146,14 @@
       text-align: center;
       padding: 28px;
     }
-    .footnote {
-      color: var(--muted);
-      font-size: 0.94rem;
-      padding-bottom: 6px;
-    }
     code {
       font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
       background: rgba(32, 38, 31, 0.06);
       padding: 0.1rem 0.35rem;
       border-radius: 6px;
     }
-    .transcribed-report p, .transcribed-report li, .transcribed-report td, .transcribed-report th {
-      line-height: 1.6;
-    }
-    .transcribed-report p:first-child { margin-top: 0; }
-    .transcribed-report { overflow-wrap: anywhere; }
     .summary-grid dd { min-width: 0; }
     .summary-grid dt { min-width: 0; }
-    .transcribed-report .summary-grid dd > :first-child { margin-top: 0; }
-    .report-list { list-style: none; padding-left: 0; }
-    .report-list li { display: flex; gap: 0.65rem; margin: 0.35rem 0; }
-    .original-label { flex: 0 0 auto; min-width: 1rem; }
-    .report-list li > div { min-width: 0; }
-    .table-scroll, .math-display { overflow-x: auto; max-width: 100%; }
-    .table-scroll table { border-collapse: collapse; width: 100%; min-width: 36rem; }
-    .table-scroll td, .table-scroll th { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-    .math-inline { display: inline-block; vertical-align: middle; max-width: none; }
-    .math-wrapper { display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }
-    .math-display { text-align: center; margin: 0.75rem 0; }
-    .math-display-image { display: inline-block; max-width: none; }
     @media (max-width: 640px) {
       .hero {
         padding-top: 32px;
@@ -186,299 +177,85 @@
         <header class="hero">
           <p class="eyebrow">PaperFeed digest</p>
           <h1>September 06, 2026</h1>
-          <p class="lede">5 items included in the weekly report.</p>
+          <p class="lede">5 papers selected for the week.</p>
           <p><a class="back-link" href="../index.html">Back to index</a></p>
         </header>
         <main class="stack">
           
-<!-- preserved-transcription -->
-<article class="panel transcribed-report">
-<h2><strong>SSA / satellite-maneuver ML briefing — 31 August to 6 September</strong> <strong>2026</strong></h2>
-<p>I found <strong>five items worth carrying forward</strong>, but only one is directly about satellite-orbit anomaly detection. The strongest new contribution this week is actually methodological: <strong>anytime-valid false-alarm control</strong> <strong>for a detector operating continuously against a fixed nominal calibration set</strong>. That is unusually well aligned with how a maneuver detector should ultimately be evaluated.</p>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>1. </strong><em><strong>A Lightweight Satellite Orbit Anomaly Detection Method Based on Peak-AAE and</strong></em> <em><strong>Its Edge Deployment</strong></em></h2>
-<p><strong>Yang Guo, Xiaolong Yue, Boyang Wang, Bingchuan Li — September 2026 — peer-reviewed article,</strong> <em><strong>Aerospace</strong></em><strong> 13(9), 802.</strong></p>
-<p><a href="https://www.mdpi.com/2226-4310/13/9/802?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct article — Aerospace/MDPI</a></p>
-<dl class="summary-grid">
-<dt><strong>Technical contribution</strong></dt><dd>
-<p>This is the <strong>only directly orbital anomaly-detection paper in this briefing interval</strong>.</p>
-<p>The method takes historical <strong>semi-major-axis time series</strong> and trains an adversarial autoencoder to reconstruct nominal behavior. The anomaly signal is</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-001.png" alt="2raa=(−^).ttt   " style="width:8.0288em;height:1.7386em" loading="lazy"></div>
-<p>Instead of imposing a conventional manually chosen threshold on <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-002.png" alt="rt " style="width:1.1777em;height:1.5683em" loading="lazy"></span>, the authors feed the residual sequence to <strong>Automatic Multiscale Peak Detection (AMPD)</strong>. Their Peak-AAE is designed specifically to reduce the false-positive behavior of the underlying AAE. The network is then compressed and deployed on an edge platform for ground-based deployment testing. <a href="https://www.researchgate.net/journal/Aerospace-2226-4310?utm_source=chatgpt.com" target="_blank" rel="noreferrer">ResearchGate +1</a></p>
-</dd>
-<dt><strong>Data</strong></dt><dd>
-<p>They evaluate on two real navigation spacecraft:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div><strong>BEIDOU-3 G2</strong></div></li><li><span class="original-label" aria-hidden="true">•</span><div><strong>IRNSS-1A</strong></div></li></ul>
-<p>This makes it materially more relevant than the usual SWaT/SMD-style anomaly paper. <a href="https://www.researchgate.net/journal/Aerospace-2226-4310?utm_source=chatgpt.com" target="_blank" rel="noreferrer">ResearchGate</a></p>
-</dd>
-<dt><strong>Evaluation</strong></dt><dd>
-<p>The accessible publication metadata reports:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-003.png" alt="Precision=90.00%,min Recall=84.74%.min " style="width:12.2387em;height:5.0487em" loading="lazy"></div>
-<p>The authors claim improved false-positive behavior relative to the ordinary AAE and provide ground simulation of the compressed model on edge hardware. <a href="https://www.researchgate.net/journal/Aerospace-2226-4310?utm_source=chatgpt.com" target="_blank" rel="noreferrer">ResearchGate</a></p>
-<p>This is useful evidence, but the evaluation is still substantially weaker than what you need for maneuver detection.</p>
-<p>In particular, the headline precision/recall numbers do <strong>not</strong> tell us:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-004.png" alt="PvFAARLtt(Δ),/object-day,,−.Dm0alarm    " style="width:30.0571em;height:1.6141em" loading="lazy"></div>
-</dd>
-<dt><strong>Detection latency</strong></dt><dd>
-<p>I found <strong>no reported maneuver-onset detection-delay distribution</strong> in the accessible material. The edge deployment addresses <strong>computational latency</strong>, not necessarily statistical detection delay.</p>
-<p>That distinction remains critical:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-005.png" alt="ttt=−.computedetectmaneuver   " style="width:14.1821em;height:1.6141em" loading="lazy"></div>
-</dd>
-<dt><strong>Uncertainty/calibration</strong></dt><dd>
-<p>There is no meaningful probabilistic UQ reported in the accessible description:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>no predictive intervals;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>no conformal calibration;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>no calibrated anomaly probability;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>no explicit long-run or anytime false-alarm guarantee.</div></li></ul>
-<p>AMPD avoids a conventional manually selected amplitude threshold, but it does <strong>not</strong> solve statistical calibration.</p>
-</dd>
-<dt><strong>Important limitation</strong></dt><dd>
-<p>The method operates only on the semi-major axis. That is simultaneously attractive and limiting.</p>
-<p>It provides a clean baseline for predominantly in-plane energetic maneuvers but cannot exploit signatures distributed across</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-006.png" alt="eiω(,,Ω,,…)." style="width:7.7514em;height:1.5253em" loading="lazy"></div>
-<p>Nor does the accessible evaluation establish how the ground truth of the detected orbital anomalies was produced.</p>
-</dd>
-<dt><strong>Why it matters for your work</strong></dt><dd>
-<p>This should become a <strong>direct baseline</strong>.</p>
-<p>Your comparison could be:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-007.png" alt="avsvsvsPeak detection on Peak-AAETSMixer residualmultivariate residual detectot " style="width:48.2578em;height:1.5253em" loading="lazy"></div>
-<p>using exactly the same event labels and operational metrics.</p>
-<p>It is particularly valuable because a reviewer could reasonably ask why a multivariate forecasting architecture is needed if a lightweight univariate AAE on <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-008.png" alt="a" style="width:0.8901em;height:1.4600em" loading="lazy"></span> already detects most maneuvers.</p>
-<p><strong>Reading priority: very high.</strong></p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>2. </strong><em><strong>Anytime-Valid Distribution Shift Detection via Predictive Rank</strong></em> <em><strong>Martingales</strong></em></h2>
-<p><strong>Qi Kuang, Yin Xia — 1 September 2026 — arXiv preprint, statistics. </strong><a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p><a href="https://arxiv.org/abs/2609.00536?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
-<p>This is the paper I consider <strong>most important methodologically</strong> this week.</p>
-<dl class="summary-grid">
-<dt><strong>The problem it solves</strong></dt><dd>
-<p>Suppose you build an anomaly score from your forecasting model:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-009.png" alt="S=f(r).tt  " style="width:5.8852em;height:1.5683em" loading="lazy"></div>
-<p>You retain a fixed set of nominal calibration scores</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-010.png" alt="DYY={,…,}01n   " style="width:9.7134em;height:1.6141em" loading="lazy"></div>
-<p>and continuously compare future scores <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-011.png" alt="Xt " style="width:1.6338em;height:1.5683em" loading="lazy"></span> against it.</p>
-<p>Keeping that reference fixed is appealing because after a maneuver you do <strong>not</strong> want anomalous observations contaminating the nominal distribution.</p>
-<p>But there is a subtle issue: repeatedly ranking observations against the <strong>same finite calibration sample</strong> makes consecutive ranks dependent. Therefore, treating conformal <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-012.png" alt="p" style="width:0.8586em;height:1.4600em" loading="lazy"></span>-values or ranks as independent can invalidate sequential false-alarm arguments. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>Kuang and Xia derive the exact conditional null distribution:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-013.png" alt="N1+tj−1,PRjRR(=∣,…,)= ,t1t−1   n+t " style="width:20.4555em;height:3.2128em" loading="lazy"></div>
-<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-014.png" alt="Ntj−1, " style="width:3.3203em;height:1.6141em" loading="lazy"></span> is the number of previous online observations occupying rank <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-015.png" alt="j" style="width:0.7485em;height:1.4600em" loading="lazy"></span>. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>They then construct an e-process / <strong>Predictive Rank Martingale (PRM)</strong>:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-016.png" alt="tqt,RtE=ME ,=. ttsπ∏     tR,t s=1 " style="width:15.1733em;height:4.0801em" loading="lazy"></div>
-<p>The alarm rule is</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-017.png" alt="1τtM=inf:≥.t α {}" style="width:12.2260em;height:3.0917em" loading="lazy"></div>
-<p>By Ville&#x27;s inequality,</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-018.png" alt="1PtMα∃:≥≤.Ht0α (  ) " style="width:13.2036em;height:3.0917em" loading="lazy"></div>
-<p>That is a very strong property: the probability of <strong>ever</strong> generating a false alarm under the assumed null is controlled by <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-019.png" alt="α" style="width:1.0244em;height:1.4600em" loading="lazy"></span>, despite arbitrary monitoring duration. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Detection modes</strong></dt><dd>
-<p>They introduce different rank features:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div><strong>Order PRM</strong> for directional location changes;</div></li><li><span class="original-label" aria-hidden="true">•</span><div><strong>Dispersion PRM</strong> for center-versus-tail changes;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a portfolio combining them.</div></li></ul>
-<p>The betting magnitude adapts via Online Newton Step, but critically the choice affects <strong>power, not</strong> <strong>validity</strong>. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Evaluation</strong></dt><dd>
-<p>They use synthetic distribution shifts plus CIFAR-10-C as a real distribution-shift benchmark.</p>
-<p>Relative to conditional conformal test martingales, Order PRM reaches <strong>80% detection probability earlier</strong> <strong>in every reported synthetic location-shift experiment</strong>. Dispersion PRM also detects symmetric changes for which the comparator has essentially no useful power over the considered horizon. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Detection latency</strong></dt><dd>
-<p>Rather than reporting a single mean delay, the paper studies finite-window detection probability.</p>
-<p>For maneuver detection, this maps naturally to:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-020.png" alt="Pτtkv(−≤∣Δ).m " style="width:10.9897em;height:1.5683em" loading="lazy"></div>
-<p>That may actually be a more operational metric than average delay.</p>
-</dd>
-<dt><strong>False-alarm control</strong></dt><dd>
-<p>This is the principal strength:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-021.png" alt="Pταsup(&lt;∞)≤.H0   P" style="width:11.3364em;height:2.3808em" loading="lazy"></div>
-<p>This is much stronger than choosing a 99th percentile threshold on nominal validation residuals and then assuming the resulting sequential false-alarm process remains calibrated. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Important assumptions</strong></dt><dd>
-<p>The calibration observations and nominal online observations are assumed IID under <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-022.png" alt="H0 " style="width:1.7549em;height:1.6141em" loading="lazy"></span>. The authors explicitly formulate the result this way. High-dimensional input can be reduced beforehand to a scalar score, but that score-generation rule must be fixed before calibration/monitoring. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>For orbital residuals, IID is questionable because residuals are temporally correlated.</p>
-<p>So:</p>
-<p><strong>The theorem cannot simply be quoted as a guarantee for your raw TSMixer residual stream.</strong></p>
-<p>You would first need to investigate whitening, block construction, innovations, or extensions to dependent observations.</p>
-</dd>
-<dt><strong>Why it matters</strong></dt><dd>
-<p>This gives you a much cleaner conceptual decomposition:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-023.png" alt="TSMixer→scalar nonconformity score→sequential PRM decision layer " style="width:38.8213em;height:1.4600em" loading="lazy"></div>
-<p>The ML model generates information; the statistical layer controls alarms.</p>
-<p>That is preferable scientifically to letting an optimized test-set threshold hide weaknesses in the forecasting representation.</p>
-<p><strong>Reading priority: highest.</strong></p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>3. </strong><em><strong>Probability-Maximizing Change Detection: Finite-Window</strong></em> <em><strong>Optimality</strong></em></h2>
-<p><strong>Ali Tajer, Javad Heydari — 2 September 2026 — arXiv preprint, mathematical statistics. </strong><a href="https://arxiv.org/html/2609.02570v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p><a href="https://arxiv.org/abs/2609.02570?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
-<p>This paper addresses a problem that fits maneuver detection unusually well.</p>
-<p>Classical quickest change detection typically minimizes expected delay subject to a false-alarm constraint. Tajer and Heydari instead ask:</p>
-<p>What if a detection is only useful if it occurs within the first <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-024.png" alt="ξ" style="width:0.7800em;height:1.4600em" loading="lazy"></span> observations after the change?</p>
-<p>They optimize</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-025.png" alt="Ptτtξ(≤&lt;+)mm  " style="width:10.7764em;height:1.5683em" loading="lazy"></div>
-<p>subject to an average-run-length false-alarm constraint. <a href="https://arxiv.org/html/2609.02570v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<dl class="summary-grid">
-<dt><strong>Why this is different</strong></dt><dd>
-<p>Ordinary delay metrics treat detecting at <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-026.png" alt="t+2m " style="width:3.5747em;height:1.5683em" loading="lazy"></span> as better than detecting at <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-027.png" alt="t+20m " style="width:4.1797em;height:1.5683em" loading="lazy"></span>, but both are successes.</p>
-<p>For operational SSA there may instead be an actual deadline:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-028.png" alt="ttT−≤.detectmoperational   " style="width:12.5854em;height:1.6141em" loading="lazy"></div>
-<p>A maneuver detected after the next OD/sensor-tasking cycle may already have lost much of its value.</p>
-<p>The paper therefore optimizes <strong>probability of detection inside an admissible window</strong>, rather than simply expected delay. <a href="https://arxiv.org/html/2609.02570v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Method</strong></dt><dd>
-<p>The authors derive a finite-memory optimal stopping rule based on a <strong>truncated Shiryaev–Roberts</strong> <strong>statistic</strong> that aggregates likelihood-ratio evidence for all candidate onset times over the previous <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-029.png" alt="ξ" style="width:0.7800em;height:1.4600em" loading="lazy"></span> observations.</p>
-<p>False alarms are controlled through an <strong>average run length</strong> constraint. <a href="https://arxiv.org/html/2609.02570v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>For</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-030.png" alt="ξ=1," style="width:3.3901em;height:1.5253em" loading="lazy"></div>
-<p>the solution collapses to a classical <strong>Shewhart detector</strong>.</p>
-<p>That result is useful conceptually: when only the very first post-maneuver observation matters, accumulated-evidence methods cease to be optimal under their formulation. <a href="https://arxiv.org/html/2609.02570v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Multiple transient changes</strong></dt><dd>
-<p>The formulation also handles multiple, non-overlapping transient change episodes. This is interesting if your residual signal after an orbital maneuver is not permanently shifted because the predictor rapidly adapts or because subsequent OD updates absorb the maneuver. <a href="https://arxiv.org/html/2609.02570v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Evaluation / evidence</strong></dt><dd>
-<p>The contribution is principally theoretical. It derives exact finite-sample optimality under the assumed likelihood model.</p>
-<p>It does <strong>not</strong> establish performance on SSA, spacecraft telemetry, or general TSAD datasets.</p>
-</dd>
-<dt><strong>Uncertainty</strong></dt><dd>
-<p>Uncertainty enters formally through the stochastic change model and likelihood-ratio construction rather than through ML predictive UQ.</p>
-<p>The difficult part in your application would be specifying</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-031.png" alt="pSHpSH(∣)and(∣).t0t1    " style="width:15.2719em;height:1.6141em" loading="lazy"></div>
-</dd>
-<dt><strong>Why it matters</strong></dt><dd>
-<p>It suggests replacing a single generic &quot;detection delay&quot; metric by something operational:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-032.png" alt="(ξ)PP(τ−t≤ξ).=mD  " style="width:11.7446em;height:2.0969em" loading="lazy"></div>
-<p>I would report, for example,</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-033.png" alt="(1)(2)(3)(5)PPPP,,,DDDD    " style="width:11.2432em;height:2.0511em" loading="lazy"></div>
-<p>at fixed false-alarm levels.</p>
-<p>This is much more interpretable for a sensor-network tasking application than only reporting mean or median delay.</p>
-<p><strong>Reading priority: very high, especially for evaluation design.</strong></p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>4. </strong><em><strong>A Convolutional Framework for Detecting Event-Driven Dynamics in</strong></em> <em><strong>Energy Price Series</strong></em></h2>
-<p><strong>Caixia Xu, Piotr Fryzlewicz — 31 August 2026 — arXiv preprint, statistical machine learning. </strong><a href="https://arxiv.org/html/2609.00402v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p><a href="https://arxiv.org/abs/2609.00402?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
-<p>The application is unrelated to SSA, but the architecture asks a useful question:</p>
-<p>Can one design a neural model that explicitly contains well-understood classical change statistics rather than hoping a black-box model rediscover them?</p>
-<dl class="summary-grid">
-<dt><strong>Method</strong></dt><dd>
-<p>The authors construct a CNN class that can <strong>exactly represent</strong> classifiers based on:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>range;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>maximum drawup;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>maximum drawdown;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>slope change,</div></li></ul>
-<p>and uniformly approximate classifiers based on:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>realized volatility;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>autoregressive explosiveness.</div></li></ul>
-<p>They additionally derive finite-sample error bounds and an oracle inequality comparing the learned common architecture with fixed statistical rules. <a href="https://arxiv.org/html/2609.00402v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>This creates a bridge between</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-034.png" alt="hand-designed detector" style="width:12.3948em;height:1.4600em" loading="lazy"></div>
-<p>and</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-035.png" alt="learned temporal detector." style="width:14.0424em;height:1.4600em" loading="lazy"></div>
-</dd>
-<dt><strong>Evaluation</strong></dt><dd>
-<p>They first use simulation to determine whether the learned common model can retain the performance of the strongest classical statistic while combining complementary signals.</p>
-<p>Then they apply a hierarchical model to six real energy-price series.</p>
-<p>A useful part of the protocol is a genuinely forward test: data after <strong>20 February 2026 are withheld</strong>, the fitted model is not retrained, and the authors explicitly avoid presenting those qualitative results as formal classification accuracy or causal evidence. <a href="https://arxiv.org/html/2609.00402v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>That methodological caution is good.</p>
-</dd>
-<dt><strong>Metrics / latency</strong></dt><dd>
-<p>The paper is fundamentally <strong>window-based event classification</strong>, not online quickest detection.</p>
-<p>It therefore does not give the type of calibrated:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-036.png" alt="FAdayARLtt/,,−m0alarm   " style="width:16.6094em;height:1.5516em" loading="lazy"></div>
-<p>evaluation that you require.</p>
-</dd>
-<dt><strong>UQ</strong></dt><dd>
-<p>No operational predictive-UQ framework is provided; the authors themselves identify multivariate extension and uncertainty quantification as future work. <a href="https://arxiv.org/html/2609.00402v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Reproducibility</strong></dt><dd>
-<p>The underlying energy series are public. Curated event labels and supporting code are available <strong>on</strong> <strong>request</strong>, not in an immediately reproducible public repository. <a href="https://arxiv.org/html/2609.00402v1" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Why it matters</strong></dt><dd>
-<p>For your work, an analogous architecture could deliberately include physically/statistically meaningful branches:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-037.png" alt="fr=max∣∣,1t  f=CUSUM(r),2 fr=Δslope(),3   ⊤−1frr=Σ,4tt   f=spectral/periodicity statistic,5 " style="width:18.1103em;height:8.9266em" loading="lazy"></div>
-<p>with a small learned combination layer.</p>
-<p>Then the learned detector is no longer being compared only against classical statistics—it <strong>contains them</strong> <strong>as representable special cases</strong>.</p>
-<p>This would be an interesting middle ground between simple statistical baselines and an entirely unconstrained TSMixer/Transformer detector.</p>
-<p><strong>Reading priority: medium-high.</strong></p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>5. </strong><em><strong>Change-point Analysis: A New Perspective for Unstable Financial</strong></em> <em><strong>Markets</strong></em></h2>
-<p><strong>Žikica Lukić, Bojana Milošević — 3 September 2026 — arXiv preprint, non-parametric statistics.</strong> <a href="https://arxiv.org/html/2609.03614v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p><a href="https://arxiv.org/abs/2609.03614?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
-<p>This is less directly applicable than items 1–4, but useful as a new <strong>non-parametric residual-change</strong> <strong>baseline</strong>.</p>
-<dl class="summary-grid">
-<dt><strong>Method</strong></dt><dd>
-<p>The authors define two families of distributional change-point statistics based on:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>empirical modified <strong>Hankel transforms</strong>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>empirical <strong>Laplace transforms</strong>.</div></li></ul>
-<p>The detector compares distributions before and after candidate split <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-038.png" alt="k" style="width:0.8804em;height:1.4600em" loading="lazy"></span>, rather than merely comparing their means. <a href="https://arxiv.org/html/2609.03614v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
-<p>This matters because a maneuver could manifest in your anomaly-score stream not only through</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-039.png" alt="E[S]↑,t " style="width:4.2729em;height:1.5253em" loading="lazy"></div>
-<p>but also through changes in:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-040.png" alt="SVar(),tail shape,overall residual distribution.t " style="width:30.0034em;height:1.5683em" loading="lazy"></div>
-</dd>
-<dt><strong>Calibration and evaluation</strong></dt><dd>
-<p>Because the null distribution of the statistics is not distribution-free, the authors use a <strong>permutation</strong> <strong>bootstrap</strong>.</p>
-<p>Their simulation protocol uses:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div><span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-041.png" alt="B=500" style="width:4.6578em;height:1.5253em" loading="lazy"></span> bootstrap replicates;</div></li><li><span class="original-label" aria-hidden="true">•</span><div><span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-042.png" alt="N=2000" style="width:5.3868em;height:1.5253em" loading="lazy"></span> Monte Carlo runs;</div></li><li><span class="original-label" aria-hidden="true">•</span><div><span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-043.png" alt="n=40,100" style="width:6.1539em;height:1.5253em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>nominal significance <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-044.png" alt="α=0.05" style="width:4.7930em;height:1.5253em" loading="lazy"></span>.</div></li></ul>
-<p>They report good empirical calibration and generally higher power than their characteristic-function-based comparators, particularly for asymmetric change locations. <a href="https://arxiv.org/html/2609.03614v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>They also evaluate on:</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>US GNP;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Argentina rainfall;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>S&amp;P 500 absolute log returns. <a href="https://arxiv.org/html/2609.03614v1" target="_blank" rel="noreferrer">arXiv</a></div></li></ul>
-</dd>
-<dt><strong>Critical limitation</strong></dt><dd>
-<p>The theory assumes <strong>IID observations</strong>. The authors explicitly identify extension to dependent data as future work. <a href="https://arxiv.org/html/2609.03614v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>That is a substantial problem for orbital residuals.</p>
-<p>There is also a tuning problem in their multiple-change implementation: the authors note that too large a segmentation window misses genuine changes while too small a window generates spurious detections, requiring tuning. <a href="https://arxiv.org/html/2609.03614v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>So this is <strong>not</strong> an immediately deployable false-alarm-controlled online maneuver detector.</p>
-</dd>
-<dt><strong>Latency</strong></dt><dd>
-<p>It is essentially retrospective/windowed change-point localization, not a genuine online detector. No meaningful real-time detection-delay distribution is reported.</p>
-</dd>
-<dt><strong>Why it matters</strong></dt><dd>
-<p>It provides another way to test a central hypothesis:</p>
-<p>Is a maneuver principally a <strong>mean shift in the residual</strong>, or a more general <strong>distributional change</strong>?</p>
-<p>You could apply it to a scalar non-negative sequence such as</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-045.png" alt="⊤−1Srr=Σ.tttr    " style="width:7.5346em;height:1.8636em" loading="lazy"></div>
-<p>If general distribution-change tests materially outperform CUSUM/location-shift tests for some maneuver classes, that tells you something important about the structure of the post-maneuver residuals.</p>
-<p><strong>Reading priority: medium.</strong></p>
-</dd>
-</dl>
-</article>
-<article class="panel transcribed-report">
-<h2><strong>Ranked reading priority</strong></h2>
-<div class="table-scroll"><table><tr><th><strong>Rank</strong></th><th><strong>Item</strong></th><th><strong>Primary value</strong></th></tr><tr><td><strong>1</strong></td><td><strong>Anytime-Valid Distribution Shift Detection</strong> <strong>via Predictive Rank Martingales</strong></td><td>Rigorous sequential false-alarm control</td></tr><tr><td><strong>2</strong></td><td><strong>Peak-AAE satellite orbit anomaly</strong> <strong>detection</strong></td><td>Direct orbital baseline + real satellites + edge deployment</td></tr><tr><td><strong>3</strong></td><td><strong>Probability-Maximizing Change Detection</strong></td><td>Operationally meaningful finite detection windows</td></tr><tr><td><strong>4</strong></td><td><strong>CNN framework for event-driven</strong> <strong>dynamics</strong></td><td>Learned detector explicitly encompassing classical statistics</td></tr><tr><td><strong>5</strong></td><td><strong>Hankel/Laplace change-point analysis</strong></td><td>Non-parametric full-distribution change baseline</td></tr></table></div>
-</article>
-<article class="panel transcribed-report">
-<h2><strong>What I would implement next</strong></h2>
-<p>The most useful experiment now is to <strong>decouple the forecasting model from the alarm-generation</strong> <strong>mechanism</strong>.</p>
-<p>Keep your current forecasting model fixed and construct one scalar score, preferably starting with</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-046.png" alt="^⊤−1Srr,=Σttt0    " style="width:7.5346em;height:1.9862em" loading="lazy"></div>
-<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-047.png" alt="^Σ0 " style="width:1.6230em;height:1.8612em" loading="lazy"></span> is estimated exclusively from nominal training/calibration residuals.</p>
-<p>Then compare four decision layers on the <strong>same </strong><span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-048.png" alt="St " style="width:1.3740em;height:1.5683em" loading="lazy"></span>:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-049.png" alt="vsvsvsstatic percentileCUSUMPRMPeak/AMPD " style="width:34.1289em;height:1.5253em" loading="lazy"></div>
-<p>This isolates whether an apparent improvement comes from the ML representation or from the alarm rule.</p>
-<p>Second, I would change the latency reporting. Instead of only</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-050.png" alt="E[τ−t]m " style="width:5.2719em;height:1.5683em" loading="lazy"></div>
-<p>or median delay, add the finite-horizon detection curves suggested by Tajer and Heydari:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-051.png" alt="PkvPτtkv(;Δ)=(−≤∣Δ),Dm  " style="width:17.7514em;height:1.5683em" loading="lazy"></div>
-<p>for</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-052.png" alt="k∈{1,2,3,5,10}." style="width:9.7309em;height:1.5253em" loading="lazy"></div>
-<p>Plot this against <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-053.png" alt="vΔ" style="width:1.8456em;height:1.5253em" loading="lazy"></span> at a fixed operational false-alarm budget.</p>
-<p>Third, measure <strong>false alarms as a sequential process</strong>. Report at least:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-054.png" alt="FA/object-day,ARL,0 " style="width:8.5600em;height:5.1141em" loading="lazy"></div>
-<p>and</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-055.png" alt="PT(at least one false alarm over )." style="width:18.0903em;height:1.5253em" loading="lazy"></div>
-<p>The PRM paper makes clear why a pointwise FPR does not automatically provide the guarantee you actually care about under indefinite monitoring. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>Fourth, perform a maneuver-signature ablation:</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-056.png" alt="a" style="width:0.8901em;height:1.4600em" loading="lazy"></div>
-<p>alone, as in Peak-AAE, versus</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-057.png" alt="aeiω(,,,Ω,)" style="width:6.6367em;height:1.5253em" loading="lazy"></div>
-<p>or your five equinoctial elements jointly. Stratify by maneuver class and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-06-math-058.png" alt="vΔ" style="width:1.8456em;height:1.5253em" loading="lazy"></span>. This would establish quantitatively whether multivariate modeling provides information beyond semi-major-axis anomaly detection.</p>
-<p>Finally, test the IID assumption explicitly before adopting any of the statistical guarantees above. On nominal residuals, estimate</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-06-math-059.png" alt="ρkSS()=Corr(,)Stt−k   " style="width:11.9775em;height:1.6141em" loading="lazy"></div>
-<p>and run whiteness diagnostics. If the residual-score sequence remains substantially autocorrelated, the nominal guarantees of PRM as formulated here and the Hankel/Laplace tests <strong>do not directly apply</strong>. In that case, adapting the sequential calibration layer to dependent residuals becomes a more important research problem than replacing TSMixer with another forecasting backbone. <a href="https://arxiv.org/html/2609.00536v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
-</article>
-<!-- end-preserved-transcription -->
+    <article class="panel paper-card">
+      <h2>A Lightweight Satellite Orbit Anomaly Detection Method Based on Peak-AAE and Its Edge Deployment</h2>
+      <p class="meta">Yang Guo, Xiaolong Yue, Boyang Wang, Bingchuan Li · Aerospace · 2026</p>
+
+      <p class="link-row"><a href="https://www.mdpi.com/2226-4310/13/9/802" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>The detection of orbital anomalies is of critical importance to the safe operation of on-orbit spacecraft. Existing methods often rely on manually engineered features and are constrained by the limited computational resources of satellite equipment. This paper proposes a lightweight unsupervised anomaly detection method based on the Peak Adversarial Autoencoder (Peak-AAE). First, the Peak-AAE model is employed to reconstruct historical semi-major axis data, and the squared differences between the reconstructed and original data are taken as the residual sequence. The Automatic Multi-Scale Peak Detection (AMPD) algorithm is then applied to the residual sequence to identify anomalous points. In comparison with traditional approaches, this method eliminates the need for manual feature design. Moreover, the improved Peak-AAE model effectively reduces the false positive rate associated with the original AAE model, thereby enhancing detection accuracy. Finally, the compressed Peak-AAE model is deployed on edge devices for ground simulation verification. Experimental validation on the BEIDOU-3 G2 and IRNSS-1A satellites demonstrates that the Peak-AAE model achieves a minimum precision of 90.00% and a minimum recall of 84.74%.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Supplies a lightweight, directly orbital reconstruction-based baseline using real navigation spacecraft histories.</dd><dt>Main idea</dt><dd>Detect peaks in semi-major-axis reconstruction residuals and compress the model for edge deployment.</dd><dt>Method</dt><dd>Peak-AAE combines an adversarial autoencoder with Automatic Multiscale Peak Detection, evaluated on BEIDOU-3 G2 and IRNSS-1A.</dd><dt>Key results</dt><dd>The briefing reports fewer false positives than ordinary AAE and a compressed edge implementation, without a complete numerical table.</dd><dt>Limitations</dt><dd>Univariate scoring misses distributed element changes; independent maneuver labels, event delay, and statistical false-alarm calibration remain unclear.</dd><dt>Relevance to my research</dt><dd>Compare Peak-AAE, physical element thresholds, and multivariate TSMixer against the same confirmed maneuver events.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Anytime-Valid Distribution Shift Detection via Predictive Rank Martingales</h2>
+      <p class="meta">Qi Kuang, Yin Xia · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2609.00536" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2609.00536" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Many sequential distribution shift detectors update a growing reference set with incoming observations. After a change, this update contaminates the reference set with post-change observations and can weaken subsequent evidence. Keeping the calibration sample fixed mitigates this contamination, but repeated reuse induces dependence among fixed-reference ranks, so arguments based on independent conformal \(p\)-values do not apply. We derive the exact conditional null distribution of the next rank given the preceding ranks and use it to construct a predictive rank martingale (PRM). Thresholding a PRM gives distribution-free, finite-sample anytime marginal type I error control. To target specific departures, we apply a pre-specified feature to each rank, center the resulting payoff under the predictive null law, and use Online Newton Step (ONS) to adapt the bet. Order and dispersion features target directional and center-versus-tail changes, respectively. For any Lipschitz feature with nonzero induced contrast under the alternative, we establish a finite-window detection guarantee and show that the test is consistent as the initial calibration size increases. At a fixed calibration size, however, we derive a power ceiling for every distribution-free detection procedure. Across synthetic and real data, our PRM methods achieve better detection performance than conditional conformal test martingale (CCTM).</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Controls repeated testing against a fixed nominal calibration sample instead of assuming successive ranks are independent.</dd><dt>Main idea</dt><dd>Build an anytime-valid distribution-shift monitor from predictive ranks.</dd><dt>Method</dt><dd>Predictive Rank Martingales use conditional rank laws, order and dispersion features, and adaptive betting with a fixed calibration reference.</dd><dt>Key results</dt><dd>The briefing reports finite-horizon detection gains and an anytime false-alarm bound under the stated IID null assumptions.</dd><dt>Limitations</dt><dd>Raw orbital residuals are serially dependent; the theorem does not directly guarantee validity after uncontrolled model adaptation.</dd><dt>Relevance to my research</dt><dd>Test fixed-score rank monitoring on suitably calibrated residual blocks and verify false alarms before claiming operational guarantees.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Probability-Maximizing Change Detection: Finite-Window Optimality</h2>
+      <p class="meta">Ali Tajer, Javad Heydari · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2609.02570" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2609.02570" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>This paper investigates probability-maximizing sequential change detection, a formulation in which performance is measured by the probability of stopping within an admissible interval of duration $ξ$ after a change rather than by the expected detection delay. Earlier work introduced this viewpoint in a Bayesian setting and subsequently formalized it under Lorden- and Pollak-type minimax criteria for the case in which successful detection must occur on the \textbf{first} post-change observation, i.e., $ξ=1$. This paper generalizes this framework in two directions. First, the decision maker is allowed to stop within a prescribed window of $ξ\in\mathbb{N}$ post-change observations. Second, the monitored process is allowed to experience multiple, non-overlapping transient change episodes with unknown onset times and durations, so that success consists of stopping within the admissible window associated with any one of these episodes. False alarms are controlled through an average run-length constraint. For exact finite-sample analysis, the paper introduces a survival-weighted average success criterion, which represents the probability of successfully detecting a randomly encountered change opportunity conditional on the detector being active at its onset. It is established that this criterion admits an exact representation as the expected \textbf{truncated} Shiryaev--Roberts (TSR) statistic at the stopping time normalized by the average run length, and it characterizes its exactly optimal stopping rule. The optimal procedure has finite memory and aggregates the likelihood-ratio evidence corresponding to all possible change onsets within the most recent window and compares the resulting TSR statistic with a \textbf{state-dependent} continuation boundary obtained from an optimal-stopping formulation.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Optimizes detection before a deadline rather than treating every eventual alarm as equally useful.</dd><dt>Main idea</dt><dd>Maximize the probability of detecting a change within a finite observation window under an average-run-length constraint.</dd><dt>Method</dt><dd>A truncated Shiryaev–Roberts statistic aggregates candidate onset likelihoods; the one-observation case reduces to Shewhart detection.</dd><dt>Key results</dt><dd>The briefing describes finite-sample optimality under the assumed likelihood model, including non-overlapping transient changes.</dd><dt>Limitations</dt><dd>Theoretical optimality depends on specified nominal and changed distributions; no orbital or spacecraft benchmark is reported.</dd><dt>Relevance to my research</dt><dd>Evaluate probability of maneuver detection within one, two, or five observations at matched false alarms.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>A Convolutional Framework for Detecting Event-Driven Dynamics in Energy Price Series</h2>
+      <p class="meta">Caixia Xu, Piotr Fryzlewicz · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2609.00402" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2609.00402" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>This paper develops a general convolutional neural network (CNN) framework for detecting heterogeneous event-driven dynamics in univariate time series windows. We show that the induced CNN class exactly represents classifiers based on range, maximum drawup, maximum drawdown and slope change, and uniformly approximates realised volatility and autoregressive explosiveness on compact domains. We further establish error bounds for representative rules in finite samples and an oracle inequality for learning across them. Simulations show that the proposed model can match or outperform classifiers based on individual statistics as the training sample grows. In an application to six daily energy price series, a hierarchical CNN distinguishes event windows and event families. Applied without retraining to observations withheld after 20 February 2026, the fitted model identifies predominantly geopolitical dynamics in several oil and refined product series around the outbreak of the 2026 Iran war, while distinguishing a contemporaneous natural gas spike associated with weather.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Connects interpretable classical change statistics with learned classifiers rather than replacing them with an unconstrained neural model.</dd><dt>Main idea</dt><dd>Construct CNNs that represent or approximate established event-change rules.</dd><dt>Method</dt><dd>Combine range, drawup, drawdown, slope, volatility, and autoregressive-explosiveness statistics with theoretical error and oracle bounds.</dd><dt>Key results</dt><dd>The briefing describes simulation tests and a forward evaluation on six energy-price series without retraining on withheld future data.</dd><dt>Limitations</dt><dd>Window-based classification is not quickest detection; multivariate uncertainty and readily available curated labels/code remain incomplete.</dd><dt>Relevance to my research</dt><dd>Test small combinations of physical orbital indicators and residual statistics before introducing a more complex detector backbone.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Change-point Analysis: A New Perspective for Unstable Financial Markets</h2>
+      <p class="meta">Žikica Lukić, Bojana Milošević · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2609.03614" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2609.03614" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>We introduce two new classes of nonparametric change-point tests for sequences of univariate non-negative random variables. The proposed procedures are based on the empirical modified Hankel transform and the Laplace transform, respectively, and provide new transform-based tools for detecting distributional changes. We derive the asymptotic null distributions of the corresponding test statistics and use a permutation bootstrap procedure to obtain $p$-values, since the limiting null distributions are not distribution-free. Through a finite-sample simulation study, we show that the proposed tests are well calibrated, generally more powerful than empirical-characteristic-function-based competitors, and capable of accurately estimating the change-point location, particularly in asymmetric settings. The usefulness of the proposed methodology is further demonstrated through applications to Argentina rainfall data, as well as U.S. GNP and S\&amp;P 500 absolute log-returns. The real-data examples illustrate that the proposed Hankel- and Laplace-transform-based tests are effective tools for detecting meaningful distributional changes in non-negative data.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Tests distributional changes beyond mean shifts, which may reveal altered residual spread or tail behavior.</dd><dt>Main idea</dt><dd>Locate change points using empirical transform differences across candidate splits.</dd><dt>Method</dt><dd>Compare modified Hankel and Laplace transforms with permutation-bootstrap calibration and multiple-change segmentation.</dd><dt>Key results</dt><dd>The briefing reports favorable calibration and power against characteristic-function comparators in simulations and non-orbital time series.</dd><dt>Limitations</dt><dd>IID assumptions, segmentation-window tuning, and retrospective localization limit direct use on dependent streaming orbital residuals.</dd><dt>Relevance to my research</dt><dd>Compare distribution-change tests with CUSUM to determine whether particular maneuver classes alter more than the residual mean.</dd>
+      </dl>
+    </article>
+
 
         </main>
         

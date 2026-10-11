@@ -97,6 +97,19 @@
       color: var(--muted);
       line-height: 1.5;
     }
+    .abstract {
+      margin-bottom: 20px;
+    }
+    .abstract summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .abstract p {
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
     .summary-grid {
       display: grid;
       grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
@@ -133,36 +146,14 @@
       text-align: center;
       padding: 28px;
     }
-    .footnote {
-      color: var(--muted);
-      font-size: 0.94rem;
-      padding-bottom: 6px;
-    }
     code {
       font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
       background: rgba(32, 38, 31, 0.06);
       padding: 0.1rem 0.35rem;
       border-radius: 6px;
     }
-    .transcribed-report p, .transcribed-report li, .transcribed-report td, .transcribed-report th {
-      line-height: 1.6;
-    }
-    .transcribed-report p:first-child { margin-top: 0; }
-    .transcribed-report { overflow-wrap: anywhere; }
     .summary-grid dd { min-width: 0; }
     .summary-grid dt { min-width: 0; }
-    .transcribed-report .summary-grid dd > :first-child { margin-top: 0; }
-    .report-list { list-style: none; padding-left: 0; }
-    .report-list li { display: flex; gap: 0.65rem; margin: 0.35rem 0; }
-    .original-label { flex: 0 0 auto; min-width: 1rem; }
-    .report-list li > div { min-width: 0; }
-    .table-scroll, .math-display { overflow-x: auto; max-width: 100%; }
-    .table-scroll table { border-collapse: collapse; width: 100%; min-width: 36rem; }
-    .table-scroll td, .table-scroll th { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-    .math-inline { display: inline-block; vertical-align: middle; max-width: none; }
-    .math-wrapper { display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }
-    .math-display { text-align: center; margin: 0.75rem 0; }
-    .math-display-image { display: inline-block; max-width: none; }
     @media (max-width: 640px) {
       .hero {
         padding-top: 32px;
@@ -186,189 +177,70 @@
         <header class="hero">
           <p class="eyebrow">PaperFeed digest</p>
           <h1>August 23, 2026</h1>
-          <p class="lede">5 items included in the weekly report.</p>
+          <p class="lede">4 papers selected for the week.</p>
           <p><a class="back-link" href="../index.html">Back to index</a></p>
         </header>
         <main class="stack">
           
-<!-- preserved-transcription -->
-<article class="panel transcribed-report">
-<h2><strong>Briefing SSA / détection de manœuvres — nouveautés depuis le</strong> <strong>précédent briefing</strong></h2>
-<p>Jʼai retenu <strong>cinq éléments publiés après le briefing précédent</strong>, en incluant FirstDiff : sa soumission arXiv date du 16 août à 12:59 UTC, donc postérieure à ce briefing. La semaine est intéressante surtout sur deux axes : <strong>détection rapide de ruptures</strong> et <strong>modélisation des erreurs orbitales</strong>. Il nʼy a en revanche pas de nouveau papier majeur démontrant directement une détection ML de manœuvres sur un benchmark SSA réaliste avec délai et FAR correctement contrôlés.</p>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>1. </strong><em><strong>FirstDiff: One-Step Diffusion-Based Anomaly Detection for Multivariate Time</strong></em> <em><strong>Series via Initial Noise Prediction</strong></em></h2>
-<p><strong>Ali Boudaghi, Alireza Nemati, Hadi Zare — 16 août 2026 — preprint arXiv.</strong> <a href="https://arxiv.org/abs/2608.15727?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Source directe — arXiv</a></p>
-<dl class="summary-grid">
-<dt><strong>Ce que propose le papier</strong></dt><dd>
-<p>FirstDiff part d&#x27;une idée intéressante : dans un modèle de diffusion, il n&#x27;est peut-être pas nécessaire de reconstruire entièrement le signal pour savoir qu&#x27;il est anormal. Les auteurs utilisent directement le <strong>bruit</strong> <strong>prédit lors de la première étape du reverse diffusion</strong> comme représentation d&#x27;anomalie :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-001.png" alt="ϵXT^(,).θT  " style="width:5.5874em;height:1.5683em" loading="lazy"></div>
-<p>Sur des données nominales de validation, ils estiment sa distribution, puis mesurent l&#x27;écart d&#x27;un nouveau point à cette distribution, notamment par distance de Mahalanobis. Autrement dit, l&#x27;anomalie est détectée dans un <strong>espace latent lié au score de densité</strong>, et non dans l&#x27;erreur finale de reconstruction. <a href="https://arxiv.org/abs/2608.15727" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>C&#x27;est conceptuellement important pour ton problème : ton architecture actuelle suppose essentiellement</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-002.png" alt="rxxforecast→=−^→anomaly score.ttt   " style="width:21.9545em;height:1.5683em" loading="lazy"></div>
-<p>FirstDiff suggère que la meilleure variable de détection n&#x27;est pas nécessairement <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-003.png" alt="rt " style="width:1.1777em;height:1.5683em" loading="lazy"></span>, mais peut être une représentation interne du modèle où nominal et manœuvre deviennent plus séparables.</p>
-</dd>
-<dt><strong>Méthode et données</strong></dt><dd>
-<p>Le backbone est un <strong>Diffusion Transformer (DiT)</strong> modélisant conjointement dépendances temporelles et inter-capteurs. L&#x27;entraînement est nominal-only. Les expériences couvrent <strong>SMD, PSM, MSL, SWaT et</strong> <strong>SMAP</strong> ; MSL et SMAP sont particulièrement intéressants puisque ce sont de vraies télémétries de missions spatiales. <a href="https://arxiv.org/abs/2608.15727" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>Le protocole utilise des fenêtres de 96 échantillons. Le DiT comporte six blocs Transformer, dimension cachée 256, huit têtes, avec 100 étapes de diffusion à l&#x27;entraînement. Les auteurs comparent PCA, Isolation Forest, CBLOF, ECOD, GDN, MAD-GAN, OmniAnomaly, MSCRED, TranAD et plusieurs méthodes de diffusion.</p>
-</dd>
-<dt><strong>Résultats et délai</strong></dt><dd>
-<p>La meilleure variante individuelle — Mahalanobis appliqué au bruit prédit — donne un F1 moyen annoncé d&#x27;environ <strong>92,9 %</strong> sur les cinq datasets. Le papier rapporte surtout une métrique rarement présente dans ces travaux : <strong>Average Detection Delay</strong>, définie à partir du premier point détecté après le début de chaque événement.</p>
-<p>Les délais annoncés sont notamment environ 36 échantillons sur SMD, 26 sur PSM, 65 sur MSL, 110 sur SWaT et 142 sur SMAP. FirstDiff n&#x27;est donc <strong>pas systématiquement le détecteur le plus rapide en termes</strong> <strong>de détection d&#x27;événement</strong>, malgré son énorme gain de vitesse de calcul.</p>
-<p>C&#x27;est une distinction cruciale :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-004.png" alt="t=t−t.inferencealarmmaneuver       temps de calculdˊelai de dˊetection" style="width:16.1997em;height:3.1766em" loading="lazy"></div>
-<p>Son inference time est en revanche très faible : environ <strong>1,25 ms par fenêtre</strong>, contre des dizaines à plusieurs centaines de millisecondes pour les trajectoires de diffusion complètes.</p>
-</dd>
-<dt><strong>Incertitude / calibration</strong></dt><dd>
-<p>La référence nominale est une moyenne-covariance estimée sur des données normales et le score Mahalanobis tient compte des corrélations. Mais cela <strong>ne constitue pas une UQ calibrée</strong> : pas de garantie de couverture, pas de conformal prediction, pas d&#x27;intervalle de confiance de détection.</p>
-<p>Plus problématique : le protocole de sélection du <strong>seuil final </strong><span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-005.png" alt="τ" style="width:0.7788em;height:1.4600em" loading="lazy"></span> n&#x27;est pas exposé avec suffisamment de clarté dans les sections expérimentales pour exclure immédiatement une optimisation utilisant les labels de test. Vu l&#x27;importance connue de ce problème en TSAD, je ne prendrais donc pas les F1 annoncés comme preuve définitive avant vérification du code.</p>
-</dd>
-<dt><strong>Pourquoi c&#x27;est important pour ton projet</strong></dt><dd>
-<p>C&#x27;est <strong>le papier méthodologiquement le plus intéressant de la semaine</strong>. Je testerais directement :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-006.png" alt="score=∥r∥,t1  ⊤−1rrscore=Σ,t2tr   " style="width:9.5405em;height:5.2558em" loading="lazy"></div>
-<p>et</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-007.png" alt="⊤−1zμzμscore=(−)Σ(−),3tztzz     " style="width:17.1918em;height:1.8636em" loading="lazy"></div>
-<p>où <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-008.png" alt="zt " style="width:1.1953em;height:1.5683em" loading="lazy"></span> est une représentation interne de TSMixer juste avant la tête de prédiction.</p>
-<p>L&#x27;expérience permettrait de savoir si le pouvoir de détection de TSMixer se trouve réellement dans <strong>l&#x27;erreur de forecast</strong> ou déjà dans son <strong>espace latent</strong>.</p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>2. </strong><em><strong>Research on LSTM-based spatial target trajectory forecasting</strong></em> <em><strong>enhanced by attention mechanisms</strong></em></h2>
-<p><strong>Qingshan Luo, Jiahao Ji, Tao Yang, Yurui Xu, Yunsheng Yao — PLOS ONE — 21 août 2026 — article</strong> <strong>peer-reviewed.</strong> Les auteurs sont notamment affiliés au National Space Science Center de la Chinese Academy of Sciences et à plusieurs institutions universitaires chinoises. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS</a></p>
-<p><a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376&amp;utm_source=chatgpt.com" target="_blank" rel="noreferrer">Source directe — PLOS ONE</a></p>
-<dl class="summary-grid">
-<dt><strong>Pourquoi ce papier mérite ton attention</strong></dt><dd>
-<p>Il ne détecte pas directement les manœuvres. Il apprend à prédire <strong>l&#x27;erreur du propagateur SGP4</strong>, ce qui touche néanmoins directement le problème fondamental de ton détecteur :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-009.png" alt="r=ˊecart causˊe par la manœuvre+erreur du modˋele nominal+bruit d’observation.t " style="width:44.3706em;height:1.5683em" loading="lazy"></div>
-<p>Si l&#x27;erreur nominale peut être apprise et supprimée efficacement, la variance de <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-010.png" alt="rt " style="width:1.1777em;height:1.5683em" loading="lazy"></span> diminue et une petite manœuvre devient théoriquement plus détectable.</p>
-</dd>
-<dt><strong>Méthode</strong></dt><dd>
-<p>Le modèle prend comme variables :</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>erreur de position SGP4 ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>vitesse ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>accélération,</div></li></ul>
-<p>et utilise un LSTM suivi d&#x27;une attention temporelle scaled-dot-product. Trois modèles sont entraînés indépendamment pour les axes ECEF <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-011.png" alt="XYZ,," style="width:4.2210em;height:1.5253em" loading="lazy"></span>. La prédiction est ensuite ajoutée comme correction à SGP4. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS +1</a></p>
-<p>Pour LAGEOS, les auteurs utilisent seulement <strong>huit jours de données continues</strong> :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-012.png" alt="7 jours train=10080 points,1 jour test=1440 points." style="width:31.3530em;height:1.4600em" loading="lazy"></div>
-<p>La fenêtre historique contient 150 pas. La prédiction sur le jour de test devient ensuite récursive : les erreurs prédites remplacent progressivement les erreurs réelles dans les entrées. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS</a></p>
-</dd>
-<dt><strong>Résultats</strong></dt><dd>
-<p>Pour une prédiction d&#x27;un jour, ils rapportent des RMSE de :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-013.png" alt="mmm28.18,21.84,7.59" style="width:15.2030em;height:1.5253em" loading="lazy"></div>
-<p>sur <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-014.png" alt="XYZ,," style="width:4.2210em;height:1.5253em" loading="lazy"></span>, avec des résidus ramenés respectivement à 3,68 %, 4,77 % et 2,37 % de l&#x27;erreur initiale selon leur métrique. ATLSTM dépasse LSTM, BiLSTM, SVM et réseau BP. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS</a></p>
-<p>La performance décroît fortement avec l&#x27;horizon : à dix jours, les RMSE atteignent environ 160, 149 et 58 m. Ils testent également HY-2B et LARES-2 pour montrer une certaine transférabilité entre altitudes orbitales. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS</a></p>
-</dd>
-<dt><strong>Problème expérimental important</strong></dt><dd>
-<p>Il y a un <strong>risque de fuite méthodologique très clair</strong>.</p>
-<p>Les auteurs écrivent qu&#x27;ils font varier le nombre de neurones et étudient sa performance <strong>sur le train et le</strong> <strong>test afin de déterminer le nombre optimal</strong>. Ils rapportent ensuite les configurations optimales. Cela revient potentiellement à utiliser le jeu de test pour le choix d&#x27;hyperparamètres. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS +1</a></p>
-<p>Le dataset principal est également extrêmement court : sept jours d&#x27;entraînement pour un satellite. Aucune caractérisation statistique de l&#x27;incertitude, aucun intervalle prédictif, aucune calibration, aucun FAR et évidemment aucun detection delay ne sont fournis.</p>
-<p>Le statement de disponibilité des données contient par ailleurs une phrase manifestement hors sujet parlant d&#x27;« art styles » et d&#x27;images, ce qui suggère une erreur éditoriale et ne facilite pas la reproductibilité. <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">PLOS</a></p>
-</dd>
-<dt><strong>Intérêt pour ton travail</strong></dt><dd>
-<p>Je ne réutiliserais pas ATLSTM comme architecture. Je testerais plutôt l&#x27;hypothèse :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-015.png" alt="apprendre l’erreur du propagateurplutoˆt que directement l’ˊetat orbital " style="width:38.5127em;height:1.4600em" loading="lazy"></div>
-<p>en particulier comme baseline hybride :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-016.png" alt="fSGP4+(historical propagation errors).θ " style="width:21.9555em;height:1.5683em" loading="lazy"></div>
-<p>Puis comparer la variance des résidus nominaux et le recall des petites manœuvres à FAR identique.</p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>3. </strong><em><strong>EvoTS-Agent: A Self-Evolving LLM Agent for Financial Time Series</strong></em> <em><strong>Change Point Detection</strong></em></h2>
-<p><strong>Lei Jiang, Ye Wei, Xinyu Xi, Jordan Langham-Lopez, Yifan Bao, Raad Khraishi, Yihao Ang, Anthony K.</strong> <strong>H. Tung, Lukasz Szpruch, Hao Ni — 18 août 2026 — preprint arXiv. </strong><a href="https://arxiv.org/abs/2608.17933" target="_blank" rel="noreferrer">arXiv</a></p>
-<p><a href="https://arxiv.org/abs/2608.17933?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Source directe — arXiv</a></p>
-<p>Ce papier est périphérique au SSA, mais le problème statistique est proche d&#x27;une manœuvre orbitale considérée comme <strong>rupture de régime</strong>.</p>
-<dl class="summary-grid">
-<dt><strong>Méthode</strong></dt><dd>
-<p>Au lieu de proposer un nouveau détecteur unique, les auteurs disposent d&#x27;une banque de méthodes de change-point detection. Un agent LLM :</p>
-<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div>caractérise statistiquement la série ;</div></li><li><span class="original-label"><strong>2. </strong></span><div>sélectionne des détecteurs ;</div></li><li><span class="original-label"><strong>3. </strong></span><div>génère et exécute les expériences ;</div></li><li><span class="original-label"><strong>4. </strong></span><div>mesure les résultats sur validation ;</div></li><li><span class="original-label"><strong>5. </strong></span><div>modifie le pipeline ;</div></li><li><span class="original-label"><strong>6. </strong></span><div>explore une autre famille d&#x27;algorithmes lorsque les améliorations stagnent ;</div></li><li><span class="original-label"><strong>7. </strong></span><div>recombine les meilleures solutions.</div></li></ul>
-<p>L&#x27;élément méthodologiquement sain est que les <strong>annotations du test restent cachées pendant tout le</strong> <strong>processus d&#x27;optimisation</strong>. Les labels de changement ne sont accessibles que sur validation. La fonction principale de sélection est un F1 boundary-aware, avec distance de Hausdorff comme diagnostic secondaire. <a href="https://arxiv.org/abs/2608.17933" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>C&#x27;est exactement la séparation qu&#x27;il faudrait exiger dans un benchmark de manœuvres :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-017.png" alt="DDD→→ jamais consultˊe.traincalibration/validationtest    " style="width:27.8129em;height:1.6141em" loading="lazy"></div>
-</dd>
-<dt><strong>Résultats et limites</strong></dt><dd>
-<p>Les expériences portent sur quatre datasets financiers et montrent une supériorité sur les autres agents LLM testés, avec 100 % de réussite d&#x27;exécution annoncée. <a href="https://arxiv.org/abs/2608.17933" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>Mais il manque ce qui est essentiel pour ton application :</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>pas de FAR/h ou FAR/day ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>pas de calibration probabiliste ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>pas d&#x27;UQ ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>pas de test SSA ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>changement principalement offline ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>coût d&#x27;inférence agentique incompatible avec un détecteur opérationnel temps réel.</div></li></ul>
-<p>Le papier démontre surtout une <strong>méthode automatique de recherche de pipeline</strong>, pas un meilleur paradigme de détection.</p>
-</dd>
-<dt><strong>Utilité concrète</strong></dt><dd>
-<p>Je n&#x27;intégrerais aucun LLM dans ton détecteur. En revanche, leur <strong>model bank</strong> est une bonne idée pour tes baselines :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-018.png" alt="{CUSUM,BOCPD,kernel CPD,Mahalanobis,forecast residual ML}." style="width:36.3217em;height:1.4600em" loading="lazy"></div>
-<p>Il serait utile de déterminer si des manœuvres données sont mieux considérées comme anomalies ponctuelles, ruptures de moyenne, ruptures de covariance ou ruptures multivariées complexes.</p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>4. </strong><em><strong>Quantifying Event Impacts on Time Series via Multiscale</strong></em> <em><strong>Contrastive Learning</strong></em></h2>
-<p><strong>Yiming Sun, Shengyu Chen, Zhengzhang Chen, Haoyu Wang, Haifeng Chen, Xiaowei Jia — 19 août</strong> <strong>2026 — preprint / travail CIKM 2026.</strong></p>
-<p><a href="https://arxiv.org/abs/2608.19447?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Source directe — arXiv</a></p>
-<dl class="summary-grid">
-<dt><strong>Concept intéressant</strong></dt><dd>
-<p>EventTime cherche à apprendre l&#x27;effet d&#x27;un <strong>événement rare et discret sur une série temporelle</strong> <strong>continue</strong>. L&#x27;analogie avec une manœuvre est forte :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-019.png" alt="nominal dynamics+rare external intervention→post-event trajectory. " style="width:38.5249em;height:1.4610em" loading="lazy"></div>
-<p>L&#x27;architecture combine représentations temporelles à plusieurs résolutions, fusion événement-série par cross-attention, et apprentissage contrastif pour compenser le faible nombre d&#x27;événements rares. <a href="https://arxiv.org/html/2608.19447" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Données et évaluation</strong></dt><dd>
-<p>Le cas principal est le dataset SECURE : événements de cybersécurité associés aux réactions boursières des entreprises. La cible est une quantité scalaire représentant l&#x27;impact post-événement. Une seconde validation concerne des événements de pluie extrême et la réponse hydrologique.</p>
-<p>La séparation est <strong>chronologique</strong>, ce qui est préférable à un random split pour des séries temporelles. Les métriques incluent <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-020.png" alt="2R" style="width:1.6012em;height:1.5678em" loading="lazy"></span>, MAE, RMSE, Pearson IC et Spearman Rank-IC. <a href="https://arxiv.org/html/2608.19447" target="_blank" rel="noreferrer">arXiv</a></p>
-<p>Sous le même fine-tuning, EventTime supervisé obtient <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-021.png" alt="2R=0.321" style="width:6.0308em;height:1.6331em" loading="lazy"></span>. L&#x27;ajout du contrastive learning porte le modèle complet à :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-022.png" alt="2R=0.524,MAE=0.0096,RMSE=0.0119." style="width:29.4185em;height:1.6956em" loading="lazy"></div>
-<p>Le gain par rapport au backbone seul est donc substantiel dans leur expérience. <a href="https://arxiv.org/html/2608.19447" target="_blank" rel="noreferrer">arXiv</a></p>
-</dd>
-<dt><strong>Ce que cela ne démontre pas</strong></dt><dd>
-<p>Il ne s&#x27;agit <strong>pas d&#x27;un détecteur d&#x27;anomalies</strong>. L&#x27;événement est connu et le modèle estime son impact. Il n&#x27;y a donc :</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>ni detection delay ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>ni FAR ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>ni seuil ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>ni calibration de probabilité d&#x27;événement.</div></li></ul>
-<p>L&#x27;interprétation correcte est « apprentissage de représentation pour événements rares », et non « meilleure méthode de détection ».</p>
-</dd>
-<dt><strong>Application à ton projet</strong></dt><dd>
-<p>L&#x27;idée la plus intéressante serait post-détection. Une fois une manœuvre détectée à <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-023.png" alt="tm " style="width:1.5068em;height:1.5683em" loading="lazy"></span>, apprendre :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-024.png" alt="v(state history,detected event representation)→{Δ,direction,type de manœuvre}." style="width:44.1831em;height:1.5253em" loading="lazy"></div>
-<p>L&#x27;apprentissage contrastif pourrait également servir à rapprocher dans l&#x27;espace latent les manœuvres dynamiquement similaires malgré des objets ou orbites différents.</p>
-</dd>
-</dl>
-</article>
-<article class="panel paper-card transcribed-report">
-<h2><strong>5. </strong><em><strong>NASAʼs Starling Mission Opens New Frontiers in Space Navigation</strong></em> <em><strong>— FALCON demonstration</strong></em></h2>
-<p><strong>NASA / EraDrive — 17 août 2026 — rapport technique institutionnel sur démonstration en vol. </strong><a href="https://www.nasa.gov/blogs/smallsatellites/2026/08/17/nasas-starling-mission-opens-new-frontiers-in-space-navigation/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">NASA</a></p>
-<p><a href="https://www.nasa.gov/blogs/smallsatellites/2026/08/17/nasas-starling-mission-opens-new-frontiers-in-space-navigation/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Source directe — NASA</a></p>
-<p>Ce n&#x27;est <strong>ni un papier ML ni un détecteur de manœuvre</strong>, mais c&#x27;est l&#x27;élément le plus intéressant de la semaine concernant le réalisme d&#x27;une future architecture SSA autonome.</p>
-<p>FALCON — <em>Fast Autonomous Lost-in-space Catalog-based Optical Navigation</em> — combine les caméras star-tracker de Starling, le logiciel Era-Core et un catalogue embarqué d&#x27;environ <strong>20 000 objets spatiaux</strong>. Les observations optiques sont corrélées au catalogue pour :</p>
-<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>déterminer l&#x27;orbite du satellite Starling lui-même ;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>mettre à jour l&#x27;orbite des autres objets observés. <a href="https://www.nasa.gov/blogs/smallsatellites/2026/08/17/nasas-starling-mission-opens-new-frontiers-in-space-navigation/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">NASA</a></div></li></ul>
-<p>Sur une période de trois jours, le système a amélioré à bord les orbites de <strong>plus de 200 objets sans</strong> <strong>intervention au sol</strong>. NASA indique également que les prédictions de position produites à bord étaient meilleures que celles initialement fournies par le catalogue au sol. <a href="https://www.nasa.gov/blogs/smallsatellites/2026/08/17/nasas-starling-mission-opens-new-frontiers-in-space-navigation/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">NASA</a></p>
-<dl class="summary-grid">
-<dt><strong>Ce qui manque</strong></dt><dd>
-<p>L&#x27;annonce ne donne pas :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-025.png" alt="RMSE,NEES/NIS,covariance consistency,FAR,P,D " style="width:34.7338em;height:1.5683em" loading="lazy"></div>
-<p>ni distribution quantitative des erreurs orbitales avant/après.</p>
-<p>Il faut donc traiter « better orbit predictions » comme <strong>résultat rapporté par NASA</strong>, pas comme une comparaison scientifique suffisamment documentée.</p>
-</dd>
-<dt><strong>Pourquoi cela compte malgré tout</strong></dt><dd>
-<p>La démonstration montre qu&#x27;un pipeline</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-026.png" alt="optical observations→catalog association→onboard OD/update" style="width:34.9592em;height:1.4600em" loading="lazy"></div>
-<p>est désormais testé en vol.</p>
-<p>Pour un détecteur de manœuvres, cela rend beaucoup moins théorique une architecture future dans laquelle :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-027.png" alt="onboard OD→state sequence→online residual/change detector→catalog update." style="width:44.3012em;height:1.4600em" loading="lazy"></div>
-<p>NASA prévoit en plus d&#x27;étendre FALCON au partage d&#x27;observations entre les quatre satellites Starling. <a href="https://www.nasa.gov/blogs/smallsatellites/2026/08/17/nasas-starling-mission-opens-new-frontiers-in-space-navigation/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">NASA</a></p>
-</dd>
-<dt><strong>Classement de lecture</strong></dt><dd>
-<div class="table-scroll"><table><tr><th><strong>Rang</strong></th><th><strong>Travail</strong></th><th><strong>Priorité pour ton sujet</strong></th><th><strong>Raison principale</strong></th></tr><tr><td><strong>1</strong></td><td><strong>FirstDiff</strong></td><td><strong>Très élevée</strong></td><td>Test direct de l&#x27;hypothèse « score latent &gt; erreur de reconstruction » + vraie métrique de délai</td></tr><tr><td><strong>2</strong></td><td><strong>Luo et al., ATLSTM–SGP4</strong></td><td><strong>Élevée</strong></td><td>Directement orbital ; idée d&#x27;apprendre l&#x27;erreur du modèle physique</td></tr><tr><td><strong>3</strong></td><td><strong>EvoTS-Agent</strong></td><td><strong>Moyenne-élevée</strong></td><td>Change-point detection + séparation validation/test particulièrement propre</td></tr><tr><td><strong>4</strong></td><td><strong>EventTime</strong></td><td><strong>Moyenne</strong></td><td>Représentations contrastives d&#x27;événements rares ; surtout caractérisation post-détection</td></tr><tr><td><strong>5</strong></td><td><strong>FALCON / Starling</strong></td><td><strong>Moyenne</strong></td><td>Réalisme opérationnel et architecture SSA autonome embarquée</td></tr></table></div>
-</dd>
-</dl>
-</article>
-<article class="panel transcribed-report">
-<h2><strong>Expériences que je lancerais maintenant</strong></h2>
-<p>La plus intéressante ne nécessite <strong>aucun nouveau backbone</strong>. Avec ton modèle de prévision actuel, je comparerais trois espaces de détection :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-028.png" alt="Stxx()=∥−^∥,ttraw2    ⊤−1Strr()=Σ,tMahtr    ⊤−1Stzμzμ()=(−)Σ(−).latenttztzz      " style="width:18.4233em;height:8.7558em" loading="lazy"></div>
-<p>Tous les paramètres <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-029.png" alt="μ,Σ" style="width:2.3922em;height:1.5253em" loading="lazy"></span> et tous les seuils seraient estimés <strong>uniquement sur le nominal train/calibration</strong>. Puis le test resterait complètement gelé.</p>
-<p>Je mesurerais ensuite, plutôt qu&#x27;un unique F1 :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-030.png" alt="P(Δv),D FAR/day,P∣FAR=f,D median(t−t),alarmmaneuver  " style="width:13.9584em;height:12.1141em" loading="lazy"></div>
-<p>et les quantiles <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-23-math-031.png" alt="PPP,,509095   " style="width:6.3955em;height:1.6141em" loading="lazy"></span> du délai.</p>
-<p>La deuxième expérience devrait confronter ton forecasting ML à une <strong>baseline hybride propagateur +</strong> <strong>correction apprise</strong> :</p>
-<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-23-math-032.png" alt="SGP4xxf^=+(historique des erreurs).t+hθth+   " style="width:22.1303em;height:1.9551em" loading="lazy"></div>
-<p>La question scientifique intéressante n&#x27;est pas seulement de savoir lequel prédit le mieux, mais lequel produit le <strong>résidu nominal le plus compact tout en conservant une réponse importante aux</strong> <strong>manœuvres</strong>.</p>
-<p>Enfin, j&#x27;ajouterais une expérience de <strong>censure autour de l&#x27;onset</strong> : supprimer volontairement la première mesure, puis les deux premières, puis les trois premières après chaque manœuvre. Si le recall s&#x27;effondre lorsque le premier pic est absent, ton système est essentiellement un détecteur de rupture ponctuelle. S&#x27;il reste capable de détecter l&#x27;événement plusieurs observations plus tard, il détecte véritablement le changement de régime. C&#x27;est, à mon avis, le test de robustesse le plus informatif à ajouter à court terme au protocole actuel.</p>
-</article>
-<!-- end-preserved-transcription -->
+    <article class="panel paper-card">
+      <h2>FirstDiff: One-Step Diffusion-Based Anomaly Detection for Multivariate Time Series via Initial Noise Prediction</h2>
+      <p class="meta">Ali Boudaghi, Alireza Nemati, Hadi Zare · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2608.15727" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2608.15727" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Diffusion models have recently shown strong potential for multivariate time-series anomaly detection by learning the distribution of normal data through iterative denoising. Existing diffusion-based approaches, however, typically perform anomaly detection after completing the reverse diffusion process, relying primarily on the final reconstructed signal and overlooking informative representations produced during denoising. This design incurs substantial computational cost and limits the use of intermediate diffusion information for anomaly detection. In this paper, we propose FirstDiff, a diffusion-based anomaly detection framework based on the observation that the predicted diffusion noise at the initial reverse-diffusion evaluation already contains sufficient information for accurate anomaly detection. FirstDiff models the statistical distribution of predicted diffusion noise under normal behavior using validation data, enabling anomaly inference from a single denoising-network evaluation rather than completing the reverse diffusion trajectory. To model complex temporal and inter-sensor dependencies, FirstDiff employs a Diffusion Transformer as the denoising backbone. Extensive experiments on five public benchmark datasets demonstrate that FirstDiff achieves state-of-the-art performance while reducing diffusion inference from the full reverse trajectory to a single denoising-network evaluation.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Tests anomaly information in diffusion-model latent noise rather than relying on full reconstruction error.</dd><dt>Main idea</dt><dd>Score abnormality from the initial reverse-diffusion noise prediction.</dd><dt>Method</dt><dd>Train a diffusion transformer on nominal windows and compare predicted noise with its validation distribution using Mahalanobis distance.</dd><dt>Key results</dt><dd>The briefing reports average F1 near 92.9% across five datasets and includes mean event-detection delay.</dd><dt>Limitations</dt><dd>Threshold selection may use test information; benchmark F1 and sample-based delay do not establish deployable orbital false-alarm performance.</dd><dt>Relevance to my research</dt><dd>Compare latent or noise-based scores with TSMixer residuals using fixed nominal calibration and matched event-level alert budgets.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Research on LSTM-based spatial target trajectory forecasting enhanced by attention mechanisms</h2>
+      <p class="meta">Qingshan Luo, Jiahao Ji, Tao Yang, Yurui Xu +1 more · PLOS ONE · 2026</p>
+
+      <p class="link-row"><a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0356376" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>To address the strong dependence of space object orbit prediction on physical models and initial conditions, as well as the difficulty of completely eliminating prediction errors, this study proposes a satellite orbit prediction correction method that integrates an attention mechanism with a long short-term memory (LSTM) network. Taking the LAGEOS satellite as the research object, the proposed method uses position error, velocity, and acceleration features extracted from historical orbital data to train a deep learning model for predicting one-day-ahead orbital errors and correcting the SGP4 orbit prediction results. The experimental results show that the ATLSTM model outperforms the LSTM, support vector machine (SVM), back propagation neural network (BP), and bidirectional long short-term memory (BiLSTM) models in both orbital error prediction and correction. The residual ratios of ATLSTM in the X, Y, and Z axes are reduced to 3.68%, 4.77%, and 2.37%, respectively, effectively improving the accuracy of satellite orbital error prediction. Further analysis indicates that a reasonable setting of the number of neurons helps improve model performance, while the prediction difficulty increases with the extension of the prediction duration, suggesting that the ATLSTM model is more suitable for short-term orbital error prediction and correction. In addition, validation results for satellites at different orbital altitudes demonstrate that the proposed model has certain generalization capability. In summary, combining deep learning methods with physical orbital models can effectively improve the accuracy of space object orbit prediction and provides an effective approach for orbital error prediction, space situational awareness, and collision warning.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Targets propagation-model error that can mask small maneuver signatures in forecast residuals.</dd><dt>Main idea</dt><dd>Learn a correction to SGP4 position predictions rather than replacing the physical propagator.</dd><dt>Method</dt><dd>Axis-specific attention LSTMs use position error, velocity, and acceleration histories; predicted corrections are rolled forward recursively.</dd><dt>Key results</dt><dd>The briefing reports residuals reduced to 3.68%, 4.77%, and 2.37% of initial axis errors, with deterioration at longer horizons.</dd><dt>Limitations</dt><dd>The main experiment uses only eight days; possible test-based hyperparameter selection and absent uncertainty calibration weaken conclusions.</dd><dt>Relevance to my research</dt><dd>Test a physics-plus-learned correction baseline, measuring nominal residual variance and small-maneuver recall at the same false-alarm rate.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>EvoTS-Agent: A Self-Evolving LLM Agent for Financial Time Series Change Point Detection</h2>
+      <p class="meta">Lei Jiang, Ye Wei, Xinyu Xi, Jordan Langham-Lopez +6 more · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2608.17933" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2608.17933" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Financial time series exhibit non-stationary and heterogeneous statistical properties, making change-point detection challenging because no single unsupervised algorithm performs consistently across assets and market regimes. Conventional workflows consequently depend heavily on expert-driven model selection, feature design, and hyperparameter tuning, limiting their scalability and adaptability. We propose EvoTS-Agent, a validation-guided self-evolving LLM agent for autonomous financial time-series change-point detection. EvoTS-Agent first performs curated exploratory data analysis to characterize dataset properties and initialize candidate detection models. It then evolves executable experiment trajectories through three complementary operators: \textit{Revision} exploits the current best solution, \textit{Alternative Strategy} explores fundamentally different modeling directions when progress stagnates, and \textit{Recombination} synthesizes complementary evidence from high-performing trajectories. Validation feedback guides trajectory evolution throughout the search, enabling the agent to adapt its detection pipeline to the statistical characteristics of each dataset while preserving reliable optimization. Experiments across four benchmark datasets demonstrate that EvoTS-Agent consistently outperforms existing LLM-based agents while maintaining a 100\% execution success rate across all evaluated backbone LLMs.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Automates pipeline exploration while keeping test change-point labels hidden during optimization.</dd><dt>Main idea</dt><dd>Use an LLM agent to select and tune a bank of change-point detection methods.</dd><dt>Method</dt><dd>Iteratively evaluate candidates on validation using boundary-aware F1, with Hausdorff distance as a secondary diagnostic.</dd><dt>Key results</dt><dd>The briefing reports superiority over other tested agents on four financial datasets and 100% successful execution.</dd><dt>Limitations</dt><dd>Financial offline change-point metrics do not establish sequential maneuver latency, false-alarm control, or satellite transfer.</dd><dt>Relevance to my research</dt><dd>Reuse the idea of a small baseline bank with separate validation, while keeping the operational detector independent of an LLM.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Quantifying Event Impacts on Time Series via Multiscale Contrastive Learning</h2>
+      <p class="meta">Yiming Sun, Shengyu Chen, Zhengzhang Chen, Haoyu Wang +2 more · arXiv preprint · 2026</p>
+
+      <p class="link-row"><a href="https://arxiv.org/abs/2608.19447" target="_blank" rel="noreferrer">Source</a> <a href="https://arxiv.org/pdf/2608.19447" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Shocks that spread through the web, such as cybersecurity breach disclosures, can abruptly disrupt financial time series and cause substantial abnormal losses. While these events are disclosed as discrete records through news reports, regulatory filings, or public databases, their consequences unfold through continuous market dynamics. This creates an event-conditioned impact prediction problem: given pre-event market history and limited event metadata, the goal is to estimate short-term post-disclosure abnormal loss rather than reconstruct the full post-event trajectory. However, most time-series forecasting models focus on endogenous regularities such as trend, seasonality, and autocorrelation, and thus struggle with rare and heterogeneous external events. The challenge is further amplified by sparse high-impact events and background market noise. We introduce EventTime, a multi-resolution framework that combines long-horizon market context, short-horizon pre-event dynamics, and event metadata. It incorporates an event fusion module that couples temporal representations with event attributes to identify relevant recent market patterns. To mitigate sparse supervision, EventTime further introduces a dynamic contrastive objective that constructs event- and time-series-aware positive and negative pairs during training. We also construct SECURE, a real-world dataset aligning cybersecurity incidents with stock-market time series and structured and LLM-derived semantic features. Experiments show that EventTime consistently outperforms state-of-the-art time-series and event-aware baselines in estimating post-event financial losses. Further analyses demonstrate more event-sensitive representations, greater robustness to incomplete metadata, and more interpretable estimates of short-term market impact following cybersecurity disclosures.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Studies learning the impact of rare events, which is distinct from deciding whether an event occurred.</dd><dt>Main idea</dt><dd>Estimate post-event effects by combining event descriptors with temporal context.</dd><dt>Method</dt><dd>EventTime uses multiscale temporal representations, event-series cross-attention, and contrastive learning on financial and hydrological event data.</dd><dt>Key results</dt><dd>The briefing reports gains from contrastive training over the supervised backbone under chronological evaluation.</dd><dt>Limitations</dt><dd>Events are supplied as inputs; the method provides no anomaly threshold, false-alarm rate, or onset-detection guarantee.</dd><dt>Relevance to my research</dt><dd>Explore post-detection maneuver characterization or representations that group dynamically similar burns across different spacecraft.</dd>
+      </dl>
+    </article>
+
 
         </main>
         

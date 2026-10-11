@@ -97,6 +97,19 @@
       color: var(--muted);
       line-height: 1.5;
     }
+    .abstract {
+      margin-bottom: 20px;
+    }
+    .abstract summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .abstract p {
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
     .summary-grid {
       display: grid;
       grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
@@ -133,36 +146,14 @@
       text-align: center;
       padding: 28px;
     }
-    .footnote {
-      color: var(--muted);
-      font-size: 0.94rem;
-      padding-bottom: 6px;
-    }
     code {
       font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
       background: rgba(32, 38, 31, 0.06);
       padding: 0.1rem 0.35rem;
       border-radius: 6px;
     }
-    .transcribed-report p, .transcribed-report li, .transcribed-report td, .transcribed-report th {
-      line-height: 1.6;
-    }
-    .transcribed-report p:first-child { margin-top: 0; }
-    .transcribed-report { overflow-wrap: anywhere; }
     .summary-grid dd { min-width: 0; }
     .summary-grid dt { min-width: 0; }
-    .transcribed-report .summary-grid dd > :first-child { margin-top: 0; }
-    .report-list { list-style: none; padding-left: 0; }
-    .report-list li { display: flex; gap: 0.65rem; margin: 0.35rem 0; }
-    .original-label { flex: 0 0 auto; min-width: 1rem; }
-    .report-list li > div { min-width: 0; }
-    .table-scroll, .math-display { overflow-x: auto; max-width: 100%; }
-    .table-scroll table { border-collapse: collapse; width: 100%; min-width: 36rem; }
-    .table-scroll td, .table-scroll th { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-    .math-inline { display: inline-block; vertical-align: middle; max-width: none; }
-    .math-wrapper { display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }
-    .math-display { text-align: center; margin: 0.75rem 0; }
-    .math-display-image { display: inline-block; max-width: none; }
     @media (max-width: 640px) {
       .hero {
         padding-top: 32px;
@@ -217,10 +208,10 @@
               <span>5 items</span>
             </a><a class="digest-card" href="digests/2026-08-30.html">
               <strong>August 30, 2026</strong>
-              <span>5 items</span>
+              <span>4 items</span>
             </a><a class="digest-card" href="digests/2026-08-23.html">
               <strong>August 23, 2026</strong>
-              <span>5 items</span>
+              <span>4 items</span>
             </a><a class="digest-card" href="digests/2026-08-16.html">
               <strong>August 16, 2026</strong>
               <span>5 items</span>
@@ -265,9 +256,6 @@
               <span>0 items</span>
             </a>
             </div>
-          </section>
-          <section class="footnote">
-            <p>Discovery metadata is sourced from Semantic Scholar.</p>
           </section>
         </main>
         
