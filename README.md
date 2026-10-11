@@ -208,7 +208,7 @@ Do not store more state than necessary in the first version.
 - Python 3.11+
 - a GitHub repository named `paperfeed-daily-digest`
 - GitHub Pages enabled for the repository
-- optionally, a Semantic Scholar API key if you choose to use one
+- a Semantic Scholar API key stored as the `S2_API_KEY` repository secret for daily automation
 - optionally, a local `llama.cpp` server for LLM-based summarization
 
 ## Local setup
@@ -309,6 +309,41 @@ A daily workflow should:
 5. publish the Pages site.
 
 A minimal workflow usually also supports manual triggering for testing.
+
+### Enable unattended daily reports
+
+1. Open your repository's **Settings > Secrets and variables > Actions**.
+2. Click **New repository secret**, name it `S2_API_KEY`, and paste only the key
+   value from the Semantic Scholar email. The workflow already passes this secret
+   to the process through its environment; do not put the key in source files.
+3. In **Settings > Pages**, select **GitHub Actions** as the publishing source.
+4. Open **Actions > Daily Digest > Run workflow** to test a new run.
+
+The daily workflow uses a GitHub-hosted runner. It installs Python and PaperFeed,
+retrieves recommendations, generates up to five summaries with the current seed
+preferences, commits the generated pages and `data/seen.json`, and deploys the
+static site. Your computer can be turned off. No Ollama or `llama.cpp` server is
+required by the default summarizer.
+
+The deterministic summarizer selects sentences from abstracts and adds fixed
+context and limitations text; it does not use an LLM. Both current backends use
+abstracts and metadata only, even when a PDF link is available. At least one
+positive seed must be indexed by Semantic Scholar.
+
+Semantic Scholar requests are spaced at least 1.1 seconds apart across both Graph
+and Recommendations endpoints, respecting the key's cumulative one-request-per-second
+limit. This pacing applies to a single client/run; other applications using the
+same key share its allowance.
+
+For LLM summaries, the optional `llama-cpp` backend sends requests to an
+OpenAI-compatible `/chat/completions` endpoint. A local server only needs to run
+while a local digest command is executing. A GitHub-hosted runner cannot reach
+your computer's `localhost`. A hosted compatible endpoint is another option;
+it requires a provider URL, model, and API key. The current workflow only wires
+`S2_API_KEY`, so using hosted LLM summaries in CI also requires explicitly passing
+`PAPERFEED_SUMMARIZER_BACKEND`, `LLAMA_CPP_BASE_URL`, `LLAMA_CPP_MODEL`, and
+`LLAMA_CPP_API_KEY` (the latter from a separate repository secret). Compatibility
+and valid summary JSON should be tested with the chosen provider.
 
 ## Summary style contract
 

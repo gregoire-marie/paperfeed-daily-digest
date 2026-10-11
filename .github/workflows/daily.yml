@@ -38,7 +38,12 @@ jobs:
       - name: Run daily pipeline
         env:
           S2_API_KEY: ${{ secrets.S2_API_KEY }}
-        run: python -m paperfeed.run_daily
+        run: |
+          if [ -z "$S2_API_KEY" ]; then
+            echo "::error::Add the S2_API_KEY repository secret in Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          python -m paperfeed.run_daily
 
       - name: Commit generated content
         run: |

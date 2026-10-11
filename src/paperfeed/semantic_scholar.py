@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from typing import Protocol
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
@@ -41,6 +42,11 @@ class DiscoveryClient(Protocol):
 
 
 class SemanticScholarClient:
+    """Retrieve papers sequentially within the shared Semantic Scholar rate limit.
+
+    Use one client per daily run so Graph and Recommendations calls share pacing.
+    """
+
     GRAPH_BASE_URL = "https://api.semanticscholar.org/graph/v1"
     RECOMMENDATIONS_BASE_URL = "https://api.semanticscholar.org/recommendations/v1"
     PAPER_FIELDS = ",".join(
@@ -60,10 +66,18 @@ class SemanticScholarClient:
     )
 
     def __init__(self, api_key: str | None = None, timeout_seconds: int = 30) -> None:
+        """Initialize the API client.
+
+        Args:
+            api_key: API key, falling back to the S2_API_KEY environment variable.
+            timeout_seconds: Timeout for each HTTP request.
+        """
         self.api_key = api_key or os.getenv("S2_API_KEY")
         self.timeout_seconds = timeout_seconds
+        self._last_request_started: float | None = None
 
     def resolve_seed(self, seed: PaperSeed) -> Paper:
+        """Resolve a configured DOI or paper ID to paper metadata."""
         identifier = seed.paper_id or f"DOI:{seed.doi}"
         encoded_identifier = quote(identifier, safe=":")
         try:
@@ -82,6 +96,7 @@ class SemanticScholarClient:
         negative_paper_ids: list[str],
         limit: int,
     ) -> list[Paper]:
+        """Retrieve related papers in API order from the configured seeds."""
         capped_limit = max(1, min(limit, 500))
         payload = self._request_json(
             method="POST",
@@ -116,6 +131,7 @@ class SemanticScholarClient:
             headers["x-api-key"] = self.api_key
 
         request = Request(request_url, headers=headers, method=method, data=data)
+        self._wait_for_rate_limit()
         try:
             with urlopen(request, timeout=self.timeout_seconds) as response:
                 return json.loads(response.read().decode("utf-8"))
@@ -128,6 +144,15 @@ class SemanticScholarClient:
             ) from exc
         except URLError as exc:
             raise SemanticScholarError(f"Semantic Scholar request failed: {exc.reason}") from exc
+
+    def _wait_for_rate_limit(self) -> None:
+        # The 1 request/second allowance is cumulative across all endpoints.
+        # Leave a small margin to avoid requests arriving at the boundary.
+        if self._last_request_started is not None:
+            remaining = 1.1 - (time.monotonic() - self._last_request_started)
+            if remaining > 0:
+                time.sleep(remaining)
+        self._last_request_started = time.monotonic()
 
 
 def _build_seed_not_found_message(seed: PaperSeed, details: str) -> str:
