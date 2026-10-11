@@ -67,8 +67,9 @@ For contribution rules and product boundaries, see [`AGENTS.md`](AGENTS.md).
 
 ## Roadmap
 
-- [ ] **Add relevance screening and selective LLM enrichment**, using a hosted
-  API with a free tier where available. Before selecting up to `top_k` papers,
+- [ ] **Add hosted LLM integration**, using an API with a free tier where
+  available, for relevance screening and selective summary enrichment.
+  Before selecting up to `top_k` papers,
   assess each candidate against explicit research goals using its abstract and
   the seed abstracts. Require an evidence-backed reason for inclusion; exclude
   weak or uncertain matches, allow fewer papers, and skip publishing when none
