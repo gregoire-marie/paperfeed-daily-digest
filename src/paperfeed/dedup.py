@@ -18,12 +18,8 @@ def normalize_title(title: str) -> str:
 
 
 def title_hash_for_paper(paper: Paper) -> str:
-    return title_hash_for_title(paper.title)
-
-
-def title_hash_for_title(title: str) -> str:
-    """Hash an original title for deduplication when no external ID is available."""
-    normalized = normalize_title(title)
+    """Return a stable title hash for deduplicating a paper."""
+    normalized = normalize_title(paper.title)
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 

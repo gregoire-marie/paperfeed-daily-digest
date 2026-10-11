@@ -67,9 +67,6 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
               {''.join(cards)}
             </div>
           </section>
-          <section class="footnote">
-            <p>Discovery metadata is sourced from Semantic Scholar.</p>
-          </section>
         </main>
         """,
     )
@@ -100,15 +97,13 @@ def build_digest_page(digest: Digest) -> str:
         </header>
         <main class="stack">
           {content}
-          <section class="footnote">
-            <p>Metadata and recommendation discovery are powered by Semantic Scholar.</p>
-          </section>
         </main>
         """,
     )
 
 
 def build_entry_card(entry: DigestEntry) -> str:
+    """Render a paper with the shared summary fields and its available abstract."""
     paper = entry.paper
     authors = format_authors(paper.authors)
     meta = " · ".join(part for part in [authors, paper.venue, _format_year(paper), _format_citations(paper)] if part)
@@ -140,7 +135,7 @@ def build_entry_card(entry: DigestEntry) -> str:
         f"<dt>{escape(label)}</dt><dd>{escape(value)}</dd>" for label, value in sections
     )
 
-    return f"""
+    card_html = f"""
     <article class="panel paper-card">
       <h2>{escape(paper.title)}</h2>
       <p class="meta">{escape(meta)}</p>
@@ -155,34 +150,7 @@ def build_entry_card(entry: DigestEntry) -> str:
       </dl>
     </article>
     """
-
-
-def build_transcribed_digest_page(digest_date: date, content_html: str, item_count: int) -> str:
-    """Wrap a preserved report transcription in PaperFeed's static reading layout.
-
-    Args:
-        digest_date: The report's archive date.
-        content_html: Verified transcription markup, including the original headings.
-        item_count: Number of ranked items, including any existing repository papers.
-
-    Returns:
-        A complete mobile-friendly HTML page without rewriting report content.
-    """
-    return _page_shell(
-        title=f"PaperFeed digest for {digest_date.isoformat()}",
-        description=f"Weekly digest for {digest_date.isoformat()}",
-        body=f"""
-        <header class="hero">
-          <p class="eyebrow">PaperFeed digest</p>
-          <h1>{escape(digest_date.strftime('%B %d, %Y'))}</h1>
-          <p class="lede">{item_count} items included in the weekly report.</p>
-          <p><a class="back-link" href="../index.html">Back to index</a></p>
-        </header>
-        <main class="stack">
-          {content_html}
-        </main>
-        """,
-    )
+    return "\n".join(line.rstrip() for line in card_html.splitlines()) + "\n"
 
 
 def source_url_for_paper(paper: Paper) -> str:
@@ -369,36 +337,14 @@ def _page_shell(*, title: str, description: str, body: str) -> str:
       text-align: center;
       padding: 28px;
     }}
-    .footnote {{
-      color: var(--muted);
-      font-size: 0.94rem;
-      padding-bottom: 6px;
-    }}
     code {{
       font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
       background: rgba(32, 38, 31, 0.06);
       padding: 0.1rem 0.35rem;
       border-radius: 6px;
     }}
-    .transcribed-report p, .transcribed-report li, .transcribed-report td, .transcribed-report th {{
-      line-height: 1.6;
-    }}
-    .transcribed-report p:first-child {{ margin-top: 0; }}
-    .transcribed-report {{ overflow-wrap: anywhere; }}
     .summary-grid dd {{ min-width: 0; }}
     .summary-grid dt {{ min-width: 0; }}
-    .transcribed-report .summary-grid dd > :first-child {{ margin-top: 0; }}
-    .report-list {{ list-style: none; padding-left: 0; }}
-    .report-list li {{ display: flex; gap: 0.65rem; margin: 0.35rem 0; }}
-    .original-label {{ flex: 0 0 auto; min-width: 1rem; }}
-    .report-list li > div {{ min-width: 0; }}
-    .table-scroll, .math-display {{ overflow-x: auto; max-width: 100%; }}
-    .table-scroll table {{ border-collapse: collapse; width: 100%; min-width: 36rem; }}
-    .table-scroll td, .table-scroll th {{ text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }}
-    .math-inline {{ display: inline-block; vertical-align: middle; max-width: none; }}
-    .math-wrapper {{ display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }}
-    .math-display {{ text-align: center; margin: 0.75rem 0; }}
-    .math-display-image {{ display: inline-block; max-width: none; }}
     @media (max-width: 640px) {{
       .hero {{
         padding-top: 32px;

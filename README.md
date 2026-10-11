@@ -158,19 +158,3 @@ separate secret. Test provider compatibility and summary JSON before enabling it
 
 The check uses public endpoints: success confirms API access from your computer,
 but does not prove the key was accepted.
-
-### Historical archive
-
-Twelve imported ChatGPT briefings are published as 58 concise paper cards using
-the same six fields as generated digests. Two non-paper updates are excluded.
-Archive summaries are based on the supplied briefings, not independently reviewed
-papers. Original source transcriptions and date mapping are documented in
-[`data/backfill/README.md`](data/backfill/README.md).
-
-```bash
-python -m paperfeed.backfill
-```
-
-This rebuilds the archive from checked, curated card data without a PDF or LLM,
-preserves the five original repository papers in the October 11 report, and
-aborts on checksum mismatches before writing reports.
