@@ -1,0 +1,326 @@
+SSA / satellite-maneuver ML briefing — 21–27 September 2026
+No strong new paper directly addresses orbital-maneuver detection this week. The most useful
+developments concern:
+multivariate predictive uncertainty;
+online adaptation under domain shift;
+anomaly-free detector selection;
+horizon-dependent calibration;
+physically informed anomaly evaluation in the space domain.
+1. Interweaving Marginals into Multivariate Sample Paths: Training-Free
+Dependence Construction for Probabilistic Time Series Foundation Models
+Jinmyeong Choi, Jinkwan Jang, Seul Lee, Taesup Kim
+22 September 2026 — arXiv preprint
+Direct paper
+Core contribution
+Probabilistic time-series foundation models generally produce marginal forecasts
+F (x)
+d,h
+for variable d and horizon h, but these marginals do not specify how future variables co-vary. Independent
+sampling silently assumes
+p(x ) = p(x ),
+t+1:t+H d,t+h
+∏
+d,h
+which destroys cross-element and cross-horizon dependence.
+The paper reconstructs a joint distribution using Gaussian copulas or historical rank templates while
+leaving the pretrained forecasting model frozen:
+z ∼ N(0,R), u = Φ(z ), x^ = F−1(u ).
+d,h d,h d,h d,h d,h
+The correlation structure can contain temporal dependence, cross-channel dependence, or both:
+R = R ⊗ R .
+channel-time channel time
+Crucially, the main experiment holds every coordinate-wise empirical marginal exactly fixed and changes
+only the association of samples. This cleanly isolates the value of dependence reconstruction.
+arxiv.org
+Data and evaluation
+The authors use 14 multivariate FEV-bench tasks with three frozen probabilistic backbones:
+Chronos-2;
+TimesFM-3;
+TiRex-2.
+They evaluate Energy Score and targeted channel and temporal Variogram Scores. Compared with
+independent sampling, channel–time coupling improves:
+Channel Variogram skill = 4.25%,
+Temporal Variogram skill = 19.51%.
+With direct sampling using 100 paths, the corresponding improvements are 4.94% and 21.86%. Results
+are computed over 654 common evaluation cells, with common random numbers and explicit numerical
+audits.
+arxiv.org +1
+Latency and uncertainty
+This is fundamentally an uncertainty-structure paper. It does not evaluate anomaly-detection delay or
+false-alarm rates.
+Its important result is that marginal calibration is insufficient. A model may have well-calibrated intervals
+for each orbital element while still producing the wrong joint covariance and therefore the wrong
+Mahalanobis anomaly score.
+Limitations
+The coupling assumes historical dependence remains relevant after the forecast origin. The separable
+Gaussian construction cannot represent variable-specific lead–lag relationships, and the experiments
+contain no orbital data or anomaly labels.
+arxiv.org
+Relevance to your work
+This addresses a concrete weakness in residual-based maneuver detection. If you use
+S = r⊤ Σ −1r ,
+t t t t
+then Σ must represent the joint forecast error distribution, not merely per-element predictive variances.
+t
+A direct experiment is:
+1. produce marginal quantiles for the five equinoctial elements;
+2. generate joint forecast paths using independent, temporal-only, and channel–time couplings;
+3. estimate Σ from those paths;
+t
+4. compare calibration and maneuver detection at fixed false-alarm rate.
+Reading priority: #1.
+2. Continuous Online Fault Detection for Mobile Robots via Adaptive Edge Models
+Jordan Levy, Nicolas Verstaevel, Vincent Talon, Benoit Gaudou
+24 September 2026 — arXiv preprint
+Direct paper
+Method
+The paper proposes offline-to-online distillation:
+TSPulse teacher → pseudo-scores → MiniRocket student.
+Synthetic spikes, cutoffs, drifts and noise are injected into nominal sequences, scored by the teacher, and
+used to train the student. MiniRocketʼs static ridge head is replaced with Recursive Least Squares:
+e = y − x⊤w ,
+t t t t−1
+P x
+t−1 t
+g = ,
+t
+λ + x⊤P x
+t t−1 t
+w = w + g e .
+t t−1 t t
+The feature-space novelty
+u = x⊤P x
+t t t−1 t
+is combined with an online noise estimate to decide when to request operator feedback and perform an
+update.
+arxiv.org
+Data and evaluation
+Evaluation combines selected TSB-AD datasets with a real four-wheeled robot dataset containing 63
+channels at 50 Hz. Three faults were physically induced—excess power consumption, overload and Global
+Navigation Satellite System jamming—each during two missions with precise temporal annotations.
+arxiv.org
+Under sequential replay:
+static teacher: VUS-PR approximately 0.26;
+static student: approximately 0.35;
+uncertainty-triggered adaptive student: 0.75;
+raw RLS eventually collapses to 0.41.
+This is useful evidence that online adaptation can improve detection under sequential domain shifts,
+although the test contains only six induced-fault missions.
+arxiv.org
+Latency and implementation
+On a Jetson Orin Nano:
+Configuration Mean inference
+TSPulse, CPU, 512 steps 343.45 ms
+TSPulse, GPU, 512 steps 36.09 ms
+MiniRocket, CPU, 512 steps 25.00 ms
+MiniRocket, CPU, 100 steps 4.30 ms
+The 99th percentile for the 100-step student is 4.50 ms. An RLS update with 2,000 kernels costs about 12
+ms; the default 10,000-kernel update costs 330 ms because covariance updating is O(k2). Code is linked
+through an anonymous review repository.
+arxiv.org +1
+Important qualifications
+The reported 4.30 ms is inference latency, not physical event-to-alarm delay.
+RLS “uncertainty” is geometric novelty scaled by estimated residual noise; it is not a calibrated
+posterior probability.
+Long-term resistance to catastrophic forgetting is not demonstrated.
+Feedback labels are assumed available from an operator.
+Statistical fault injection may not represent physically valid faults.
+arxiv.org
+Relevance to your work
+This suggests keeping your expensive TSMixer offline and distilling its score into a lightweight adaptive
+detector. However, the more useful idea is the split between:
+fixed temporal representation + cheap adaptive readout.
+For SSA, updates should be gated by catalog-quality checks or confirmed maneuvers, rather than
+unrestricted self-training.
+Reading priority: #2.
+3. Can We Predict Anomaly Detection Performance from Embedding-Space
+Geometry?
+Kevin Wilkinghoff, Zheng-Hua Tan
+22 September 2026 — arXiv preprint
+Direct paper
+Core problem
+Unsupervised detectors are trained on nominal data, but model and hyperparameter selection frequently
+uses labeled anomalies. This creates an unrealistic dependency on known fault examples.
+For inlier and outlier log-scores z and z , the authors derive:
+in out
+μ2
+AUC ≥ Δ ,
+Var(z ) + Var(z ) + μ2
+out in Δ
+where
+Δ = z − z .
+out in
+Because real outliers are unavailable, their moments are approximated using pseudo-anomalies
+constructed in embedding space.
+arxiv.org
+Pseudo-anomaly strategies
+The paper tests:
+isotropic Gaussian points;
+feature-wise recombination;
+sequence or element exchange;
+examples from another domain;
+examples from another semantic class;
+examples from another operating condition;
+a diverse union of several constructions.
+This distinction matters: arbitrary Gaussian points are often too far from the nominal manifold to provide
+useful model selection.
+Evaluation
+The study covers DCASE 2022–2025 anomalous-machine-sound benchmarks, four pretrained
+embedding models and 208 detector configurations. It evaluates model-selection quality using Spearman
+correlation, pairwise ranking accuracy and regret relative to the genuinely best detector.
+arxiv.org +1
+The diverse pseudo-AUC estimator obtains overall rank correlation 0.51, pairwise accuracy 0.69, and
+regret 2.75%. It exceeds conventional development-set selection on the shifted evaluation sets by 1.63
+percentage points in selected AUC, with a bootstrap 95% confidence interval of [0.85,2.45].
+arxiv.org
+Limitations
+The evidence is exclusively from acoustic machine monitoring and nearest-neighbour detectors.
+Performance depends strongly on pseudo-anomaly construction; sequence and element exchange
+perform poorly, and the best construction uses semantic metadata that may not always be available.
+There is no threshold calibration, latency analysis or false-alarm guarantee.
+Relevance to your work
+This is useful for selecting anomaly scores without tuning on test maneuvers. Physically meaningful SSA
+pseudo-anomalies could be produced by applying small impulsive Δv perturbations to nominal
+propagated trajectories:
+Δv ∼ p(magnitude,direction,orbital phase).
+The pseudo-events should be used only for model selection. Final performance must still be reported on
+independent real maneuver labels such as MAD-LEO.
+Reading priority: #3.
+4. PISCES: Physics-Informed Solar-wind Convolutional autoEncoder for Space-
+weather Anomaly Detection and Early Warning
+Kevin Lee, Alison J. March
+23 September 2026 — arXiv preprint; NASA symposium poster
+Direct paper · Code
+Method and data
+PISCES is trained without event labels on one-minute OMNI solar-wind measurements. Its autoencoder
+objective includes:
+magnetic-field consistency;
+an empirical temperature–velocity relationship;
+Parker-spiral geometry;
+penalties on changes in reconstructed derived quantities.
+The final score is decomposed into 15 reconstruction, plasma, magnetic and physics-related terms rather
+than producing only one opaque anomaly score.
+arxiv.org
+Training uses 11 years of nominally unlabeled data. Evaluation uses 2018–2024 events from NASA DONKI
+and the Richardson–Cane interplanetary coronal mass ejection catalog. A 99th-percentile threshold is
+fitted on 2016–2017 validation scores. Metrics include average precision, window and event probability of
+detection, false-alarm ratio and detection offset.
+arxiv.org
+Results and timeliness
+The selected checkpoint obtains test average precision 0.365, rising to 0.406 after validation-selected
+skip attenuation. Across 11 runs, mean average precision rises from
+0.306 ± 0.029
+to
+0.376 ± 0.020.
+Using causal trailing-median smoothing, full-skip configurations match approximately 29–35% of sudden
+commencements, with median estimated leads of 24–28 minutes. These are estimated physical warning
+margins, not measured end-to-end alert latencies.
+arxiv.org +1
+Major evaluation problems
+This paper is valuable partly because it exposes several failure modes:
+The chosen checkpoint was selected from 27 configurations after inspecting corrected test metrics.
+The skip-attenuation study was designed after test-set inspection.
+An untrained network achieves average precision 0.337, higher than 10 of the 11 trained full-skip
+runs.
+Physics-loss ablations do not show a consistent average-precision improvement.
+Changing the catalog matching tolerance from ±0.5 h to ±6 h raises PR-AUC from 0.220 to 0.419.
+OMNI timestamps are shifted to predicted bow-shock arrival and do not represent measurement
+receipt or alert issuance time.
+arxiv.org +2
+Therefore, the reported results are retrospective evidence, not a prospective demonstration of operational
+early warning.
+Relevance to your work
+The transferable parts are:
+1. physically decomposed anomaly scores;
+2. explicit event-versus-window metrics;
+3. sensitivity analysis for label-matching tolerance;
+4. the warning that visually plausible “early detection” can be created by timestamp conventions.
+For maneuver detection, report latency using raw observation availability:
+t − t ,
+alarm first available postmaneuver observation
+as well as relative to the maneuver epoch.
+Reading priority: #4.
+5. Evaluating Accuracy and Probabilistic Reliability of Zero-Shot Time Series
+Foundation Models
+Panagiotis Michael, Moysis Symeonides, Demetris Trihinas
+22 September 2026 — arXiv preprint
+Direct paper · Benchmark code
+Evaluation design
+The study compares six zero-shot forecasting models:
+Moirai-2;
+TiRex;
+Chronos-2;
+Sundial;
+Toto;
+TimesFM;
+against ARIMA, running average, random walk with drift and a supervised PatchTST.
+A chronological non-overlapping rolling protocol varies both forecast horizon and context length. Data
+include one-second traffic, hourly electricity load and daily financial prices. Two recent datasets were
+chosen to reduce pretraining leakage risk.
+arxiv.org +1
+Calibration metrics
+For nominal 80% prediction intervals, the paper reports:
+ICE = P(x ∈/ [q^ ,q^ ]) − 0.2 ,
+0.1 0.9
+plus Interval Mean Absolute Error, which measures how far missed observations fall outside the interval.
+This separates frequency calibration from the severity of interval violations.
+arxiv.org
+Main result
+Point accuracy and uncertainty reliability are not aligned.
+On the long EdgeTraffic horizon:
+TimesFM ICE: 0.73;
+Moirai ICE: 0.56;
+Toto ICE: 0.07;
+Chronos-2 and TiRex: below 0.06.
+TimesFM and Moirai remain competitive in point forecasting while becoming strongly overconfident. TiRex
+is the most consistently conservative model; Chronos-2 gives the best overall accuracy–calibration
+compromise.
+arxiv.org +1
+Limitations
+The evaluation is univariate and covers only three application datasets. It does not test anomalies,
+irregular sampling, missingness, concept drift, multivariate calibration or detection latency. Computational
+cost is also deferred to future work.
+arxiv.org
+Relevance to your work
+A forecasting model with lower mean squared error can still produce a worse detector if its predictive
+intervals are too narrow:
+underestimated uncertainty ⟹ inflated nominal residual scores ⟹ false alarms.
+Your forecasting evaluation should therefore report coverage as a function of forecast horizon, spacecraft
+and orbital regime—not just aggregate MSE.
+Reading priority: #5.
+Ranked reading priority
+Rank Item Main reason
+1 Interweaving Marginals Directly addresses the joint predictive covariance
+needed for multivariate residual scoring
+2 Continuous Online Fault Detection Practical architecture for lightweight adaptation
+under sequential domain shift
+3 Embedding-Space Geometry Provides a defensible route for selecting detectors
+without tuning on real maneuvers
+4 PISCES Space-domain early-warning study with unusually
+revealing evaluation caveats
+5 TSFM Probabilistic Reliability Shows that forecast accuracy and uncertainty
+calibration can diverge severely
+Recommended experiments
+1. Joint predictive-covariance ablation
+diagonal empirical copula
+Σ vs Σ vs Σ .
+t t t
+Compare calibration and detection at fixed FAR/object/day.
+2. Horizon-conditioned residual calibration
+Estimate:
+P(x ∈ [q^ ,q^ ] ∣ h,RSO,regime).
+t+h 0.1,t+h 0.9,t+h
+A single global residual threshold is unjustified if coverage deteriorates with h.
+3. Physically valid pseudo-maneuvers for model selection
+Generate impulsive maneuvers over magnitude, direction and orbital phase, then use them to rank score
+definitions or representations. Keep all real maneuvers strictly held out.
+4. Adaptive score head
+Freeze the forecasting representation and compare:
+static linear head vs gated RLS head.
+Measure both adaptation to nominal drift and whether confirmed maneuvers are forgotten.
+5. Latency audit
+Store four distinct timestamps:
+t , t , t , t .
+maneuver measurement available alarm
+Report both physical detection delay and processing delay. PISCES demonstrates why conflating
+propagated or shifted timestamps with operational alert time can create misleading early-warning claims.

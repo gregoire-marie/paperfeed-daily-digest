@@ -146,7 +146,7 @@ class LlamaCppSummarizer:
                 {
                     "role": "system",
                     "content": (
-                        "You write concise technical summaries for a daily research digest. "
+                        "You write concise technical summaries for a weekly research digest. "
                         "Use only the provided title, metadata, abstract, and seed matches. "
                         "Do not claim to have read the full paper. "
                         "Return a JSON object and nothing else."
@@ -285,7 +285,7 @@ def _build_llama_prompt(paper: Paper, matched_seed_titles: list[str]) -> str:
     matched_seed_block = ", ".join(matched_seed_titles) if matched_seed_titles else "None"
     field_list = "\n".join(f"- {key}" for key in SUMMARY_KEYS)
     return f"""
-Summarize the following paper for a small daily research digest.
+Summarize the following paper for a small weekly research digest.
 
 Return valid JSON with exactly these string keys:
 {field_list}

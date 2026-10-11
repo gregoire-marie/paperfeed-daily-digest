@@ -1,11 +1,11 @@
 # PaperFeed
 
-PaperFeed is a minimal daily research digest for researchers who want a small, high-signal paper feed instead of infinite social media scrolling.
+PaperFeed is a minimal weekly research digest for researchers who want a small, high-signal paper feed instead of infinite social media scrolling.
 
 It is designed for one job:
 
 1. start from a small set of seed papers that represent your research,
-2. fetch new related papers every day,
+2. fetch new related papers every week,
 3. summarize the best ones with a fixed structure,
 4. publish a simple static digest page to GitHub Pages.
 
@@ -14,7 +14,7 @@ The project intentionally avoids complexity.
 ## Goals
 
 - Discover papers similar to your own papers.
-- Run automatically every day.
+- Run automatically every week.
 - Avoid repeating papers that were already shown.
 - Produce concise, structured summaries.
 - Publish a mobile-friendly static digest you can read from your iPhone all day.
@@ -36,8 +36,8 @@ PaperFeed stays deliberately small:
 
 - **one discovery source**: Semantic Scholar recommendations,
 - **one memory file**: `data/seen.json`,
-- **one main runner**: `python -m paperfeed.run_daily`,
-- **one static output**: a daily digest page in `site/`.
+- **one main runner**: `python -m paperfeed.run_weekly`,
+- **one static output**: a weekly digest page in `site/`.
 
 The site is a reading surface, not a platform.
 
@@ -71,7 +71,7 @@ Deduplication is based on the best identifier available, in this priority order:
 
 ### 4. Selection
 
-The daily runner keeps the top `k` unseen candidates after lightweight filtering.
+The weekly runner keeps the top `k` unseen candidates after lightweight filtering.
 
 The first version should remain simple. Avoid adding sophisticated reranking unless there is a demonstrated quality problem.
 
@@ -146,10 +146,10 @@ paperfeed-daily-digest/
 │     ├─ dedup.py
 │     ├─ summarize.py
 │     ├─ site_builder.py
-│     └─ run_daily.py
+│     └─ run_weekly.py
 └─ .github/
    └─ workflows/
-      └─ daily.yml
+      └─ weekly.yml
 ```
 
 ## Configuration
@@ -210,7 +210,7 @@ Do not store more state than necessary in the first version.
 - Python 3.11+
 - a GitHub repository named `paperfeed-daily-digest`
 - GitHub Pages enabled for the repository
-- a Semantic Scholar API key stored as the `S2_API_KEY` repository secret for daily automation
+- a Semantic Scholar API key stored as the `S2_API_KEY` repository secret for weekly automation
 - optionally, a local `llama.cpp` server for LLM-based summarization
 
 ## Local setup
@@ -252,6 +252,16 @@ export LLAMA_CPP_API_KEY="..."
 
 ## Running locally
 
+PaperFeed generates one report per week. Scheduled generation runs on Sundays at
+06:17 UTC. A manual run uses the most recent Sunday as its default report date.
+If that report already exists, the command exits successfully without changing
+the report, fetching papers, or modifying deduplication state. This also protects
+the historical transcriptions below.
+
+The supported command is `python -m paperfeed.run_weekly` (or
+`paperfeed-run-weekly`). The older `paperfeed.run_daily` / `paperfeed-run-daily`
+commands remain compatibility aliases with the same weekly behavior.
+
 ### Check your Semantic Scholar key locally
 
 From the repository directory, run this in an interactive terminal (Python 3.11+;
@@ -265,7 +275,7 @@ Paste the key value from your email at the hidden prompt. The command uses this
 value directly rather than an existing `S2_API_KEY` environment variable. It does
 not save the key, add it to shell history, or change `site/` or `data/seen.json`.
 It tests a known indexed paper independently of your seeds, using the same client,
-headers, pacing, and retries as the daily pipeline.
+headers, pacing, and retries as the weekly pipeline.
 
 To also test your seeds and a recommendations request:
 
@@ -282,16 +292,16 @@ does not prove the paper is absent from Semantic Scholar. If the local check wor
 fails, compare the repository secret with the exact value you entered and start a
 fresh workflow run on the latest `main` commit, rather than rerunning an old job.
 
-Run the full daily pipeline:
+Run the full weekly pipeline:
 
 ```bash
-python -m paperfeed.run_daily --top-k 5
+python -m paperfeed.run_weekly --top-k 5
 ```
 
 Run it against a local `llama.cpp` server:
 
 ```bash
-python -m paperfeed.run_daily \
+python -m paperfeed.run_weekly \
   --summary-backend llama-cpp \
   --llama-base-url http://127.0.0.1:8080/v1 \
   --llama-model local-model
@@ -302,7 +312,7 @@ Typical effects of one run:
 - fetch recommendations,
 - remove already seen papers,
 - summarize the selected papers,
-- write a new daily digest page,
+- write a new weekly digest page,
 - refresh `site/index.html`,
 - update `data/seen.json`.
 
@@ -314,11 +324,11 @@ After a successful run, you should get something like:
 site/
 ├─ index.html
 └─ digests/
-   ├─ 2026-03-23.html
-   └─ 2026-03-24.html
+   ├─ 2026-10-11.html
+   └─ 2026-10-18.html
 ```
 
-Each daily page should be fully static and directly viewable in a browser.
+Each weekly page should be fully static and directly viewable in a browser.
 
 ## GitHub Pages deployment
 
@@ -332,26 +342,31 @@ Recommended approach:
 
 ## GitHub Actions automation
 
-A daily workflow should:
+The workflow is `.github/workflows/weekly.yml`, named **Weekly Digest**. It supports
+manual runs and one scheduled run per week. Pushes changing the site publish the
+existing static content without generating another report. This lets historical
+backfills deploy immediately while preserving the weekly generation cadence.
+
+A weekly workflow should:
 
 1. check out the repository,
 2. install dependencies,
-3. run `python -m paperfeed.run_daily`,
+3. run `python -m paperfeed.run_weekly`,
 4. commit the updated `site/` and `data/seen.json` files if they changed,
 5. publish the Pages site.
 
 A minimal workflow usually also supports manual triggering for testing.
 
-### Enable unattended daily reports
+### Enable unattended weekly reports
 
 1. Open your repository's **Settings > Secrets and variables > Actions**.
 2. Click **New repository secret**, name it `S2_API_KEY`, and paste only the key
    value from the Semantic Scholar email. The workflow already passes this secret
    to the process through its environment; do not put the key in source files.
 3. In **Settings > Pages**, select **GitHub Actions** as the publishing source.
-4. Open **Actions > Daily Digest > Run workflow** to test a new run.
+4. Open **Actions > Weekly Digest > Run workflow** to test a new run.
 
-The daily workflow uses a GitHub-hosted runner. It installs Python and PaperFeed,
+The weekly workflow uses a GitHub-hosted runner. It installs Python and PaperFeed,
 retrieves recommendations, generates up to five summaries with the current seed
 preferences, commits the generated pages and `data/seen.json`, and deploys the
 static site. Your computer can be turned off. No Ollama or `llama.cpp` server is
@@ -399,6 +414,30 @@ and valid summary JSON should be tested with the chosen provider.
 
 ## Summary style contract
 
+### Historical report archive
+
+Twelve original ChatGPT briefings (60 ranked items) have been transcribed into the
+archive using their stated coverage-window end dates. The October 11 report also
+retains the five papers originally generated by PaperFeed that day, for ten items
+in the combined report. The original briefing prose, headings, rankings, tables,
+formulas, links, introductions, and conclusions are preserved rather than passed
+through the current summarizer or rewritten into its section schema.
+
+The canonical transcriptions and date audit are in `data/backfill/`. See
+[`data/backfill/README.md`](data/backfill/README.md) for the mapping and fidelity
+checks. The PDF remains outside the repository; only the report transcriptions
+and small formula assets are versioned. Original item titles are added to
+`data/seen.json` so future discovery can avoid repeating them.
+
+Rebuild these checked transcriptions without the PDF or an LLM:
+
+```bash
+python -m paperfeed.backfill
+```
+
+Rebuilding is deterministic and preserves the existing October 11 repository
+papers. Checksum mismatches abort before any report is written.
+
 All summaries must follow the same structure and tone.
 
 They should be:
@@ -433,19 +472,19 @@ Version 1 should include only:
 - seed configuration,
 - deduplication through `seen.json`,
 - one default summarization backend with an optional local `llama.cpp` alternative,
-- one static digest page per day,
-- GitHub Actions daily automation.
+- one static digest page per week,
+- GitHub Actions weekly automation.
 
 Do not implement tags, filters, search, accounts, databases, dashboards, or analytics in version 1.
 
 ## Example user experience
 
-A normal daily workflow is:
+A normal weekly workflow is:
 
 1. open the GitHub Pages site on iPhone,
-2. read the latest daily digest,
+2. read the latest weekly digest,
 3. open the external PDF links for the papers worth deeper reading,
-4. come back the next day for a new small batch.
+4. come back the next week for a new small batch.
 
 The product is meant to feel like a focused reading ritual, not a content stream.
 
@@ -468,8 +507,8 @@ When contributing to PaperFeed:
 - candidate retrieval
 - deduplication
 - summarization
-- static daily page generation
-- GitHub Actions daily run
+- static weekly page generation
+- GitHub Actions weekly run
 
 ### Possible later additions
 
@@ -479,7 +518,7 @@ Only add these if a concrete need appears:
 - negative seeds,
 - better metadata normalization,
 - local non-versioned PDF cache,
-- email notification with the daily digest link.
+- email notification with the weekly digest link.
 
 ## License
 

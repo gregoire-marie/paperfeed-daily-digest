@@ -1,8 +1,14 @@
 # Implementation Status
 
-Updated: 2026-03-23
+Updated: 2026-10-11
 
 ## Completed
+
+- Weekly Sunday generation, manual triggering, and separate publishing on site pushes
+- Protection of existing weekly pages on repeated runs
+- Twelve original weekly ChatGPT briefings transcribed with source and date audits
+- October 11 blend preserving the five original PaperFeed papers and five briefing items
+- Standard-library archive rebuild, transcription checksums, and imported-title deduplication
 
 - Project packaging and `src/paperfeed/` module layout
 - Seed configuration loading from `seeds.yaml`
@@ -11,9 +17,9 @@ Updated: 2026-03-23
 - Deterministic abstract-based summaries with a fixed section contract
 - Optional `llama.cpp` summarizer backend via a local OpenAI-compatible server
 - Static digest page generation under `site/`
-- Daily runner CLI at `python -m paperfeed.run_daily`
+- Weekly runner CLI at `python -m paperfeed.run_weekly`
 - GitHub Actions workflow for scheduled generation and Pages deployment
-- Offline unit tests for config parsing, deduplication, and the daily pipeline
+- Offline unit tests for config parsing, deduplication, and the weekly pipeline
 
 ## Pending
 

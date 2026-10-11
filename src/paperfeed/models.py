@@ -130,7 +130,7 @@ class DigestEntry:
 
 @dataclass(frozen=True, slots=True)
 class Digest:
-    """A daily reading page, with an explanation when no papers were selected."""
+    """A weekly reading page, with an explanation when no papers were selected."""
 
     digest_date: date
     entries: list[DigestEntry]

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PaperFeed digest for 2026-09-20</title>
+  <meta name="description" content="Weekly digest for 2026-09-20">
+  <style>
+    :root {
+      --bg: #f4efe3;
+      --panel: rgba(255, 251, 242, 0.9);
+      --ink: #20261f;
+      --muted: #5e655d;
+      --line: rgba(32, 38, 31, 0.12);
+      --accent: #1e6a4c;
+      --accent-soft: #ddeee6;
+      --shadow: 0 18px 40px rgba(32, 38, 31, 0.08);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(30, 106, 76, 0.12), transparent 32%),
+        radial-gradient(circle at top right, rgba(178, 111, 56, 0.12), transparent 28%),
+        linear-gradient(180deg, #fbf7ee 0%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .hero, .stack {
+      width: min(860px, calc(100vw - 32px));
+      margin: 0 auto;
+    }
+    .hero {
+      padding: 48px 0 24px;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0 0 10px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      line-height: 0.95;
+      max-width: 12ch;
+    }
+    .lede {
+      max-width: 42rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .stack {
+      display: grid;
+      gap: 18px;
+      padding-bottom: 48px;
+    }
+    .panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .digest-list {
+      display: grid;
+      gap: 12px;
+    }
+    .digest-card {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+    .paper-card h2, .panel h2 {
+      margin-top: 0;
+    }
+    .meta {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+      gap: 10px 16px;
+      margin: 0;
+    }
+    .summary-grid dt {
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .summary-grid dd {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 16px 0 20px;
+    }
+    .link-row a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-soft);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+    .back-link {
+      font-weight: 700;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 28px;
+    }
+    .footnote {
+      color: var(--muted);
+      font-size: 0.94rem;
+      padding-bottom: 6px;
+    }
+    code {
+      font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
+      background: rgba(32, 38, 31, 0.06);
+      padding: 0.1rem 0.35rem;
+      border-radius: 6px;
+    }
+    .transcribed-report p, .transcribed-report li, .transcribed-report td, .transcribed-report th {
+      line-height: 1.6;
+    }
+    .transcribed-report p:first-child { margin-top: 0; }
+    .transcribed-report { overflow-wrap: anywhere; }
+    .summary-grid dd { min-width: 0; }
+    .summary-grid dt { min-width: 0; }
+    .transcribed-report .summary-grid dd > :first-child { margin-top: 0; }
+    .report-list { list-style: none; padding-left: 0; }
+    .report-list li { display: flex; gap: 0.65rem; margin: 0.35rem 0; }
+    .original-label { flex: 0 0 auto; min-width: 1rem; }
+    .report-list li > div { min-width: 0; }
+    .table-scroll, .math-display { overflow-x: auto; max-width: 100%; }
+    .table-scroll table { border-collapse: collapse; width: 100%; min-width: 36rem; }
+    .table-scroll td, .table-scroll th { text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .math-inline { display: inline-block; vertical-align: middle; max-width: none; }
+    .math-wrapper { display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }
+    .math-display { text-align: center; margin: 0.75rem 0; }
+    .math-display-image { display: inline-block; max-width: none; }
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 32px;
+      }
+      .panel {
+        padding: 18px;
+        border-radius: 20px;
+      }
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .digest-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+        <header class="hero">
+          <p class="eyebrow">PaperFeed digest</p>
+          <h1>September 20, 2026</h1>
+          <p class="lede">5 items included in the weekly report.</p>
+          <p><a class="back-link" href="../index.html">Back to index</a></p>
+        </header>
+        <main class="stack">
+          
+<!-- preserved-transcription -->
+<article class="panel transcribed-report">
+<h2><strong>SSA / satellite-maneuver ML briefing — 14–20 September 2026</strong></h2>
+<p>This week produced <strong>no strong new paper directly on orbital-maneuver detection</strong> comparable to MAD-LEO last week. The worthwhile material is instead methodological. Two papers are particularly relevant to your current residual-based approach: <strong>GSLAD</strong>, because it asks whether anomalies are more visible as changes in inter-variable structure than as forecast residuals, and <strong>Jensen et al.</strong>, because it addresses adaptive thresholding under distribution shift without immediately contaminating the nominal reference.</p>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>1. </strong><em><strong>GSLAD: Prototype-Regularized Graph Structure Learning for Multivariate Time</strong></em> <em><strong>Series Anomaly Detection</strong></em></h2>
+<p><strong>Zepeng Zhang, Fuad Khuri, Keivan Faghih Niresi, Olga Fink — EPFL</strong> <strong>14 September 2026 — arXiv preprint.</strong></p>
+<p><a href="https://arxiv.org/abs/2609.15483?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper — arXiv</a></p>
+<p>This is the most relevant new paper this week.</p>
+<dl class="summary-grid">
+<dt><strong>Core idea</strong></dt><dd>
+<p>Most forecasting-based detectors assume</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-001.png" alt="xxanomaly⟹∥−^∥↑.tt  " style="width:13.7963em;height:1.5253em" loading="lazy"></div>
+<p>GSLAD explicitly challenges that assumption. An abnormal physical regime can alter the <strong>relationships</strong> <strong>among variables</strong> while every individual trajectory remains relatively predictable. A forecast-residual detector may therefore continue forecasting well and miss the event. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>This is directly applicable to orbital maneuvers. A weak maneuver could alter relationships among your orbital elements without immediately generating a spectacular marginal residual in every element.</p>
+</dd>
+<dt><strong>Method</strong></dt><dd>
+<p>For an input window</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-002.png" alt="NW×X∈,Rt " style="width:6.7163em;height:1.9713em" loading="lazy"></div>
+<p>a shared 1-D convolutional encoder generates one representation per variable. A condition-aware attention module simultaneously learns a dense directed dependency graph</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-003.png" alt="NN×S∈[0,1],t " style="width:7.8608em;height:1.7844em" loading="lazy"></div>
+<p>while a sparsified version feeds a Graph Attention Network (GAT-v2) forecaster. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Training has two phases.</p>
+<p>First:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-004.png" alt="1^2LYY=∥−∥.predttF NH    " style="width:12.7905em;height:3.0822em" loading="lazy"></div>
+<p>Then all normal learned graphs are clustered with <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-005.png" alt="K" style="width:1.2773em;height:1.4600em" loading="lazy"></span>-means. For each normal operating regime <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-006.png" alt="k" style="width:0.8804em;height:1.4600em" loading="lazy"></span>, the method obtains an edge-wise mean and standard deviation:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-007.png" alt="μσ(,).kijkij,,  " style="width:6.3940em;height:1.6141em" loading="lazy"></div>
+<p>Structural deviation is approximately</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-008.png" alt="2sμ1(−)t,ijk,ijdS()=  .kt22∑N2σ+σ     0k,ij  ij" style="width:16.6694em;height:3.7386em" loading="lazy"></div>
+<p>Thus deviation of a normally <strong>stable</strong> relationship is weighted more strongly than deviation of an inherently variable relationship. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>At inference, the anomaly score combines z-normalized:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-009.png" alt="SSS=+.anomalypredictionstructural   " style="width:16.5795em;height:1.6141em" loading="lazy"></div>
+<p>The normalization statistics come exclusively from training data. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Data and evaluation</strong></dt><dd>
+<p>Four standard industrial MTS datasets are used:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>SWaT;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>WADI;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>PSM;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Tennessee Eastman Process.</div></li></ul>
+<p>Training uses 80% of nominal data; 20% of nominal data is validation; labeled anomalous sequences are reserved for test. Importantly, the authors avoid threshold-optimized F1 and report <strong>ROC-AUC and PR-</strong><strong>AUC</strong>, explicitly because many baselines do not provide a predetermined threshold. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Results include:</p>
+<div class="table-scroll"><table><tr><th><strong>Dataset</strong></th><th><strong>ROC-AUC</strong></th><th><strong>PR-AUC</strong></th></tr><tr><td>SWaT</td><td>0.861</td><td>0.761</td></tr><tr><td>WADI</td><td>0.702</td><td>0.516</td></tr><tr><td>PSM</td><td>0.819</td><td>0.704</td></tr><tr><td>TEP</td><td>0.956</td><td>0.969</td></tr></table></div>
+<p>The important result is the ablation. Removing structural deviation reduces SWaT PR-AUC from <strong>0.761 to</strong> <strong>0.205</strong>, PSM from <strong>0.704 to 0.391</strong>, and TEP from <strong>0.969 to 0.929</strong>. Removing uncertainty normalization also substantially hurts several datasets. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>That is evidence that structural information contains anomaly signal unavailable from prediction residuals alone on these benchmarks.</p>
+</dd>
+<dt><strong>Latency and false alarms</strong></dt><dd>
+<p>This is the main weakness. The paper reports computational inference-time comparisons but <strong>no event</strong> <strong>detection delay</strong>, FAR/day, ARL, or operational threshold calibration. <a href="https://arxiv.org/html/2609.15483v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>ROC/PR curves therefore demonstrate ranking quality, not deployable alarm performance.</p>
+</dd>
+<dt><strong>Uncertainty</strong></dt><dd>
+<p>The <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-010.png" alt="σkij, " style="width:2.4102em;height:1.6141em" loading="lazy"></span> terms represent empirical <strong>normal structural variability</strong>, not predictive uncertainty in the Bayesian/conformal sense.</p>
+<p>Still, the idea is useful:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-011.png" alt="structural deviationexpected nominal structural variability " style="width:20.7422em;height:3.1475em" loading="lazy"></div>
+<p>is preferable to treating every learned relation equally.</p>
+</dd>
+<dt><strong>Why it matters for your maneuver detector</strong></dt><dd>
+<p>This suggests a precise experiment rather than replacing TSMixer.</p>
+<p>From your five orbital variables, learn a normal dependency representation and compare:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-012.png" alt="⊤−1S(t)=rΣrrttr    " style="width:8.6924em;height:1.8011em" loading="lazy"></div>
+<p>against</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-013.png" alt="StdGG()=(,)gtnominal   " style="width:11.8818em;height:1.6141em" loading="lazy"></div>
+<p>and</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-014.png" alt="S(t)=S(t)+λS(t).rg  " style="width:11.7768em;height:1.5683em" loading="lazy"></div>
+<p>The central question is:</p>
+<p><strong>Do weak maneuvers alter the multivariate orbital structure before they generate a sufficiently</strong> <strong>large prediction residual?</strong></p>
+<p>That is more scientifically interesting than another TSMixer-versus-Transformer benchmark.</p>
+<p><strong>Priority: #1.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>2. </strong><em><strong>Robust Fault Detection in Mechanical Multimodal Time Series via Self-</strong></em><em><strong>Supervised Cross-Modal Reconstruction</strong></em></h2>
+<p><strong>Magnus Munk Jensen, Dorte Hammershøi, Rafał Wiśniewski, Olga Fink</strong> <strong>14 September 2026 — arXiv preprint, submitted to Reliability Engineering &amp; System Safety.</strong></p>
+<p><a href="https://arxiv.org/abs/2609.16314?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper — arXiv</a></p>
+<p>This paper is valuable for two separate reasons: <strong>heterogeneous sensing</strong> and <strong>safe online threshold</strong> <strong>adaptation</strong>.</p>
+<dl class="summary-grid">
+<dt><strong>Method</strong></dt><dd>
+<p>Instead of reconstructing a modality from itself, the network reconstructs each modality from the others:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-015.png" alt="m(−)xD(z),^=mmshared   " style="width:9.4731em;height:2.1426em" loading="lazy"></div>
+<p>and uses</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-016.png" alt="2sxx=∥−^∥mmm   " style="width:9.3404em;height:1.7386em" loading="lazy"></div>
+<p>as anomaly evidence. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>The premise is that healthy modalities are mutually predictable because they observe the same latent physical state. A fault breaks that consistency.</p>
+<p>Unlike ordinary early fusion, this architecture accommodates heterogeneous sampling rates and does not require all modalities to be perfectly aligned. <a href="https://arxiv.org/abs/2609.16314" target="_blank" rel="noreferrer">arXiv +1</a></p>
+<p>That is directly interesting for future SSA fusion:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-017.png" alt="{radar,laser,optical,OD state}." style="width:16.9663em;height:1.4600em" loading="lazy"></div>
+</dd>
+<dt><strong>Adaptive threshold</strong></dt><dd>
+<p>The most useful component is independent of the neural architecture.</p>
+<p>For each known operating condition <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-018.png" alt="ρ" style="width:0.8756em;height:1.4600em" loading="lazy"></span>, maintain nominal score statistics</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-019.png" alt="(ρ)(ρ)(μ^,σ^).kk   " style="width:5.8471em;height:2.0344em" loading="lazy"></div>
+<p>Before updating anything, test</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-020.png" alt="(ρ)(ρ)(ρ)−s&gt;τ=μ^κσ^+.kkk−1alarmk−1      " style="width:15.2915em;height:2.1426em" loading="lazy"></div>
+<p>A separate, stricter gate determines whether the sample may update the nominal model:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-021.png" alt="(ρ)(ρ)g=1s≤μ^+κσ^.kkupdk−1k−1[]      " style="width:16.5463em;height:2.5791em" loading="lazy"></div>
+<p>Only samples passing this nominality gate update the exponentially weighted statistics. The decision therefore occurs <strong>before adaptation</strong>, and suspicious observations cannot immediately normalize themselves away. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
+<p>This directly addresses a problem discussed earlier with forecasting anomaly detectors: adaptation to the anomalous regime can make the anomaly disappear.</p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>Three public rotating-machinery datasets are used: AMPERE, KAIST and IMAD-DS, with explicit held-out operating conditions to create distribution shift. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>On the hardest AMPERE setting, leaving test operating conditions unseen during training, the proposed cross-modal method has overall AUC 0.871 versus 0.741 for the unimodal autoencoder and 0.714 for early fusion. At the most difficult 100% load condition the respective AUCs are 0.605, 0.235 and 0.426. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>With adaptive thresholding, one-broken-bar OOD testing gives approximately</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-022.png" alt="PRF=0.958,=0.917,=0.937.1 " style="width:22.7471em;height:1.6141em" loading="lazy"></div>
+<p>Other, easier fault types remain above <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-023.png" alt="F=0.961 " style="width:5.2764em;height:1.6141em" loading="lazy"></span> in their strong-OOD configuration. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Important methodological caveat</strong></dt><dd>
+<p>Their adaptive threshold <strong>does not provide a statistical FAR guarantee</strong>. Parameters such as <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-024.png" alt="3σ" style="width:1.5464em;height:1.5253em" loading="lazy"></span> or <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-025.png" alt="3.5σ" style="width:2.4878em;height:1.5253em" loading="lazy"></span> are configured empirically. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Furthermore, the operating condition <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-026.png" alt="ρ" style="width:0.8756em;height:1.4600em" loading="lazy"></span> is assumed known. In SSA, the analogous context might be orbital regime, sensor, geometry, or orbital phase, but those categories must be defined.</p>
+</dd>
+<dt><strong>Latency</strong></dt><dd>
+<p>No meaningful onset-to-alarm delay is reported.</p>
+</dd>
+<dt><strong>Why it matters</strong></dt><dd>
+<p>I would implement their gated adaptation concept on your existing anomaly score before touching the forecasting model:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-027.png" alt="Sτ&gt;alarmtalarm  ⎧SSτ→&lt;update nominal statisticsttupdate     ⎨otherwisefreeze calibration.⎩" style="width:24.5254em;height:5.5212em" loading="lazy"></div>
+<p>Then compare it against static calibration and EVT.</p>
+<p><strong>Priority: #2.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>3. </strong><em><strong>SlipSense: Multimodal Tactile Learning for Low-Latency and Generalized Slip</strong></em> <em><strong>Detection</strong></em></h2>
+<p><strong>Tong Jian et al.</strong> <strong>14 September 2026 — arXiv preprint; accepted at CoRL 2026.</strong></p>
+<p><a href="https://arxiv.org/abs/2609.15910?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper — arXiv</a></p>
+<p>The application is robotics, but this is the <strong>best new evaluation example this week for detection latency</strong>.</p>
+<dl class="summary-grid">
+<dt><strong>Why it is worth including</strong></dt><dd>
+<p>Most anomaly papers report classification accuracy and perhaps model inference time. SlipSense explicitly asks:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-028.png" alt="How long after the physical event does the detector actually fire? " style="width:34.3613em;height:1.4600em" loading="lazy"></div>
+<p>That is precisely what maneuver-detection evaluation needs.</p>
+</dd>
+<dt><strong>Method and data</strong></dt><dd>
+<p>The detector combines:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>a <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-029.png" alt="32×32" style="width:4.1495em;height:1.4600em" loading="lazy"></span> pressure array sampled at 240 Hz;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a three-axis accelerometer sampled at 8 kHz;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>modality-specific encoders;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>intra-sensor fusion;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>cross-modal attention;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>causal temporal prediction at 240 Hz.</div></li></ul>
+<p>The dataset contains approximately <strong>1.4 million frames over 37 objects</strong>. <a href="https://arxiv.org/abs/2609.15910" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>The reported overall result is:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-030.png" alt="FPRMacro-F1=96.7%,&lt;1.6%." style="width:20.4346em;height:1.5253em" loading="lazy"></div>
+<p>More importantly:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-031.png" alt="76%" style="width:2.4679em;height:1.4600em" loading="lazy"></div>
+<p>of physical slip events are detected within 23.1\ {\rm ms}. \] :chatgpt-content-reference{index=&quot;18&quot;} This is a much more useful latency statement than “inference takes 2 ms.” The authors additionally train only on one robotic system and evaluate **zero-shot on a different dexterous hand**, with unseen objects, sensor units and platform. :chatgpt-content-reference{index=&quot;19&quot;} ### Uncertainty No significant calibrated predictive-UQ mechanism is central to the method. ### Relevance to maneuver detection The transferable contribution is the evaluation protocol, not the architecture. Your equivalent result should eventually look like: \[ P\left( t_{\rm detect}-t_m \le\Delta t \mid \Delta v,\mathrm{FAR} \right).</p>
+<p>For example:</p>
+<p>At <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-033.png" alt="0.01" style="width:2.4014em;height:1.4600em" loading="lazy"></span> false alarms/object/day, 73% of maneuvers with <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-032.png" alt="Δv&gt;5" style="width:4.1070em;height:1.5253em" loading="lazy"></span> cm/s are detected within two observations.</p>
+<p>That is far more operationally meaningful than:</p>
+<p>F1 = 0.93.</p>
+<p>This paper reinforces the case for reporting the entire empirical latency CDF.</p>
+<p><strong>Priority: #3.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>4. </strong><em><strong>SOTER: A Generative Time-Series Foundation Model for Wearable Human</strong></em> <em><strong>Physiological Signals</strong></em></h2>
+<p><strong>Fangke Chen, Sirry Chen, Wei Chen, Zhongyu Wei</strong> <strong>15 September 2026 — arXiv preprint.</strong></p>
+<p><a href="https://arxiv.org/abs/2609.16804?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper — arXiv</a> <a href="https://github.com/SII-fkchen/SOTER?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Public implementation</a></p>
+<p>SOTER is not an anomaly detector, but it addresses three properties that general-purpose models such as TimesFM handle poorly for your problem:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-034.png" alt="multivariate coupling+irregular timestamps+continuous-time dynamics. " style="width:39.8262em;height:1.4600em" loading="lazy"></div>
+<dl class="summary-grid">
+<dt><strong>Architecture</strong></dt><dd>
+<p>The model combines:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div>continuous-time rotary positional encoding;</div></li><li><span class="original-label"><strong>2. </strong></span><div>five lower channel-independent temporal layers;</div></li><li><span class="original-label"><strong>3. </strong></span><div>one high-level cross-channel layer;</div></li><li><span class="original-label"><strong>4. </strong></span><div>power-spectral-density-guided mixture-of-experts;</div></li><li><span class="original-label"><strong>5. </strong></span><div>a Neural Controlled Differential Equation / Neural Ordinary Differential Equation decoder.</div></li></ul>
+<p>The timestamp itself, rather than the sequence index, controls positional encoding. The decoder can therefore be queried at arbitrary future times. <a href="https://arxiv.org/html/2609.16804v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>This is highly relevant to radar/laser SSA data where</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-035.png" alt="t−tii+1  " style="width:4.4072em;height:1.6141em" loading="lazy"></div>
+<p>is neither constant nor necessarily small.</p>
+</dd>
+<dt><strong>Data and evaluation</strong></dt><dd>
+<p>SOTER is pre-trained on <strong>226 billion physiological time points from five public datasets</strong>, then evaluated without retraining the backbone on six out-of-distribution datasets. <a href="https://arxiv.org/html/2609.16804v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>The authors evaluate three distinct capabilities:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>zero-shot forecasting;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>frozen-representation classification;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>continuous-time imputation.</div></li></ul>
+<p>It obtains the lowest RMSE on 4/6 zero-shot forecasting datasets, lowest MAE on 5/6, and lowest imputation error on all six datasets when <strong>75% of observations are missing</strong>. <a href="https://arxiv.org/abs/2609.16804" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>They also explicitly corrupt observations with additive acquisition noise; SOTER under their strongest corruption reportedly matches or exceeds several competing models operating on clean signals. <a href="https://arxiv.org/abs/2609.16804" target="_blank" rel="noreferrer">arXiv +1</a></p>
+</dd>
+<dt><strong>Reproducibility</strong></dt><dd>
+<p>Unlike many new foundation-model papers, source code is already public. <a href="https://arxiv.org/html/2609.16804v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>What this does </strong><em><strong>not</strong></em><strong> prove</strong></dt><dd>
+<p>There is no maneuver detection, no anomaly FAR, no detection latency and no anomaly-score calibration.</p>
+<p>It therefore provides <strong>architecture evidence</strong>, not anomaly-detection evidence.</p>
+</dd>
+<dt><strong>Why it matters</strong></dt><dd>
+<p>This is the most interesting new architecture to compare conceptually with TimesFM/TSMixer for your actual data characteristics.</p>
+<p>Rather than regularizing radar/laser observations onto a fixed grid, test:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-036.png" alt="nf{(t,x)}→x^(t)()θjjqj=1     " style="width:13.3310em;height:1.9551em" loading="lazy"></div>
+<p>directly.</p>
+<p>Then ask whether continuous-time forecasting produces:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div>lower nominal residual variance;</div></li><li><span class="original-label"><strong>2. </strong></span><div>better calibrated uncertainty versus sampling gap;</div></li><li><span class="original-label"><strong>3. </strong></span><div>higher maneuver separability.</div></li></ul>
+<p>The third criterion is the important one. Better RMSE alone is insufficient.</p>
+<p><strong>Priority: #4.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>5. </strong><em><strong>QUALS: Corpus Equilibrium for Universal Forecasting via Pattern Quantization</strong></em> <em><strong>and Learnability Synchronization</strong></em></h2>
+<p><strong>Yujie Li, Zezhi Shao, Chengqing Yu, Yisong Fu, Weijie Zhu, Yifan Du, Jilin Hu, Bin Yang, Yongjun Xu,</strong> <strong>Fei Wang</strong> <strong>17 September 2026 — arXiv preprint. </strong><a href="https://arxiv.org/abs/2609.20156?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv</a></p>
+<p><a href="https://arxiv.org/abs/2609.20156?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper — arXiv</a></p>
+<p>This is relevant because it shifts attention away from <strong>architecture</strong> and toward the <strong>distribution of</strong> <strong>temporal patterns seen during pre-training</strong>.</p>
+<dl class="summary-grid">
+<dt><strong>Core idea</strong></dt><dd>
+<p>Large time-series corpora are heavily imbalanced. Common easy motifs dominate optimization while uncommon dynamics receive relatively little effective training.</p>
+<p>QUALS first quantizes temporal patterns using vector quantization and uniform binning, then modifies sampling weights according to their observed learnability.</p>
+<p>The objective is essentially to prevent:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-037.png" alt="common/easy patterns≫rare/difficult patterns" style="width:25.5959em;height:1.4600em" loading="lazy"></div>
+<p>from determining the representation. The authors report that existing forecasting architectures trained with QUALS can achieve better zero-shot performance using only a fraction of the original pretraining data. <a href="https://arxiv.org/abs/2609.20156?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv +1</a></p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>The experiments concern <strong>zero-shot forecasting</strong>, not anomaly detection. Therefore:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>no FAR;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>no anomaly calibration;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>no detection delay;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>no maneuver evaluation.</div></li></ul>
+<p>The evidence should not be overinterpreted.</p>
+</dd>
+<dt><strong>Why it nevertheless matters</strong></dt><dd>
+<p>It connects directly to an important issue in your dataset.</p>
+<p>Your training population may contain very unequal amounts of:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>near-circular LEO;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>eccentric orbits;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>different inclinations;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>slowly versus rapidly evolving elements;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>different observation cadences;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>different dynamical regimes.</div></li></ul>
+<p>Uniform sampling over observations means the dominant orbital regime receives most gradient updates.</p>
+<p>Before inventing another architecture, cluster nominal windows in a representation such as</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-038.png" alt="˙zaeiaeiTt=[,,,˙,˙,,,Δ,…]orbitsampling  " style="width:19.4975em;height:1.7987em" loading="lazy"></div>
+<p>and inspect the training distribution.</p>
+<p>Then compare ordinary random batching with regime-balanced sampling.</p>
+<p>The key downstream quantity should again not be forecast MSE alone. Measure:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-039.png" alt="SVar(∣nominal regime)t " style="width:13.3330em;height:1.5683em" loading="lazy"></div>
+<p>and maneuver detection at fixed FAR.</p>
+<p><strong>Priority: #5.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Reading priority</strong></h2>
+<div class="table-scroll"><table><tr><th><strong>Rank</strong></th><th><strong>Work</strong></th><th><strong>Why</strong></th></tr><tr><td><strong>1</strong></td><td><strong>GSLAD</strong></td><td>Directly tests whether structural changes carry anomaly information beyond forecast residuals</td></tr><tr><td><strong>2</strong></td><td><strong>Cross-modal reconstruction + adaptive</strong> <strong>threshold</strong></td><td>Strong treatment of OOD score drift and safe test-time calibration</td></tr><tr><td><strong>3</strong></td><td><strong>SlipSense</strong></td><td>Excellent template for physically meaningful detection-latency evaluation</td></tr><tr><td><strong>4</strong></td><td><strong>SOTER</strong></td><td>Irregular sampling + multivariate coupling + continuous-time forecasting</td></tr><tr><td><strong>5</strong></td><td><strong>QUALS</strong></td><td>Highlights training-population imbalance rather than architecture</td></tr></table></div>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Experiments I would add now</strong></h2>
+<p>The highest-value experiment this week is a <strong>structural-score ablation</strong> on the model you already have. Do not implement all of GSLAD initially. Extract a time-dependent measure of cross-variable structure from nominal windows and test whether maneuver windows move away from it. Compare</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-040.png" alt="S(t),S(t),S(t)+λS(t)residualstructuralresidualstructural    " style="width:30.0967em;height:1.6141em" loading="lazy"></div>
+<p>using MAD-LEO or your own maneuver truth. Evaluate PR-AUC first, then freeze the scoring method and evaluate operational thresholds.</p>
+<p>Second, change latency reporting to an empirical detection CDF:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-041.png" alt="FkvPτtk(∣Δ)=(−≤).detm  " style="width:16.0268em;height:1.6141em" loading="lazy"></div>
+<p>Report it at several fixed false-alarm budgets and stratify by maneuver magnitude. SlipSense is a good example of how to make the result immediately interpretable. <a href="https://arxiv.org/abs/2609.15910" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Third, test <strong>gated calibration adaptation</strong>. Use two thresholds:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-042.png" alt="τ&lt;τ.updatealarm  " style="width:8.0395em;height:1.6141em" loading="lazy"></div>
+<p>Scores below the first update the nominal distribution; scores between them freeze adaptation; scores above the second trigger an alarm. This directly tests whether your detector can follow slow nominal drift without learning away a maneuver. <a href="https://arxiv.org/html/2609.16314v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
+<p>Fourth, perform an <strong>irregular-sampling stress test</strong>. Starting from the same trajectories, progressively remove observations and introduce realistic radar/laser gaps. Compare your current fixed-grid preprocessing against a continuous-time model or, more simply, add <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-20-math-043.png" alt="Δt" style="width:1.6956em;height:1.5253em" loading="lazy"></span> explicitly to the forecasting model. Plot</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-20-math-044.png" alt="Pfvt=(Δ,Δ)Dgap  " style="width:10.0918em;height:1.5516em" loading="lazy"></div>
+<p>at constant FAR. SOTER&#x27;s results under 75% missingness make this a worthwhile architecture direction, but they do not yet establish that it helps anomaly detection. <a href="https://arxiv.org/abs/2609.16804" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Finally, I would add <strong>training-regime balancing</strong> as a cheap ablation before changing the backbone. If rare orbital regimes currently contribute few training windows, balance them and check whether the worst-regime nominal residual variance decreases. This may improve cross-object generalization without increasing model complexity.</p>
+<p>The main conclusion this week is therefore fairly specific: <strong>the most promising direction is no longer</strong> <strong>simply improving the forecast. It is testing whether maneuver information appears in changes of</strong> <strong>multivariate structure that a good forecaster can otherwise absorb.</strong> GSLAD provides the clearest new experimental hypothesis for that.</p>
+</article>
+<!-- end-preserved-transcription -->
+
+        </main>
+        
+</body>
+</html>

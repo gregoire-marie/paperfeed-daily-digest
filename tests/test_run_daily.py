@@ -124,7 +124,7 @@ class RunDailyTests(unittest.TestCase):
                 client = FakeDiscoveryClient()
                 client.candidates = candidates
 
-                with self.assertLogs("paperfeed.run_daily", level="INFO") as logs:
+                with self.assertLogs("paperfeed.run_weekly", level="INFO") as logs:
                     result = run_daily(
                         config_path=config_path, seen_path=store.path, site_dir=root / "site",
                         digest_date=date(2026, 3, 23), client=client,
@@ -247,7 +247,7 @@ preferences:
                 encoding="utf-8",
             )
 
-            with self.assertLogs("paperfeed.run_daily", level="WARNING") as captured_logs:
+            with self.assertLogs("paperfeed.run_weekly", level="WARNING") as captured_logs:
                 result = run_daily(
                     config_path=config_path,
                     seen_path=seen_path,
@@ -281,7 +281,7 @@ negative_seeds: []
                 encoding="utf-8",
             )
 
-            with self.assertLogs("paperfeed.run_daily", level="WARNING") as captured_logs:
+            with self.assertLogs("paperfeed.run_weekly", level="WARNING") as captured_logs:
                 with self.assertRaisesRegex(
                     NoUsablePositiveSeedsError,
                     "None of the configured positive seeds could be resolved",

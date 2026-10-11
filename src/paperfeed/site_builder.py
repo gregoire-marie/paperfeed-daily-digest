@@ -27,16 +27,16 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
     cards = []
     for path in digest_paths:
         digest_date = date.fromisoformat(path.stem)
-        count_label = ""
+        count_label = f"{path.read_text(encoding='utf-8').count('<article class=\"panel paper-card')} items"
         if latest_digest and latest_digest.digest_date == digest_date:
-            count_label = f"{len(latest_digest.entries)} papers"
+            count_label = f"{len(latest_digest.entries)} items"
         cards.append(
             f"""
             <a class="digest-card" href="digests/{escape(path.name)}">
               <strong>{escape(digest_date.strftime('%B %d, %Y'))}</strong>
-              <span>{count_label or 'Open digest'}</span>
+              <span>{count_label}</span>
             </a>
-            """
+            """.strip()
         )
 
     if not cards:
@@ -44,18 +44,18 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
             """
             <section class="empty-state">
               <h2>No digests yet</h2>
-              <p>Run <code>python -m paperfeed.run_daily</code> to generate the first daily page.</p>
+              <p>Run <code>python -m paperfeed.run_weekly</code> to generate the first weekly page.</p>
             </section>
             """
         )
 
     return _page_shell(
         title="PaperFeed",
-        description="A minimal daily research digest built from your seed papers.",
+        description="A minimal weekly research digest built from your seed papers.",
         body=f"""
         <header class="hero">
           <p class="eyebrow">PaperFeed</p>
-          <h1>Daily paper digest</h1>
+          <h1>Weekly paper digest</h1>
           <p class="lede">
             A small, static reading surface for high-signal papers related to your research.
           </p>
@@ -76,26 +76,26 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
 
 
 def build_digest_page(digest: Digest) -> str:
-    """Render a daily page using its recorded explanation for an empty result."""
+    """Render a weekly page using its recorded explanation for an empty result."""
     if digest.entries:
         content = "".join(build_entry_card(entry) for entry in digest.entries)
     else:
         reason = digest.empty_reason or "No papers were selected. Discovery details were not recorded for this digest."
         content = f"""
         <section class="panel empty-state">
-          <h2>No new papers today</h2>
+          <h2>No new papers this week</h2>
           <p>{escape(reason)}</p>
         </section>
         """
 
     return _page_shell(
         title=f"PaperFeed digest for {digest.digest_date.isoformat()}",
-        description=f"Daily digest for {digest.digest_date.isoformat()}",
+        description=f"Weekly digest for {digest.digest_date.isoformat()}",
         body=f"""
         <header class="hero">
           <p class="eyebrow">PaperFeed digest</p>
           <h1>{escape(digest.digest_date.strftime('%B %d, %Y'))}</h1>
-          <p class="lede">{len(digest.entries)} papers selected for the day.</p>
+          <p class="lede">{len(digest.entries)} papers selected for the week.</p>
           <p><a class="back-link" href="../index.html">Back to index</a></p>
         </header>
         <main class="stack">
@@ -152,6 +152,34 @@ def build_entry_card(entry: DigestEntry) -> str:
       </dl>
     </article>
     """
+
+
+def build_transcribed_digest_page(digest_date: date, content_html: str, item_count: int) -> str:
+    """Wrap a preserved report transcription in PaperFeed's static reading layout.
+
+    Args:
+        digest_date: The report's archive date.
+        content_html: Verified transcription markup, including the original headings.
+        item_count: Number of ranked items, including any existing repository papers.
+
+    Returns:
+        A complete mobile-friendly HTML page without rewriting report content.
+    """
+    return _page_shell(
+        title=f"PaperFeed digest for {digest_date.isoformat()}",
+        description=f"Weekly digest for {digest_date.isoformat()}",
+        body=f"""
+        <header class="hero">
+          <p class="eyebrow">PaperFeed digest</p>
+          <h1>{escape(digest_date.strftime('%B %d, %Y'))}</h1>
+          <p class="lede">{item_count} items included in the weekly report.</p>
+          <p><a class="back-link" href="../index.html">Back to index</a></p>
+        </header>
+        <main class="stack">
+          {content_html}
+        </main>
+        """,
+    )
 
 
 def source_url_for_paper(paper: Paper) -> str:
@@ -260,6 +288,7 @@ def _page_shell(*, title: str, description: str, body: str) -> str:
       padding-bottom: 48px;
     }}
     .panel {{
+      min-width: 0;
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 24px;
@@ -335,6 +364,25 @@ def _page_shell(*, title: str, description: str, body: str) -> str:
       padding: 0.1rem 0.35rem;
       border-radius: 6px;
     }}
+    .transcribed-report p, .transcribed-report li, .transcribed-report td, .transcribed-report th {{
+      line-height: 1.6;
+    }}
+    .transcribed-report p:first-child {{ margin-top: 0; }}
+    .transcribed-report {{ overflow-wrap: anywhere; }}
+    .summary-grid dd {{ min-width: 0; }}
+    .summary-grid dt {{ min-width: 0; }}
+    .transcribed-report .summary-grid dd > :first-child {{ margin-top: 0; }}
+    .report-list {{ list-style: none; padding-left: 0; }}
+    .report-list li {{ display: flex; gap: 0.65rem; margin: 0.35rem 0; }}
+    .original-label {{ flex: 0 0 auto; min-width: 1rem; }}
+    .report-list li > div {{ min-width: 0; }}
+    .table-scroll, .math-display {{ overflow-x: auto; max-width: 100%; }}
+    .table-scroll table {{ border-collapse: collapse; width: 100%; min-width: 36rem; }}
+    .table-scroll td, .table-scroll th {{ text-align: left; padding: 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }}
+    .math-inline {{ display: inline-block; vertical-align: middle; max-width: none; }}
+    .math-wrapper {{ display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }}
+    .math-display {{ text-align: center; margin: 0.75rem 0; }}
+    .math-display-image {{ display: inline-block; max-width: none; }}
     @media (max-width: 640px) {{
       .hero {{
         padding-top: 32px;

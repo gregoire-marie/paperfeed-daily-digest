@@ -49,7 +49,7 @@ class DiscoveryClient(Protocol):
 class SemanticScholarClient:
     """Retrieve papers sequentially within the shared Semantic Scholar rate limit.
 
-    Use one client per daily run so Graph and Recommendations calls share pacing.
+    Use one client per run so Graph and Recommendations calls share pacing.
     """
 
     GRAPH_BASE_URL = "https://api.semanticscholar.org/graph/v1"

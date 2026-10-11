@@ -1,0 +1,201 @@
+<article class="panel transcribed-report">
+<h2><strong>SSA / satellite-maneuver ML briefing — 21–27 September 2026</strong></h2>
+<p>No strong new paper directly addresses orbital-maneuver detection this week. The most useful developments concern:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>multivariate predictive uncertainty;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>online adaptation under domain shift;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>anomaly-free detector selection;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>horizon-dependent calibration;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>physically informed anomaly evaluation in the space domain.</div></li></ul>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>1. </strong><em><strong>Interweaving Marginals into Multivariate Sample Paths: Training-Free</strong></em> <em><strong>Dependence Construction for Probabilistic Time Series Foundation Models</strong></em></h2>
+<p><strong>Jinmyeong Choi, Jinkwan Jang, Seul Lee, Taesup Kim</strong> <strong>22 September 2026 — arXiv preprint</strong> <a href="https://arxiv.org/abs/2609.25980?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Core contribution</strong></dt><dd>
+<p>Probabilistic time-series foundation models generally produce marginal forecasts</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-001.png" alt="Fx()dh, " style="width:3.8867em;height:1.5516em" loading="lazy"></div>
+<p>for variable <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-002.png" alt="d" style="width:0.8792em;height:1.4600em" loading="lazy"></span> and horizon <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-003.png" alt="h" style="width:0.9470em;height:1.4600em" loading="lazy"></span>, but these marginals do not specify how future variables co-vary. Independent sampling silently assumes</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-004.png" alt="px(x)=p(),ttHdth+1:+,+∏   d,h" style="width:14.0913em;height:2.9266em" loading="lazy"></div>
+<p>which destroys cross-element and cross-horizon dependence.</p>
+<p>The paper reconstructs a joint distribution using Gaussian copulas or historical rank templates while leaving the pretrained forecasting model frozen:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-005.png" alt="−1NRuzxFuz∼(0,),=Φ(),^=().dhdhdhdh,,,,dh,     " style="width:28.5297em;height:1.9719em" loading="lazy"></div>
+<p>The correlation structure can contain temporal dependence, cross-channel dependence, or both:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-006.png" alt="R=R⊗R.channel-timechanneltime   " style="width:15.8364em;height:1.6141em" loading="lazy"></div>
+<p>Crucially, the main experiment holds every coordinate-wise empirical marginal exactly fixed and changes only the association of samples. This cleanly isolates the value of dependence reconstruction. <a href="https://arxiv.org/html/2609.25980v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Data and evaluation</strong></dt><dd>
+<p>The authors use 14 multivariate FEV-bench tasks with three frozen probabilistic backbones:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>Chronos-2;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>TimesFM-3;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>TiRex-2.</div></li></ul>
+<p>They evaluate Energy Score and targeted channel and temporal Variogram Scores. Compared with independent sampling, channel–time coupling improves:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-007.png" alt="Channel Variogram skill=4.25%,Temporal Variogram skill=19.51%." style="width:19.4269em;height:4.8975em" loading="lazy"></div>
+<p>With direct sampling using 100 paths, the corresponding improvements are <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-008.png" alt="4.94%" style="width:3.4093em;height:1.4600em" loading="lazy"></span> and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-009.png" alt="21.86%" style="width:4.0143em;height:1.4600em" loading="lazy"></span>. Results are computed over 654 common evaluation cells, with common random numbers and explicit numerical audits. <a href="https://arxiv.org/html/2609.25980v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +1</a></p>
+</dd>
+<dt><strong>Latency and uncertainty</strong></dt><dd>
+<p>This is fundamentally an uncertainty-structure paper. It does not evaluate anomaly-detection delay or false-alarm rates.</p>
+<p>Its important result is that marginal calibration is insufficient. A model may have well-calibrated intervals for each orbital element while still producing the wrong joint covariance and therefore the wrong Mahalanobis anomaly score.</p>
+</dd>
+<dt><strong>Limitations</strong></dt><dd>
+<p>The coupling assumes historical dependence remains relevant after the forecast origin. The separable Gaussian construction cannot represent variable-specific lead–lag relationships, and the experiments contain no orbital data or anomaly labels. <a href="https://arxiv.org/html/2609.25980v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Relevance to your work</strong></dt><dd>
+<p>This addresses a concrete weakness in residual-based maneuver detection. If you use</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-010.png" alt="⊤−1Srr=Σ,tttt    " style="width:7.5346em;height:1.8636em" loading="lazy"></div>
+<p>then <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-011.png" alt="Σt " style="width:1.5059em;height:1.5030em" loading="lazy"></span> must represent the joint forecast error distribution, not merely per-element predictive variances.</p>
+<p>A direct experiment is:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div>produce marginal quantiles for the five equinoctial elements;</div></li><li><span class="original-label"><strong>2. </strong></span><div>generate joint forecast paths using independent, temporal-only, and channel–time couplings;</div></li><li><span class="original-label"><strong>3. </strong></span><div>estimate <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-012.png" alt="Σt " style="width:1.5059em;height:1.5030em" loading="lazy"></span> from those paths;</div></li><li><span class="original-label"><strong>4. </strong></span><div>compare calibration and maneuver detection at fixed false-alarm rate.</div></li></ul>
+<p><strong>Reading priority: #1.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>2. </strong><em><strong>Continuous Online Fault Detection for Mobile Robots via Adaptive Edge Models</strong></em></h2>
+<p><strong>Jordan Levy, Nicolas Verstaevel, Vincent Talon, Benoit Gaudou</strong> <strong>24 September 2026 — arXiv preprint</strong> <a href="https://arxiv.org/abs/2609.29194?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Method</strong></dt><dd>
+<p>The paper proposes offline-to-online distillation:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-013.png" alt="TSPulse teacher→pseudo-scores→MiniRocket student." style="width:30.4428em;height:1.4600em" loading="lazy"></div>
+<p>Synthetic spikes, cutoffs, drifts and noise are injected into nominal sequences, scored by the teacher, and used to train the student. MiniRocketʼs static ridge head is replaced with Recursive Least Squares:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-014.png" alt="⊤eyxw=−,ttt−1t    Pxt−1tg=,  t⊤ λxPx +t−1tt   w=w+ge.tt−1tt    " style="width:10.3139em;height:10.0969em" loading="lazy"></div>
+<p>The feature-space novelty</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-015.png" alt="⊤uxPx=tt−1tt    " style="width:7.6338em;height:1.8636em" loading="lazy"></div>
+<p>is combined with an online noise estimate to decide when to request operator feedback and perform an update. <a href="https://arxiv.org/html/2609.29194v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Data and evaluation</strong></dt><dd>
+<p>Evaluation combines selected TSB-AD datasets with a real four-wheeled robot dataset containing 63 channels at 50 Hz. Three faults were physically induced—excess power consumption, overload and Global Navigation Satellite System jamming—each during two missions with precise temporal annotations. <a href="https://arxiv.org/html/2609.29194v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+<p>Under sequential replay:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>static teacher: VUS-PR approximately <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-016.png" alt="0.26" style="width:2.4014em;height:1.4600em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>static student: approximately <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-017.png" alt="0.35" style="width:2.4014em;height:1.4600em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>uncertainty-triggered adaptive student: <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-018.png" alt="0.75" style="width:2.4014em;height:1.4600em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>raw RLS eventually collapses to <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-019.png" alt="0.41" style="width:2.4014em;height:1.4600em" loading="lazy"></span>.</div></li></ul>
+<p>This is useful evidence that online adaptation can improve detection under sequential domain shifts, although the test contains only six induced-fault missions. <a href="https://arxiv.org/html/2609.29194v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Latency and implementation</strong></dt><dd>
+<p>On a Jetson Orin Nano:</p>
+<div class="table-scroll"><table><tr><th><strong>Configuration</strong></th><th><strong>Mean inference</strong></th></tr><tr><td>TSPulse, CPU, 512 steps</td><td>343.45 ms</td></tr><tr><td>TSPulse, GPU, 512 steps</td><td>36.09 ms</td></tr><tr><td>MiniRocket, CPU, 512 steps</td><td>25.00 ms</td></tr><tr><td>MiniRocket, CPU, 100 steps</td><td>4.30 ms</td></tr></table></div>
+<p>The 99th percentile for the 100-step student is 4.50 ms. An RLS update with 2,000 kernels costs about 12 ms; the default 10,000-kernel update costs 330 ms because covariance updating is <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-020.png" alt="2O(k)" style="width:3.3008em;height:1.6331em" loading="lazy"></span>. Code is linked through an anonymous review repository. <a href="https://arxiv.org/html/2609.29194v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +1</a></p>
+</dd>
+<dt><strong>Important qualifications</strong></dt><dd>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>The reported 4.30 ms is inference latency, not physical event-to-alarm delay.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>RLS “uncertainty” is geometric novelty scaled by estimated residual noise; it is not a calibrated posterior probability.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Long-term resistance to catastrophic forgetting is not demonstrated.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Feedback labels are assumed available from an operator.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Statistical fault injection may not represent physically valid faults. <a href="https://arxiv.org/html/2609.29194v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></div></li></ul>
+</dd>
+<dt><strong>Relevance to your work</strong></dt><dd>
+<p>This suggests keeping your expensive TSMixer offline and distilling its score into a lightweight adaptive detector. However, the more useful idea is the split between:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-021.png" alt="fixed temporal representation+cheap adaptive readout." style="width:29.6850em;height:1.4600em" loading="lazy"></div>
+<p>For SSA, updates should be gated by catalog-quality checks or confirmed maneuvers, rather than unrestricted self-training.</p>
+<p><strong>Reading priority: #2.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>3. </strong><em><strong>Can We Predict Anomaly Detection Performance from Embedding-Space</strong></em> <em><strong>Geometry?</strong></em></h2>
+<p><strong>Kevin Wilkinghoff, Zheng-Hua Tan</strong> <strong>22 September 2026 — arXiv preprint</strong> <a href="https://arxiv.org/abs/2609.26460?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Core problem</strong></dt><dd>
+<p>Unsupervised detectors are trained on nominal data, but model and hyperparameter selection frequently uses labeled anomalies. This creates an unrealistic dependency on known fault examples.</p>
+<p>For inlier and outlier log-scores <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-022.png" alt="zin " style="width:1.5957em;height:1.6141em" loading="lazy"></span> and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-023.png" alt="zout " style="width:2.1133em;height:1.6141em" loading="lazy"></span>, the authors derive:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-024.png" alt="2μΔAUC≥ ,zzμ2Var()+Var()+ outinΔ  " style="width:18.6665em;height:3.5344em" loading="lazy"></div>
+<p>where</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-025.png" alt="zzΔ=−.outin  " style="width:7.8647em;height:1.6141em" loading="lazy"></div>
+<p>Because real outliers are unavailable, their moments are approximated using pseudo-anomalies constructed in embedding space. <a href="https://arxiv.org/html/2609.26460v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Pseudo-anomaly strategies</strong></dt><dd>
+<p>The paper tests:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>isotropic Gaussian points;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>feature-wise recombination;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>sequence or element exchange;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>examples from another domain;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>examples from another semantic class;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>examples from another operating condition;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a diverse union of several constructions.</div></li></ul>
+<p>This distinction matters: arbitrary Gaussian points are often too far from the nominal manifold to provide useful model selection.</p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>The study covers DCASE 2022–2025 anomalous-machine-sound benchmarks, four pretrained embedding models and 208 detector configurations. It evaluates model-selection quality using Spearman correlation, pairwise ranking accuracy and regret relative to the genuinely best detector. <a href="https://arxiv.org/html/2609.26460v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +1</a></p>
+<p>The diverse pseudo-AUC estimator obtains overall rank correlation <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-026.png" alt="0.51" style="width:2.4014em;height:1.4600em" loading="lazy"></span>, pairwise accuracy <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-027.png" alt="0.69" style="width:2.4014em;height:1.4600em" loading="lazy"></span>, and regret <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-028.png" alt="2.75%" style="width:3.4093em;height:1.4600em" loading="lazy"></span>. It exceeds conventional development-set selection on the shifted evaluation sets by 1.63 percentage points in selected AUC, with a bootstrap 95% confidence interval of <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-029.png" alt="[0.85,2.45]" style="width:5.7661em;height:1.4600em" loading="lazy"></span>. <a href="https://arxiv.org/html/2609.26460v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Limitations</strong></dt><dd>
+<p>The evidence is exclusively from acoustic machine monitoring and nearest-neighbour detectors. Performance depends strongly on pseudo-anomaly construction; sequence and element exchange perform poorly, and the best construction uses semantic metadata that may not always be available.</p>
+<p>There is no threshold calibration, latency analysis or false-alarm guarantee.</p>
+</dd>
+<dt><strong>Relevance to your work</strong></dt><dd>
+<p>This is useful for selecting anomaly scores without tuning on test maneuvers. Physically meaningful SSA pseudo-anomalies could be produced by applying small impulsive <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-030.png" alt="vΔ" style="width:1.8456em;height:1.5253em" loading="lazy"></span> perturbations to nominal propagated trajectories:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-031.png" alt="pΔv∼(magnitude,direction,orbital phase)." style="width:23.5815em;height:1.5253em" loading="lazy"></div>
+<p>The pseudo-events should be used only for model selection. Final performance must still be reported on independent real maneuver labels such as MAD-LEO.</p>
+<p><strong>Reading priority: #3.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>4. </strong><em><strong>PISCES: Physics-Informed Solar-wind Convolutional autoEncoder for Space-</strong></em><em><strong>weather Anomaly Detection and Early Warning</strong></em></h2>
+<p><strong>Kevin Lee, Alison J. March</strong> <strong>23 September 2026 — arXiv preprint; NASA symposium poster</strong> <a href="https://arxiv.org/abs/2609.28022?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper</a> · <a href="https://github.com/magnaprog/PISCES" target="_blank" rel="noreferrer">Code</a></p>
+<dl class="summary-grid">
+<dt><strong>Method and data</strong></dt><dd>
+<p>PISCES is trained without event labels on one-minute OMNI solar-wind measurements. Its autoencoder objective includes:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>magnetic-field consistency;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>an empirical temperature–velocity relationship;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Parker-spiral geometry;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>penalties on changes in reconstructed derived quantities.</div></li></ul>
+<p>The final score is decomposed into 15 reconstruction, plasma, magnetic and physics-related terms rather than producing only one opaque anomaly score. <a href="https://arxiv.org/html/2609.28022v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+<p>Training uses 11 years of nominally unlabeled data. Evaluation uses 2018–2024 events from NASA DONKI and the Richardson–Cane interplanetary coronal mass ejection catalog. A 99th-percentile threshold is fitted on 2016–2017 validation scores. Metrics include average precision, window and event probability of detection, false-alarm ratio and detection offset. <a href="https://arxiv.org/html/2609.28022v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Results and timeliness</strong></dt><dd>
+<p>The selected checkpoint obtains test average precision <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-032.png" alt="0.365" style="width:3.0064em;height:1.4600em" loading="lazy"></span>, rising to <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-033.png" alt="0.406" style="width:3.0064em;height:1.4600em" loading="lazy"></span> after validation-selected skip attenuation. Across 11 runs, mean average precision rises from</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-034.png" alt="0.306±0.029" style="width:7.2417em;height:1.4600em" loading="lazy"></div>
+<p>to</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-035.png" alt="0.376±0.020." style="width:7.5781em;height:1.4600em" loading="lazy"></div>
+<p>Using causal trailing-median smoothing, full-skip configurations match approximately 29–35% of sudden commencements, with median estimated leads of 24–28 minutes. These are estimated physical warning margins, not measured end-to-end alert latencies. <a href="https://arxiv.org/html/2609.28022v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +1</a></p>
+</dd>
+<dt><strong>Major evaluation problems</strong></dt><dd>
+<p>This paper is valuable partly because it exposes several failure modes:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>The chosen checkpoint was selected from 27 configurations after inspecting corrected test metrics.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>The skip-attenuation study was designed after test-set inspection.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>An untrained network achieves average precision <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-036.png" alt="0.337" style="width:3.0064em;height:1.4600em" loading="lazy"></span>, higher than 10 of the 11 trained full-skip runs.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Physics-loss ablations do not show a consistent average-precision improvement.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Changing the catalog matching tolerance from ±0.5 h to ±6 h raises PR-AUC from <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-037.png" alt="0.220" style="width:3.0064em;height:1.4600em" loading="lazy"></span> to <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-038.png" alt="0.419" style="width:3.0064em;height:1.4600em" loading="lazy"></span>.</div></li><li><span class="original-label" aria-hidden="true">•</span><div>OMNI timestamps are shifted to predicted bow-shock arrival and do not represent measurement receipt or alert issuance time. <a href="https://arxiv.org/html/2609.28022v1?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +2</a></div></li></ul>
+<p>Therefore, the reported results are retrospective evidence, not a prospective demonstration of operational early warning.</p>
+</dd>
+<dt><strong>Relevance to your work</strong></dt><dd>
+<p>The transferable parts are:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div>physically decomposed anomaly scores;</div></li><li><span class="original-label"><strong>2. </strong></span><div>explicit event-versus-window metrics;</div></li><li><span class="original-label"><strong>3. </strong></span><div>sensitivity analysis for label-matching tolerance;</div></li><li><span class="original-label"><strong>4. </strong></span><div>the warning that visually plausible “early detection” can be created by timestamp conventions.</div></li></ul>
+<p>For maneuver detection, report latency using raw observation availability:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-039.png" alt="t−t,alarmfirst available postmaneuver observation  " style="width:20.0024em;height:1.6141em" loading="lazy"></div>
+<p>as well as relative to the maneuver epoch.</p>
+<p><strong>Reading priority: #4.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>5. </strong><em><strong>Evaluating Accuracy and Probabilistic Reliability of Zero-Shot Time Series</strong></em> <em><strong>Foundation Models</strong></em></h2>
+<p><strong>Panagiotis Michael, Moysis Symeonides, Demetris Trihinas</strong> <strong>22 September 2026 — arXiv preprint</strong> <a href="https://arxiv.org/abs/2609.25788?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct paper</a> · <a href="https://github.com/unic-ailab/TSFM-Eval" target="_blank" rel="noreferrer">Benchmark code</a></p>
+<dl class="summary-grid">
+<dt><strong>Evaluation design</strong></dt><dd>
+<p>The study compares six zero-shot forecasting models:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>Moirai-2;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>TiRex;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Chronos-2;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Sundial;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Toto;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>TimesFM;</div></li></ul>
+<p>against ARIMA, running average, random walk with drift and a supervised PatchTST.</p>
+<p>A chronological non-overlapping rolling protocol varies both forecast horizon and context length. Data include one-second traffic, hourly electricity load and daily financial prices. Two recent datasets were chosen to reduce pretraining leakage risk. <a href="https://arxiv.org/pdf/2609.25788?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +1</a></p>
+</dd>
+<dt><strong>Calibration metrics</strong></dt><dd>
+<p>For nominal 80% prediction intervals, the paper reports:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-040.png" alt="ICE=P(x∈/[q^,q^])−0.2,0.10.9      " style="width:17.0014em;height:1.6141em" loading="lazy"></div>
+<p>plus Interval Mean Absolute Error, which measures how far missed observations fall outside the interval. This separates frequency calibration from the severity of interval violations. <a href="https://arxiv.org/pdf/2609.25788?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Main result</strong></dt><dd>
+<p>Point accuracy and uncertainty reliability are not aligned.</p>
+<p>On the long EdgeTraffic horizon:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>TimesFM ICE: <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-041.png" alt="0.73" style="width:2.4014em;height:1.4600em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Moirai ICE: <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-042.png" alt="0.56" style="width:2.4014em;height:1.4600em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Toto ICE: <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-043.png" alt="0.07" style="width:2.4014em;height:1.4600em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Chronos-2 and TiRex: below <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-044.png" alt="0.06" style="width:2.4014em;height:1.4600em" loading="lazy"></span>.</div></li></ul>
+<p>TimesFM and Moirai remain competitive in point forecasting while becoming strongly overconfident. TiRex is the most consistently conservative model; Chronos-2 gives the best overall accuracy–calibration compromise. <a href="https://arxiv.org/pdf/2609.25788?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org +1</a></p>
+</dd>
+<dt><strong>Limitations</strong></dt><dd>
+<p>The evaluation is univariate and covers only three application datasets. It does not test anomalies, irregular sampling, missingness, concept drift, multivariate calibration or detection latency. Computational cost is also deferred to future work. <a href="https://arxiv.org/pdf/2609.25788?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arxiv.org</a></p>
+</dd>
+<dt><strong>Relevance to your work</strong></dt><dd>
+<p>A forecasting model with lower mean squared error can still produce a worse detector if its predictive intervals are too narrow:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-045.png" alt="underestimated uncertainty⟹inflated nominal residual scores⟹false alarms." style="width:42.9292em;height:1.4600em" loading="lazy"></div>
+<p>Your forecasting evaluation should therefore report coverage as a function of forecast horizon, spacecraft and orbital regime—not just aggregate MSE.</p>
+<p><strong>Reading priority: #5.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Ranked reading priority</strong></h2>
+<div class="table-scroll"><table><tr><th><strong>Rank</strong></th><th><strong>Item</strong></th><th><strong>Main reason</strong></th></tr><tr><td>1</td><td>Interweaving Marginals</td><td>Directly addresses the joint predictive covariance needed for multivariate residual scoring</td></tr><tr><td>2</td><td>Continuous Online Fault Detection</td><td>Practical architecture for lightweight adaptation under sequential domain shift</td></tr><tr><td>3</td><td>Embedding-Space Geometry</td><td>Provides a defensible route for selecting detectors without tuning on real maneuvers</td></tr><tr><td>4</td><td>PISCES</td><td>Space-domain early-warning study with unusually revealing evaluation caveats</td></tr><tr><td>5</td><td>TSFM Probabilistic Reliability</td><td>Shows that forecast accuracy and uncertainty calibration can diverge severely</td></tr></table></div>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Recommended experiments</strong></h2>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div><strong>Joint predictive-covariance ablation</strong></div></li></ul>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-046.png" alt="diagonalempiricalcopulaΣvsΣvsΣ.ttt   " style="width:19.3569em;height:1.9261em" loading="lazy"></div>
+<p>Compare calibration and detection at fixed FAR/object/day.</p>
+<ul class="report-list"><li><span class="original-label"><strong>2. </strong></span><div><strong>Horizon-conditioned residual calibration</strong></div></li></ul>
+<p>Estimate:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-047.png" alt="Pxqqh(∈[^,^]∣,RSO,regime).t+h0.1,t+h0.9,t+h    " style="width:23.1040em;height:1.6141em" loading="lazy"></div>
+<p>A single global residual threshold is unjustified if coverage deteriorates with <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-09-27-math-048.png" alt="h" style="width:0.9470em;height:1.4600em" loading="lazy"></span>.</p>
+<ul class="report-list"><li><span class="original-label"><strong>3. </strong></span><div><strong>Physically valid pseudo-maneuvers for model selection</strong></div></li></ul>
+<p>Generate impulsive maneuvers over magnitude, direction and orbital phase, then use them to rank score definitions or representations. Keep all real maneuvers strictly held out.</p>
+<ul class="report-list"><li><span class="original-label"><strong>4. </strong></span><div><strong>Adaptive score head</strong></div></li></ul>
+<p>Freeze the forecasting representation and compare:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-049.png" alt="static linear headvsgated RLS head." style="width:21.3784em;height:1.4600em" loading="lazy"></div>
+<p>Measure both adaptation to nominal drift and whether confirmed maneuvers are forgotten.</p>
+<ul class="report-list"><li><span class="original-label"><strong>5. </strong></span><div><strong>Latency audit</strong></div></li></ul>
+<p>Store four distinct timestamps:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-09-27-math-050.png" alt="tttt,,,.maneuvermeasurementavailablealarm    " style="width:21.7124em;height:1.6141em" loading="lazy"></div>
+<p>Report both physical detection delay and processing delay. PISCES demonstrates why conflating propagated or shifted timestamps with operational alert time can create misleading early-warning claims.</p>
+</article>

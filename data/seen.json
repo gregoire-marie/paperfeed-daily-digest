@@ -29,10 +29,305 @@
     },
     {
       "doi": "10.1371/journal.pone.0356376",
-      "first_seen_date": "2026-10-11",
+      "first_seen_date": "2026-08-23",
       "last_summarized_date": "2026-10-11",
       "paper_id": "6abeaf87f64ada1f406dacfe819592e8e018f16c",
       "title_hash": "75a4883aba5e6effd5fe75d2932242ec20d3aef3459c6205800cc5e4c0362596"
+    },
+    {
+      "first_seen_date": "2026-07-12",
+      "last_summarized_date": "2026-07-12",
+      "title_hash": "61206109d5ac6636c7da4a6a0b24330f8b33f5963769a35485c7e0e504eb97d6"
+    },
+    {
+      "first_seen_date": "2026-07-12",
+      "last_summarized_date": "2026-07-12",
+      "title_hash": "3976cb4703c139619d3ff3374805c08f41ff3c178424472f0be24bd65997aa1c"
+    },
+    {
+      "first_seen_date": "2026-07-12",
+      "last_summarized_date": "2026-07-12",
+      "title_hash": "9ff5a8b243ab618914bac84817ca988105ed8c98a8b3b4e0e6d4006fd9e54257"
+    },
+    {
+      "first_seen_date": "2026-07-12",
+      "last_summarized_date": "2026-07-12",
+      "title_hash": "332082912ced95d33cb6d45421189fa56734272311877200f54290adb5090321"
+    },
+    {
+      "first_seen_date": "2026-07-12",
+      "last_summarized_date": "2026-07-12",
+      "title_hash": "c78caa32446d9be03e52bb64ceebeb4b87a499d2a66f6bd36820493489505a55"
+    },
+    {
+      "first_seen_date": "2026-07-26",
+      "last_summarized_date": "2026-07-26",
+      "title_hash": "67f49a2776152efb6c134cce9b77c4458adfcee00ddb8b92d05d01a5012103c4"
+    },
+    {
+      "first_seen_date": "2026-07-26",
+      "last_summarized_date": "2026-07-26",
+      "title_hash": "bfd42d2bfc13ea92965d953608566a927463c4c32c30226ea9fea5b03365df9a"
+    },
+    {
+      "first_seen_date": "2026-07-26",
+      "last_summarized_date": "2026-07-26",
+      "title_hash": "9d93c97d350087859c08840ba3d4342b53902570cf2d4911bb1502ca04a84c69"
+    },
+    {
+      "first_seen_date": "2026-07-26",
+      "last_summarized_date": "2026-07-26",
+      "title_hash": "3b396b6e53022efc4c16b47512d858fd302d1bb6f53e570c4142e3a0d14fe29d"
+    },
+    {
+      "first_seen_date": "2026-07-26",
+      "last_summarized_date": "2026-07-26",
+      "title_hash": "0464347c8c09af5acbf1c9659a581d57b0c32ccdf49c66cf24ab6b511973262d"
+    },
+    {
+      "first_seen_date": "2026-08-09",
+      "last_summarized_date": "2026-08-09",
+      "title_hash": "85844f7ad94cd95dfb4f02638c2c4045a56e278f270c93c6ce58e38fb071f3de"
+    },
+    {
+      "first_seen_date": "2026-08-09",
+      "last_summarized_date": "2026-08-09",
+      "title_hash": "049d58f3af0e0c05292f4a1877de84bd41c85b85a402ef497f81f7266f9b9794"
+    },
+    {
+      "first_seen_date": "2026-08-09",
+      "last_summarized_date": "2026-08-09",
+      "title_hash": "56055169204bdbfc156997de04a7cf17c6569325e805bc7c37f36cad3e356a19"
+    },
+    {
+      "first_seen_date": "2026-08-09",
+      "last_summarized_date": "2026-08-09",
+      "title_hash": "3393e4ec7bac11b4fabcaef5e1020e9d789c11208984967ea9e856e3c9e60866"
+    },
+    {
+      "first_seen_date": "2026-08-09",
+      "last_summarized_date": "2026-08-09",
+      "title_hash": "92cb847c22dc6b0e125349fd923d7d0dee9517ce96cc82200961a2d7be8383b5"
+    },
+    {
+      "first_seen_date": "2026-08-16",
+      "last_summarized_date": "2026-08-16",
+      "title_hash": "e9edff14a047f905195d77867b93f4b221b839bd134c6ce61ed5967efc365f4e"
+    },
+    {
+      "first_seen_date": "2026-08-16",
+      "last_summarized_date": "2026-08-16",
+      "title_hash": "372a15059c22f2aa5c02dff1cf335f8a06b86d45209de6130f2915478d23aa32"
+    },
+    {
+      "first_seen_date": "2026-08-16",
+      "last_summarized_date": "2026-08-16",
+      "title_hash": "f8eb16a335bf1b30a6bcc2f5b9802500716ec2e58d5871ec8ae30c9586d140ff"
+    },
+    {
+      "first_seen_date": "2026-08-16",
+      "last_summarized_date": "2026-08-16",
+      "title_hash": "25ec28b438c9a170ba000d15bd8fd29d6e0d075ce50f648960bd0b84c7051469"
+    },
+    {
+      "first_seen_date": "2026-08-16",
+      "last_summarized_date": "2026-08-16",
+      "title_hash": "164daa133ec8218dee54e06f1a72cc81706fb13baf7a034b477281ad9c9b46d5"
+    },
+    {
+      "first_seen_date": "2026-08-23",
+      "last_summarized_date": "2026-08-23",
+      "title_hash": "b4ff492fd4bf6498aacb699b4d9f1269f736355d121b8cd6ef44369ca87b05c1"
+    },
+    {
+      "first_seen_date": "2026-08-23",
+      "last_summarized_date": "2026-08-23",
+      "title_hash": "e9d796b85f733c26adea660d8b661e83ceb8520d162bb6228755f2f621d440e8"
+    },
+    {
+      "first_seen_date": "2026-08-23",
+      "last_summarized_date": "2026-08-23",
+      "title_hash": "9096a2d0c55a91f309f8cee42954a4a9df1642344193cc76ff20f3637dec47c6"
+    },
+    {
+      "first_seen_date": "2026-08-23",
+      "last_summarized_date": "2026-08-23",
+      "title_hash": "bfc8cf61a9c70ff4fc88c137342e1261a7a6e2cfb2383543ef4028a88fd031cb"
+    },
+    {
+      "first_seen_date": "2026-08-30",
+      "last_summarized_date": "2026-08-30",
+      "title_hash": "ff9764d55f3c7cb75cf68b7deedce7ca666955a8970b7cf63ebadcd6f030026c"
+    },
+    {
+      "first_seen_date": "2026-08-30",
+      "last_summarized_date": "2026-08-30",
+      "title_hash": "cf5cb4a09098fc3623e78f62c68b71bfd7cd7972973f931a25b57ff93bccc733"
+    },
+    {
+      "first_seen_date": "2026-08-30",
+      "last_summarized_date": "2026-08-30",
+      "title_hash": "aa9249b85b578df57ce99365dfaccefd6845e40c0344def151862bd839920005"
+    },
+    {
+      "first_seen_date": "2026-08-30",
+      "last_summarized_date": "2026-08-30",
+      "title_hash": "bba875a4d03e1a9a1c79f44f9149f03e817455974d33075f71671e6f8d35d313"
+    },
+    {
+      "first_seen_date": "2026-08-30",
+      "last_summarized_date": "2026-08-30",
+      "title_hash": "863b592e7bf2a4ae0a22ec1c5bf89637808f07511d6970d8314c2918bdf6fb8d"
+    },
+    {
+      "first_seen_date": "2026-09-06",
+      "last_summarized_date": "2026-09-06",
+      "title_hash": "1a6be4f3d82c58725816aad7683663cd15888724c5b9d9104a7b4ec94301b228"
+    },
+    {
+      "first_seen_date": "2026-09-06",
+      "last_summarized_date": "2026-09-06",
+      "title_hash": "f687dd6b1bf3321923c196324d6b42b718daa5918867f93a103bb9784824efc8"
+    },
+    {
+      "first_seen_date": "2026-09-06",
+      "last_summarized_date": "2026-09-06",
+      "title_hash": "facd502751a03ed7e52aea613471040b24ef4c0e6b165330cfb07ba64977d0cf"
+    },
+    {
+      "first_seen_date": "2026-09-06",
+      "last_summarized_date": "2026-09-06",
+      "title_hash": "5874846429877f1f455796d002672128ecce0340bb143bb97f27485b3c7c8824"
+    },
+    {
+      "first_seen_date": "2026-09-06",
+      "last_summarized_date": "2026-09-06",
+      "title_hash": "cf9efb7bf98cdcce72ccd6b43f47df4ab9ee81b9c7f0e8971a1a651bac5086b3"
+    },
+    {
+      "first_seen_date": "2026-09-13",
+      "last_summarized_date": "2026-09-13",
+      "title_hash": "b68d1575773120e130d3899893dc37f5f64dd9a9bf7a51cf1fef561809291cd6"
+    },
+    {
+      "first_seen_date": "2026-09-13",
+      "last_summarized_date": "2026-09-13",
+      "title_hash": "4c02647b1bf2969c6c293916b7ac98826461c1694a14c97c568d4f6f83302927"
+    },
+    {
+      "first_seen_date": "2026-09-13",
+      "last_summarized_date": "2026-09-13",
+      "title_hash": "8de35aa3e92650595a5e388a9e5c727bb60106c8e817047a8cfdc3a136174d55"
+    },
+    {
+      "first_seen_date": "2026-09-13",
+      "last_summarized_date": "2026-09-13",
+      "title_hash": "eb0a3836c7bb96dcbfcb3208625462f4f1ef79ee7b9650a732cdcfdc3d1a265c"
+    },
+    {
+      "first_seen_date": "2026-09-13",
+      "last_summarized_date": "2026-09-13",
+      "title_hash": "f0e12972dc92b778dad488d68b74044c4f79863a730507931c36afe1e385a937"
+    },
+    {
+      "first_seen_date": "2026-09-20",
+      "last_summarized_date": "2026-09-20",
+      "title_hash": "4529b8d44092a4919d958497dbbe511669a90db7e09395fb628ecf74a54e6766"
+    },
+    {
+      "first_seen_date": "2026-09-20",
+      "last_summarized_date": "2026-09-20",
+      "title_hash": "d768e3386c2c8be92872f3e14bf4558aaa91b65eafc060d1cbc9c4cef5569e48"
+    },
+    {
+      "first_seen_date": "2026-09-20",
+      "last_summarized_date": "2026-09-20",
+      "title_hash": "3f964941a8a7eb9111b093d7a904477be26b8945f1af1880a2f72cd3eafd9a49"
+    },
+    {
+      "first_seen_date": "2026-09-20",
+      "last_summarized_date": "2026-09-20",
+      "title_hash": "4e338ec8032ef27f13221439169d9f035a3d15058fde4254da3d92a6e2b52045"
+    },
+    {
+      "first_seen_date": "2026-09-20",
+      "last_summarized_date": "2026-09-20",
+      "title_hash": "f09217e8d574c14108a58541bc051f9eba31a1300d13da572c16df9ac3474dd5"
+    },
+    {
+      "first_seen_date": "2026-09-27",
+      "last_summarized_date": "2026-09-27",
+      "title_hash": "ffd0df8725559f11cf21468d988bf9120f52d41dd515b10029ca9a5812b0e05d"
+    },
+    {
+      "first_seen_date": "2026-09-27",
+      "last_summarized_date": "2026-09-27",
+      "title_hash": "fadc7876939af7d152675a8ef9b0a2ffb3f63e2a100d7d0a47dddfd69d0380a5"
+    },
+    {
+      "first_seen_date": "2026-09-27",
+      "last_summarized_date": "2026-09-27",
+      "title_hash": "c4a351304434c0cd86d14a794f7ca4cee9e6d6c76c1af0452281fd6c95ecd463"
+    },
+    {
+      "first_seen_date": "2026-09-27",
+      "last_summarized_date": "2026-09-27",
+      "title_hash": "5049c9438356cc83fa786f75d63b1b8ab5ca6a9dd81abeb26fd0a062662630ba"
+    },
+    {
+      "first_seen_date": "2026-09-27",
+      "last_summarized_date": "2026-09-27",
+      "title_hash": "3440c40000b77d824a623a643c85b44cae1336e07da32b4ee2f8ad7f0ed0fbbe"
+    },
+    {
+      "first_seen_date": "2026-10-04",
+      "last_summarized_date": "2026-10-04",
+      "title_hash": "8ea2a9cb4a449a85bdf89f329f914d5d1af86d2dbf003fb0857ab1f3e6ea3637"
+    },
+    {
+      "first_seen_date": "2026-10-04",
+      "last_summarized_date": "2026-10-04",
+      "title_hash": "78f41b8bf0b9020242895f77797492741714ce8c3be4dfaad0d5477d783f433c"
+    },
+    {
+      "first_seen_date": "2026-10-04",
+      "last_summarized_date": "2026-10-04",
+      "title_hash": "499565ed982943867c05110e91aa70df1d4eb176de0a01835d58aa49ed931c80"
+    },
+    {
+      "first_seen_date": "2026-10-04",
+      "last_summarized_date": "2026-10-04",
+      "title_hash": "87ff8ec299da34515ce3a30efcb51e99981bc42bb3dfa25c0828d9a330c99541"
+    },
+    {
+      "first_seen_date": "2026-10-04",
+      "last_summarized_date": "2026-10-04",
+      "title_hash": "4dc0b87ad37c813fd720fe5bc2d5ae0a2e0dd6f048c59decb1c116152ce29136"
+    },
+    {
+      "first_seen_date": "2026-10-11",
+      "last_summarized_date": "2026-10-11",
+      "title_hash": "5be0b042ae79b1fd5214d9905597920d4ff1ad8f92c4ec3188f40908446407a6"
+    },
+    {
+      "first_seen_date": "2026-10-11",
+      "last_summarized_date": "2026-10-11",
+      "title_hash": "77e21287cfc30d3e9b615482d43e51f95e4f96115698137b4ab6d496960336bd"
+    },
+    {
+      "first_seen_date": "2026-10-11",
+      "last_summarized_date": "2026-10-11",
+      "title_hash": "602a9d15586bd178d7ce913500be8620f2e3fd133e48fde09ca1df73f2dd29bf"
+    },
+    {
+      "first_seen_date": "2026-10-11",
+      "last_summarized_date": "2026-10-11",
+      "title_hash": "385446adbeb75df36aa9b3d4a524301f70c2b52d8921555f41371b2cd0d4c482"
+    },
+    {
+      "first_seen_date": "2026-10-11",
+      "last_summarized_date": "2026-10-11",
+      "title_hash": "8fdcc0dff7f063cc30c7f37ffce43431b9583dcaab9ab0e208bfc212ad83c2a6"
     }
   ]
 }

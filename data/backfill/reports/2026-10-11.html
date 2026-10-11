@@ -1,0 +1,480 @@
+<article class="panel transcribed-report">
+<h2><strong>SSA / Satellite Maneuver Detection — Research Briefing</strong></h2>
+<p><strong>5–11 October 2026 | Five new papers | Ranked by research relevance</strong></p>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Executive summary</strong></h2>
+<p>This week produced <strong>three particularly relevant advances</strong> for ML-based satellite maneuver detection:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div><strong>Normality Constraint Learning (NCL)</strong> addresses a fundamental weakness of forecasting-based anomaly detection: powerful models can predict anomalies too accurately, making their residuals insufficiently discriminative. The paper includes experiments with TimesFM.</div></li><li><span class="original-label"><strong>2. </strong></span><div><strong>MORA</strong> distinguishes genuine anomalies from nominal distribution drift using short- and long-term temporal context. Importantly, it includes an ESA spacecraft telemetry benchmark.</div></li><li><span class="original-label"><strong>3. </strong></span><div><strong>Diffusion-Integrated Score CUSUM</strong> develops a statistically grounded sequential detector, explicitly evaluating detection delay under controlled false-alarm rates.</div></li></ul>
+<p>Two additional papers address reference-conditioned anomaly detection and a significant source of evaluation leakage in online forecasting.</p>
+<p><strong>Scope:</strong> I found no comparably substantive new publication during 5–11 October that directly benchmarks ML maneuver detection against independently validated orbital maneuver events. The five selected papers are therefore methodological contributions, not new evidence of maneuver-detection performance. All five are preprints; none should be described as independently validated operational SSA systems.</p>
+<div class="table-scroll"><table><tr><th><strong>Rank</strong></th><th><strong>Publication</strong></th><th><strong>Date</strong></th><th><strong>Primary relevance</strong></th><th><strong>Evidence</strong></th></tr><tr><td>1</td><td>Normality Constraint Learning</td><td>5 Oct</td><td>Improving maneuver separability in forecasting residuals</td><td>10 TSAD datasets; multiple foundation models</td></tr><tr><td>2</td><td>MORA</td><td>7 Oct</td><td>Distinguishing orbital drift from anomalous behavior</td><td>Four datasets, including ESA telemetry</td></tr><tr><td>3</td><td>Diffusion-Integrated Score CUSUM</td><td>8 Oct</td><td>Detection delay and false-alarm control</td><td>Theory, simulations, image benchmarks</td></tr><tr><td>4</td><td>Anlu</td><td>5 Oct</td><td>Reference-conditioned detection across operating regimes</td><td>350 TSB-AD-U sequences</td></tr><tr><td>5</td><td>Training on the Future</td><td>8 Oct</td><td>Preventing temporal leakage during online adaptation</td><td>Five forecasting benchmarks; reproducible audit</td></tr></table></div>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>1. Normality Constraint Learning: Adapting Foundation Models for Time Series</strong> <strong>Anomaly Detection</strong></h2>
+<p><strong>Authors:</strong> Xiaohui Zhou, Yijie Wang, Hongzuo Xu, Weixuan Liang, Guansong Pang<br><strong>Published:</strong> 5 October 2026<br><strong>Source type:</strong> arXiv preprint, 43 pages<br><strong>Direct source: </strong><a href="https://arxiv.org/abs/2610.06453?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv:2610.06453 — Full paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Technical contribution</strong></dt><dd>
+<p>This is the most relevant paper of the week for your forecasting-based maneuver detector.</p>
+<p>The authors investigate a fundamental mismatch between forecasting quality and anomaly-detection quality.</p>
+<p>Consider a pretrained forecasting model:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-001.png" alt="xfx^=()thθt+1:   " style="width:7.8037em;height:1.6141em" loading="lazy"></div>
+<p>with anomaly score</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-002.png" alt="2Sxx=∥−^∥.t+ht+ht+h   " style="width:12.0405em;height:1.7844em" loading="lazy"></div>
+<p>The conventional assumption is that anomalous observations are harder to predict than nominal observations.</p>
+<p>However, a sufficiently expressive foundation model may learn patterns that also describe abnormal behavior.</p>
+<p>Consequently,</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-003.png" alt="SH[∣]E1 " style="width:5.0405em;height:1.7552em" loading="lazy"></div>
+<p>may not differ sufficiently from</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-004.png" alt="[S∣H]E0 " style="width:5.0405em;height:1.7552em" loading="lazy"></div>
+<p>even when the forecasting model is highly accurate.</p>
+<p><strong>NCL attempts to restrict the model&#x27;s effective representational capacity to the nominal regime</strong>, without modifying the pretrained backbone.</p>
+<p>This directly addresses the distinction between forecasting accuracy and maneuver detectability discussed in earlier briefings. <a href="https://arxiv.org/html/2610.06453v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Architecture</strong></dt><dd>
+<p>NCL introduces three components.</p>
+<p><strong>1. NormSpace — nominal subspace estimation</strong></p>
+<p>Extract latent patch representations from nominal observations:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-005.png" alt="⊤z1 Z=.⋮   ⊤zN " style="width:6.3227em;height:5.5511em" loading="lazy"></div>
+<p>Compute their singular value decomposition:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-006.png" alt="⊤ZUV=Σ." style="width:6.6391em;height:1.7210em" loading="lazy"></div>
+<p>The first <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-007.png" alt="k" style="width:0.8804em;height:1.4600em" loading="lazy"></span> right singular vectors define a nominal representation subspace:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-008.png" alt="S=span(v,…,v).N1k   " style="width:12.0151em;height:1.6423em" loading="lazy"></div>
+<p>The underlying hypothesis is that dominant directions in nominal patch representations capture stable temporal structures.</p>
+<p><strong>2. PatchNT — adaptive normality transformation</strong></p>
+<p>For each latent patch <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-009.png" alt="zn " style="width:1.3975em;height:1.5683em" loading="lazy"></span>, NCL applies a learned correction along each nominal direction:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-010.png" alt="~i()⊤z=z+βvα−vz()niiinni        " style="width:14.9170em;height:2.0655em" loading="lazy"></div>
+<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-011.png" alt="αi " style="width:1.3926em;height:1.5683em" loading="lazy"></span> and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-012.png" alt="βi " style="width:1.3037em;height:1.5683em" loading="lazy"></span> are generated by lightweight neural heads.</p>
+<p>The transformation selectively modifies the component of a representation along a nominal direction.</p>
+<p><strong>3. ConNC — contrastive normality constraint</strong></p>
+<p>A contrastive objective encourages the transformed representations to form compact, distinguishable normality manifolds.</p>
+<p>The resulting representations are decoded and combined with the original foundation-model output.</p>
+<p>Only the NCL module is trained. The foundation model remains frozen. <a href="https://arxiv.org/html/2610.06453v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Data and evaluation</strong></dt><dd>
+<p>The authors evaluate several foundation-model families, including:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>TimesFM;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Chronos;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>TinyTimeMixer;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>MOMENT;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>UniTS;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>ROSE;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Aurora;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Time-MoE.</div></li></ul>
+<p>Experiments cover ten anomaly-detection datasets, including SMD, PSM, SWaT, SMAP and MSL.</p>
+<p>The principal metric is <strong>VUS-PR</strong>, chosen to avoid some of the known inflation associated with point-adjusted F1.</p>
+<p>Across the evaluated backbones, the authors report an average relative VUS-PR improvement of <strong>41.49%</strong> after adding NCL. <a href="https://arxiv.org/html/2610.06453v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
+<p>Particularly relevant are the reported TimesFM results:</p>
+<div class="table-scroll"><table><tr><th><strong>Dataset</strong></th><th><strong>TimesFM</strong></th><th><strong>TimesFM + NCL</strong></th></tr><tr><td>PSM</td><td>0.3366</td><td>0.3862</td></tr><tr><td>SMD</td><td>0.1123</td><td>0.1498</td></tr><tr><td>SWaT</td><td>0.1132</td><td>0.5117</td></tr></table></div>
+<p>These are VUS-PR results from the paper&#x27;s comparison with anomaly-detection-specific foundation models.</p>
+<p>The improvement is substantial on SWaT but considerably smaller on PSM. It would therefore be incorrect to infer a uniform improvement across all domains. <a href="https://arxiv.org/html/2610.06453v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Implementation and reproducibility</strong></dt><dd>
+<p>The reported default configuration uses:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-013.png" alt="k=16" style="width:3.7422em;height:1.5253em" loading="lazy"></div>
+<p>nominal singular vectors, five nominal training samples, five training epochs and Adam with learning rate <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-014.png" alt="−410" style="width:2.5436em;height:1.6956em" loading="lazy"></span>.</p>
+<p>The paper documents its backbone implementations and evaluation framework. I could verify the referenced upstream repositories, but not a dedicated public NCL implementation from the material inspected. <a href="https://arxiv.org/html/2610.06453v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Latency, uncertainty and false alarms</strong></dt><dd>
+<p>NCL does not provide an operational maneuver-detection latency analysis.</p>
+<p>The paper&#x27;s <em>normality calibration</em> is representation learning, not probabilistic calibration.</p>
+<p>In particular, NCL does not establish:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-015.png" alt="P(S&gt;τ∣H)=αt0  " style="width:10.4101em;height:1.5516em" loading="lazy"></div>
+<p>for a prescribed operational false-alarm probability.</p>
+<p>Its principal results concern anomaly-score discrimination, not guaranteed alert rates.</p>
+</dd>
+<dt><strong>Limitations</strong></dt><dd>
+<p>The central limitations are:</p>
+<p><strong>No orbital maneuver benchmark.</strong> SMAP and MSL are spacecraft telemetry datasets, but their anomalies are not independently validated orbital maneuvers.</p>
+<p><strong>Potential nominal-subspace contamination.</strong> The method assumes its selected normal examples adequately represent nominal behavior. Its contrastive regularization may reduce contamination sensitivity, but does not establish a contamination-free guarantee.</p>
+<p><strong>Dependence on latent accessibility.</strong> Integrating NCL requires access to meaningful internal representations. This may be straightforward for some open models but less convenient for other forecasting implementations.</p>
+<p><strong>No demonstrated low-FAR advantage.</strong> Better VUS-PR does not guarantee improved recall at an operationally restrictive false-alarm budget.</p>
+</dd>
+<dt><strong>Why it matters for your research</strong></dt><dd>
+<p>Your current approach uses a learned forecasting model to identify orbital deviations.</p>
+<p>NCL suggests that improving the forecaster itself may be the wrong optimization target.</p>
+<p>The relevant objective is instead to maximize separation between:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-016.png" alt="p(r∣nominal)" style="width:7.6250em;height:1.5253em" loading="lazy"></div>
+<p>and</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-017.png" alt="pr(∣maneuver)." style="width:8.8715em;height:1.5253em" loading="lazy"></div>
+<p>I would test a lightweight alternative before reproducing the complete architecture:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-018.png" alt="encoderzfx=(),tt1:θ   ⊥⊤zIVVzμ=(−)(−),ktNtk     " style="width:14.4213em;height:5.3636em" loading="lazy"></div>
+<p>and define a complementary score:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-019.png" alt="⊥2S(t)=∥z∥.latentt  " style="width:9.5747em;height:1.8636em" loading="lazy"></div>
+<p>Compare this with the ordinary forecasting residual and a combination of both.</p>
+<p>This is not equivalent to NCL, but directly tests whether deviations outside the nominal latent subspace carry maneuver information.</p>
+<p><strong>Research priority: Very high.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>2. MORA: Modeling Observed Changes for Drift-Robust Time-Series Anomaly</strong> <strong>Detection</strong></h2>
+<p><strong>Authors:</strong> Xudong Mou, Tiejun Wang, Rui Wang, Hui Wang, Pin Liu, Tianyu Wo, Xudong Liu, Renyu Yang<br><strong>Published:</strong> 7 October 2026<br><strong>Source type:</strong> arXiv preprint<br><strong>Direct source: </strong><a href="https://arxiv.org/abs/2610.09473?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv:2610.09473 — Full paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Technical contribution</strong></dt><dd>
+<p>MORA addresses an especially important problem for orbital surveillance:</p>
+<p><strong>A deviation from historical behavior is not necessarily an anomaly.</strong></p>
+<p>For orbital data, changes may result from:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>secular orbital evolution;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>perturbations imperfectly represented by the forecasting model;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>changes in observation geometry or cadence;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>changes in the nominal operating regime;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>genuine maneuvers.</div></li></ul>
+<p>MORA attempts to distinguish anomalous behavior from explainable nominal drift by comparing how well the same recent observations can be reconstructed using different amounts of temporal context.</p>
+<p>Unlike adaptive detectors, it does not update its model online.</p>
+</dd>
+<dt><strong>Method</strong></dt><dd>
+<p>At time <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-020.png" alt="t" style="width:0.6868em;height:1.4600em" loading="lazy"></span>, define a short window:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-021.png" alt="sXx=tLt−+1:ts   " style="width:7.6973em;height:1.9094em" loading="lazy"></div>
+<p>and a longer contextual window:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-022.png" alt="lX=x,L&gt;L.tLtls−+1:tl     " style="width:14.8042em;height:1.9094em" loading="lazy"></div>
+<p>Both windows end at the same timestamp.</p>
+<p>A shared encoder produces two representations:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-023.png" alt="ssz=f(X),θtt   llzfX=().θtt   " style="width:6.8422em;height:5.4719em" loading="lazy"></div>
+<p>Two decoders reconstruct the <strong>same short target window</strong>.</p>
+<p>Their reconstruction errors are:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-024.png" alt="^sloc2XX∥−∥locttFS=   ,tLd  s ^sctx2XX∥−∥ctxttFS=   .tLd  s " style="width:11.7993em;height:8.4405em" loading="lazy"></div>
+<p>If the longer history makes the recent deviation easier to explain, the contextual error should be smaller.</p>
+<p>MORA defines:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-025.png" alt="locctxSSΔ=max(0,−)ttt   " style="width:13.0029em;height:1.8469em" loading="lazy"></div>
+<p>and constructs the final score:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-026.png" alt="locSSγ=−Δtttt     " style="width:9.1777em;height:1.9094em" loading="lazy"></div>
+<p>where</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-027.png" alt="γ∈[0,1]t " style="width:5.1450em;height:1.5683em" loading="lazy"></div>
+<p>is produced by a learned correction mechanism.</p>
+<p>This creates an asymmetric rule: contextual information may <strong>reduce</strong> an anomaly score, but cannot increase it.</p>
+<p>The authors additionally use differences between short- and long-context representations to estimate how much correction should be applied. <a href="https://arxiv.org/html/2610.09473v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
+</dd>
+<dt><strong>Data and evaluation</strong></dt><dd>
+<p>MORA is evaluated on four datasets:</p>
+<div class="table-scroll"><table><tr><th><strong>Dataset</strong></th><th><strong>Domain</strong></th><th><strong>Variables</strong></th><th><strong>Test anomaly prevalence</strong></th></tr><tr><td>SMD</td><td>Server monitoring</td><td>38</td><td>5.62%</td></tr><tr><td>Exathlon</td><td>Distributed computing</td><td>19</td><td>12.75%</td></tr><tr><td>ESA</td><td>Spacecraft telemetry</td><td>6</td><td>0.91%</td></tr><tr><td>ASD</td><td>Application monitoring</td><td>19</td><td>4.54%</td></tr></table></div>
+<p>The inclusion of ESA telemetry is particularly valuable, although this is not a maneuver-specific dataset.</p>
+<p>The authors report Best RPA-F1, VUS-ROC and VUS-PR over five random seeds. <a href="https://arxiv.org/html/2610.09473v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Reported MORA results include:</p>
+<div class="table-scroll"><table><tr><th><strong>Dataset</strong></th><th><strong>Best RPA-F1</strong></th><th><strong>VUS-ROC</strong></th><th><strong>VUS-PR</strong></th></tr><tr><td>SMD</td><td>69.97%</td><td>98.81%</td><td>89.65%</td></tr><tr><td>Exathlon</td><td>74.84%</td><td>98.93%</td><td>94.25%</td></tr><tr><td>ESA</td><td>84.62%</td><td>99.38%</td><td>78.79%</td></tr><tr><td>ASD</td><td>42.52%</td><td>98.27%</td><td>85.91%</td></tr></table></div>
+<p>These results require qualification.</p>
+<p>On ESA, TranAD achieves VUS-PR of 92.94%, substantially above MORA&#x27;s 78.79%.</p>
+<p>Furthermore, removing MORA&#x27;s local branch actually improves ESA&#x27;s Best RPA-F1 to 88.89%.</p>
+<p>Thus, although MORA performs well overall, <strong>its complete architecture is not uniformly superior on</strong> <strong>spacecraft telemetry</strong>. <a href="https://arxiv.org/html/2610.09473v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
+</dd>
+<dt><strong>Evaluation limitations</strong></dt><dd>
+<p>The authors explicitly describe Best RPA-F1 as an upper-bound estimate.</p>
+<p>This matters because the best threshold is not necessarily available during deployment.</p>
+<p>VUS metrics provide useful threshold-independent comparisons but do not establish performance at a specified false-alarm budget.</p>
+<p>No operational false-alarm calibration is demonstrated.</p>
+</dd>
+<dt><strong>Detection latency</strong></dt><dd>
+<p>No event-onset detection-delay distribution is reported.</p>
+<p>Although the windows end at the current timestamp, using a longer contextual window introduces a dependence on the available historical context.</p>
+<p>The model is therefore compatible with causal inference, but the paper does not demonstrate how rapidly it reacts to an abrupt physical event.</p>
+</dd>
+<dt><strong>Uncertainty treatment</strong></dt><dd>
+<p>The correction weight <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-028.png" alt="γt " style="width:1.2588em;height:1.5683em" loading="lazy"></span> is learned from cross-view features.</p>
+<p>It is not a calibrated probability that the observed change is nominal drift.</p>
+<p>There is no Bayesian posterior over drift hypotheses or explicit confidence guarantee.</p>
+</dd>
+<dt><strong>Implementation</strong></dt><dd>
+<p>The reported implementation uses PyTorch 2.6 and Merlion 2.0.0, evaluated on an NVIDIA Tesla V100.</p>
+<p>The paper provides architectural and training details, but I did not verify a public repository containing the complete MORA implementation. <a href="https://arxiv.org/html/2610.09473v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Why it matters for maneuver detection</strong></dt><dd>
+<p>This is an interesting approach to reducing false alarms caused by ordinary orbital evolution.</p>
+<p>However, there is an important physical caveat.</p>
+<p><strong>A genuine orbital maneuver can also create a coherent long-term change.</strong></p>
+<p>For example, an orbit-raising maneuver produces a new, physically consistent orbital regime.</p>
+<p>A contextual model might eventually explain that regime and reduce the anomaly score.</p>
+<p>Therefore, the assumption</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-029.png" alt="contextually explainable⟹nominal" style="width:19.9159em;height:1.4600em" loading="lazy"></div>
+<p>is not universally valid for orbital maneuvers.</p>
+<p>I would test a simplified contextual correction on your residuals:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-030.png" alt="localSscore(r),=tLt−+1:ts   contextS=score(r),tLt−+1:tl   " style="width:13.4506em;height:5.4094em" loading="lazy"></div>
+<p>with <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-031.png" alt="LL&gt;ls  " style="width:4.3135em;height:1.5683em" loading="lazy"></span>.</p>
+<p>Then compare the original score against a conservatively corrected score.</p>
+<p>The critical experiment would separate:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div>gradual nominal drift;</div></li><li><span class="original-label"><strong>2. </strong></span><div>impulsive maneuvers;</div></li><li><span class="original-label"><strong>3. </strong></span><div>finite-duration low-thrust maneuvers;</div></li><li><span class="original-label"><strong>4. </strong></span><div>permanent post-maneuver orbital changes.</div></li></ul>
+<p>The objective is to determine whether contextual correction suppresses false alarms <strong>without</strong> <strong>suppressing genuine maneuver signatures</strong>.</p>
+<p><strong>Research priority: Very high.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>3. Quickest Change Detection with Diffusion-Integrated Scores</strong></h2>
+<p><strong>Authors:</strong> Arman Adibi, Mohammadreza Maleki, Sanjeev Kulkarni, H. Vincent Poor<br><strong>Published:</strong> 8 October 2026<br><strong>Source type:</strong> arXiv statistical-methodology preprint<br><strong>Direct source: </strong><a href="https://arxiv.org/abs/2610.12200?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv:2610.12200 — Full paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Technical contribution</strong></dt><dd>
+<p>This paper addresses the sequential decision problem more directly than the previous two.</p>
+<p>Its objective is not simply to assign anomaly scores but to <strong>detect a distribution change as quickly as</strong> <strong>possible while controlling false alarms</strong>.</p>
+<p>Classical CUSUM uses log-likelihood-ratio increments:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-032.png" alt="px()1tℓ=log  t px ()0t  " style="width:7.8145em;height:3.3016em" loading="lazy"></div>
+<p>and recursion:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-033.png" alt="WW=max(0,+ℓ).ttt−1   " style="width:12.9868em;height:1.5516em" loading="lazy"></div>
+<p>An alarm occurs when:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-034.png" alt="W≥h.t " style="width:4.4057em;height:1.5683em" loading="lazy"></div>
+<p>The difficulty is that <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-035.png" alt="p0 " style="width:1.3584em;height:1.6141em" loading="lazy"></span> and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-036.png" alt="p1 " style="width:1.3584em;height:1.6141em" loading="lazy"></span> are generally unknown.</p>
+<p>The authors propose <strong>Diffusion-Integrated Score CUSUM (DI-SCUSUM)</strong>, which replaces the unavailable likelihood ratio with a statistic derived from Gaussian-smoothed empirical distributions.</p>
+</dd>
+<dt><strong>Method</strong></dt><dd>
+<p>Given reference samples from pre-change and post-change distributions, Gaussian noise is added to produce smoothed density estimates.</p>
+<p>For each diffusion time <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-037.png" alt="u" style="width:0.9421em;height:1.4600em" loading="lazy"></span>, the method computes their Hyvärinen scores.</p>
+<p>The Hyvärinen score of a density <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-038.png" alt="p" style="width:0.8586em;height:1.4600em" loading="lazy"></span> has the form:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-039.png" alt="12Hpxpxpx(,)=∥∇log()∥+Δlog().2 " style="width:20.5170em;height:3.1475em" loading="lazy"></div>
+<p>Instead of training a diffusion model, the authors exploit the fact that Gaussian-kernel empirical distributions admit closed-form score calculations.</p>
+<p>They integrate score differences across diffusion times and use the resulting statistic as a CUSUM increment.</p>
+<p>The integration is approximated using importance sampling or numerical quadrature.</p>
+<p>The resulting detector remains sequential:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-040.png" alt="WWZ=max(0,+),ttt−1   " style="width:13.3090em;height:1.5516em" loading="lazy"></div>
+<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-041.png" alt="Zt " style="width:1.4590em;height:1.5683em" loading="lazy"></span> is the diffusion-integrated increment. <a href="https://arxiv.org/html/2610.12200v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Theoretical results</strong></dt><dd>
+<p>Under the paper&#x27;s assumptions on the fixed empirical pre- and post-change distributions, the authors derive exponential false-alarm scaling:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-042.png" alt="logARL=θh+O(1).0 " style="width:12.2836em;height:1.6141em" loading="lazy"></div>
+<p>Here,</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-043.png" alt="τARL=[]E0∞  " style="width:7.9555em;height:1.7552em" loading="lazy"></div>
+<p>is the expected number of observations before a false alarm.</p>
+<p>They also derive a first-order detection-delay bound related inversely to the KL divergence between the smoothed empirical distributions.</p>
+<p>The important distinction is that these are <strong>model-conditional, asymptotic results</strong>, not universal guarantees for arbitrary dependent residual streams. <a href="https://arxiv.org/html/2610.12200v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>The experiments include:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>anisotropic Gaussian distribution changes;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>MNIST digit transitions;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Oxford-IIIT Pet category transitions.</div></li></ul>
+<p>Thresholds are calibrated on no-change streams.</p>
+<p>The Gaussian experiment uses target ARLs of 500, 1,000 and 2,000 observations.</p>
+<p>The authors report that DI-SCUSUM nearly matches likelihood-ratio CUSUM and reduces detection delay by approximately <strong>91% compared with ordinary score-based CUSUM</strong> in their anisotropic Gaussian setting.</p>
+<p>On MNIST, reported conditional detection-delay reductions relative to SCUSUM are approximately <strong>39.5–</strong> <strong>42.7%</strong> at comparable false-alarm levels.</p>
+<p>On Oxford-IIIT Pet, the reductions are approximately <strong>6.3–12.6%</strong>. <a href="https://arxiv.org/html/2610.12200v1" target="_blank" rel="noreferrer">arXiv +1</a></p>
+</dd>
+<dt><strong>Detection latency</strong></dt><dd>
+<p>Unlike most TSAD papers, this study explicitly evaluates detection delay.</p>
+<p>The authors measure the number of observations between the distribution change and the alarm.</p>
+<p>They also report confidence intervals and audit whether the compared methods actually attain similar ARLs.</p>
+<p>This is important: two detectors should not be compared on detection delay unless their false-alarm operating points are comparable.</p>
+<p>However, the results are measured in observations, not wall-clock time.</p>
+<p>For SSA, conversion to elapsed time requires the actual measurement timestamps.</p>
+</dd>
+<dt><strong>Uncertainty and false-alarm control</strong></dt><dd>
+<p>The method&#x27;s strongest contribution is its statistical treatment of the alarm process.</p>
+<p>However, there are two qualifications.</p>
+<p>First, empirical ARL calibration is still needed to account for finite thresholds and estimator behavior.</p>
+<p>Second, the analysis assumes a particular stochastic observation model. Temporal dependence in forecasting residuals would require separate validation.</p>
+</dd>
+<dt><strong>Implementation and reproducibility</strong></dt><dd>
+<p>The algorithm does not require training a score network.</p>
+<p>Its exact empirical score evaluation costs approximately:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-044.png" alt="ONNd((+))01  " style="width:8.1084em;height:1.6141em" loading="lazy"></div>
+<p>per diffusion time, where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-045.png" alt="NN,01 " style="width:3.7139em;height:1.6141em" loading="lazy"></span> are the reference sample counts.</p>
+<p>The experiments also use a quadrature approximation with 20 diffusion-time nodes.</p>
+<p>I did not verify a dedicated public implementation. <a href="https://arxiv.org/html/2610.12200v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Main limitation for maneuver detection</strong></dt><dd>
+<p><strong>DI-SCUSUM requires representative post-change samples.</strong></p>
+<p>This is a significant issue.</p>
+<p>For maneuver detection, nominal observations are comparatively easy to obtain. Representative observations after unknown maneuvers are much harder.</p>
+<p>A practical implementation would therefore require either:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>synthetic maneuver residuals;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a library of confirmed maneuver examples;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a different formulation that does not require an explicit post-change reference distribution.</div></li></ul>
+<p>The first option is particularly relevant to your research, but it introduces simulation-to-real transfer risk.</p>
+</dd>
+<dt><strong>Why it matters</strong></dt><dd>
+<p>This is a strong candidate for the <strong>decision layer</strong> of a maneuver detector.</p>
+<p>Your forecasting model can remain unchanged:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-046.png" alt="xxr→^→→sequential detector.ttt   " style="width:19.1567em;height:1.5683em" loading="lazy"></div>
+<p>I would initially compare:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-047.png" alt="Static thresholdvsCUSUMvsDI-SCUSUM " style="width:27.6211em;height:1.5253em" loading="lazy"></div>
+<p>using the same scalar or multivariate residual representation.</p>
+<p>The primary evaluation should be:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-048.png" alt="P(k;Δv)D " style="width:5.5996em;height:1.5683em" loading="lazy"></div>
+<p>at fixed:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-049.png" alt="ARL0 " style="width:3.3037em;height:1.5487em" loading="lazy"></div>
+<p>or false alarms per object-day.</p>
+<p><strong>Research priority: High.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>4. Anlu: Enabling In-Context Time Series Anomaly Detection in Foundation Models</strong> <strong>via Counterfactual Supervision</strong></h2>
+<p><strong>Authors:</strong> Tian Lan, Yifei Gao, Yimeng Lu, Xuming An, Meng Wang, Yue Pan, Wenjun He, Chen Zhang<br><strong>Published:</strong> 5 October 2026<br><strong>Source type:</strong> arXiv preprint<br><strong>Direct source: </strong><a href="https://arxiv.org/abs/2610.06180?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv:2610.06180 — Full paper</a></p>
+<dl class="summary-grid">
+<dt><strong>Technical contribution</strong></dt><dd>
+<p>Anlu addresses a different weakness of anomaly detectors: <strong>the same observation may be normal in one</strong> <strong>operating regime and anomalous in another</strong>.</p>
+<p>For example, a sudden increase in a signal might be expected during one operating mode but abnormal during another.</p>
+<p>The authors investigate reference-conditioned anomaly detection.</p>
+<p>Instead of evaluating a query <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-050.png" alt="X" style="width:1.2519em;height:1.4600em" loading="lazy"></span> independently, the model receives:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-051.png" alt="XR(,)" style="width:3.7539em;height:1.5253em" loading="lazy"></div>
+<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-052.png" alt="R" style="width:1.1684em;height:1.4600em" loading="lazy"></span> is a reference sequence describing expected behavior.</p>
+<p>The model produces:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-053.png" alt="SXR(∣)." style="width:5.3725em;height:1.5253em" loading="lazy"></div>
+<p>The central problem is ensuring that the model actually uses the reference.</p>
+</dd>
+<dt><strong>Counterfactual supervision</strong></dt><dd>
+<p>The authors construct training examples containing the same query with two different references:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-054.png" alt="XRXR(,),(,).12  " style="width:11.5014em;height:1.6141em" loading="lazy"></div>
+<p>The references imply different nominal rules.</p>
+<p>Consequently, the correct anomaly labels may differ:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-055.png" alt="yXRyXR(∣)=(∣).12  " style="width:12.3715em;height:1.6141em" loading="lazy"></div>
+<p>A model that ignores the reference cannot correctly classify both examples.</p>
+<p>This creates an explicit training signal for learning reference-dependent anomaly detection.</p>
+<p>The architecture adds reference memory and zero-initialized gated adapters to a frozen anomaly-detection foundation model. <a href="https://arxiv.org/abs/2610.06180" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>The authors evaluate on 350 sequences from TSB-AD-U.</p>
+<p>They report:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-056.png" alt="VUS−PR=0.542baseline " style="width:13.0279em;height:1.5030em" loading="lazy"></div>
+<p>and</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-057.png" alt="VUS−PR=0.607.Anlu " style="width:12.1943em;height:1.5030em" loading="lazy"></div>
+<p>When the reference is replaced by zeros, performance falls to:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-058.png" alt="0.499." style="width:3.3428em;height:1.4600em" loading="lazy"></div>
+<p>This ablation provides evidence that the reference contributes to the model&#x27;s predictions.</p>
+<p>It does not, by itself, prove that the learned reference dependency generalizes to orbital operating regimes. <a href="https://arxiv.org/abs/2610.06180" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Latency, calibration and reproducibility</strong></dt><dd>
+<p>The accessible paper metadata and abstract do not establish operational event-to-alarm delay, calibrated false-alarm control or predictive uncertainty guarantees.</p>
+<p>I also could not verify a dedicated public implementation from the accessible material.</p>
+<p>The reported evidence is therefore primarily about anomaly ranking and reference utilization.</p>
+</dd>
+<dt><strong>Limitations</strong></dt><dd>
+<p>The method depends on the availability of a representative reference sequence.</p>
+<p>An incorrect reference can change the meaning of the detection problem.</p>
+<p>Moreover, reference-conditioned detection introduces a subtle risk for maneuver monitoring: if the reference is updated using post-maneuver observations, the model may learn to treat the maneuvered orbit as nominal.</p>
+</dd>
+<dt><strong>Why it matters</strong></dt><dd>
+<p>This is relevant to <strong>cross-satellite generalization</strong>.</p>
+<p>Different RSOs have different nominal dynamics.</p>
+<p>A single global detector may struggle to distinguish these regimes.</p>
+<p>Anlu suggests replacing a universal definition of nominal behavior with an object- or regime-conditioned definition:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-059.png" alt="ρSSxR=(∣).tt−L:tnominal   " style="width:12.8520em;height:2.0801em" loading="lazy"></div>
+<p>For orbital data, the reference could be constructed from:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>historical nominal observations of the same RSO;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a physically propagated nominal trajectory;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>observations from dynamically similar RSOs.</div></li></ul>
+<p>The most interesting experiment would compare a detector conditioned on a generic nominal population against one conditioned on an object-specific nominal reference.</p>
+<p>This may improve generalization without requiring a separate forecasting model for every satellite.</p>
+<p><strong>Research priority: Medium-high.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>5. Training on the Future: A Delay-Aware Audit of Test-Time Adaptation for Time-</strong><strong>Series Forecasting</strong></h2>
+<p><strong>Authors:</strong> Mohamed Readh Fentazi, Mazene Ameur, Adlen Ksentini<br><strong>Published:</strong> 8 October 2026<br><strong>Source type:</strong> arXiv preprint with public evaluation code<br><strong>Direct sources: </strong><a href="https://arxiv.org/abs/2610.12232?utm_source=chatgpt.com" target="_blank" rel="noreferrer">arXiv:2610.12232 — Full paper</a> · <a href="https://github.com/Xodios/TRAINING-ON-THE-FUTURE-A-DELAY-AWARE-AUDIT-OF-TEST-TIME-ADAPTATION-FOR-TIME-SERIES-FORECASTING?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Reproducibility repository</a></p>
+<dl class="summary-grid">
+<dt><strong>Technical contribution</strong></dt><dd>
+<p>This paper identifies a serious evaluation problem in online forecasting research:</p>
+<p><strong>Some test-time adaptation protocols update models using observations that would not yet be</strong> <strong>available during real deployment.</strong></p>
+<p>Suppose a model issues an <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-060.png" alt="H" style="width:1.2555em;height:1.4600em" loading="lazy"></span>-step forecast at time <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-061.png" alt="s" style="width:0.8175em;height:1.4600em" loading="lazy"></span>:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-062.png" alt="x^.sHs+∣ " style="width:3.8012em;height:1.6141em" loading="lazy"></div>
+<p>The corresponding target is not available until time <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-063.png" alt="sH+" style="width:3.3024em;height:1.5253em" loading="lazy"></span>, at the earliest.</p>
+<p>If observations are delayed by the measurement or processing pipeline, the actual availability time is later.</p>
+<p>A causal adaptation protocol must therefore enforce:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-064.png" alt="tsddH≥+,≥.update " style="width:14.2202em;height:1.6141em" loading="lazy"></div>
+<p>The authors construct an evaluation framework that enforces this condition. <a href="https://arxiv.org/abs/2610.12232" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Methods</strong></dt><dd>
+<p>They audit four recent test-time adaptation methods:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>TAFAS;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>COSA;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>PETSA;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>DynaTTA.</div></li></ul>
+<p>The study also introduces inexpensive reference methods based on Recursive Least Squares and an ELF-style linear corrector.</p>
+<p>The RLS baseline uses a bank of filters with different forgetting factors.</p>
+<p>Predictions are aggregated using a coordinate-wise median to reduce sensitivity to poorly chosen adaptation rates.</p>
+</dd>
+<dt><strong>Evaluation</strong></dt><dd>
+<p>The authors use five forecasting benchmarks:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>ETTm1;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>ETTh2;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Weather;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Electricity;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>Traffic.</div></li></ul>
+<p>They evaluate the methods under different delays before forecast targets become available for adaptation.</p>
+<p>The results are striking.</p>
+<p>On ETTm1, all four audited methods genuinely improve forecasting, but the RLS bank beats three of them at substantially lower cost.</p>
+<p>Only DynaTTA outperforms the RLS bank at the minimum causal delay, at approximately 2,500 times the per-update computational cost.</p>
+<p>On the other four datasets, the largest statistically significant improvement of any audited method over its frozen checkpoint is only about <strong>0.5%</strong>.</p>
+<p>Some methods become significantly worse than the frozen model.</p>
+<p>Under drift-heavy ETTh2 conditions, increasing label delay makes adaptation increasingly harmful. <a href="https://arxiv.org/abs/2610.12232" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Leakage findings</strong></dt><dd>
+<p>The paper reports that using prematurely available labels can inflate apparent adaptation gains by up to 110%.</p>
+<p>For example, an exponential-moving-average bias corrector on ETTh2/PatchTST has standardized MSE:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-065.png" alt="0.63" style="width:2.4014em;height:1.4600em" loading="lazy"></div>
+<p>under the leaky protocol, versus:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-066.png" alt="1.32" style="width:2.4014em;height:1.4600em" loading="lazy"></div>
+<p>under the causal protocol.</p>
+<p>The authors also find that the backbone training recipe can change frozen online error by a factor of 25, larger than the adaptation effects being studied. <a href="https://arxiv.org/html/2610.12232v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Latency and computational cost</strong></dt><dd>
+<p>The RLS bank requires approximately:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-067.png" alt="μs56 " style="width:3.0616em;height:1.5253em" loading="lazy"></div>
+<p>per step on the evaluated seven-channel configuration.</p>
+<p>This is an update-time measurement, not anomaly-detection latency.</p>
+</dd>
+<dt><strong>Uncertainty</strong></dt><dd>
+<p>RLS maintains a matrix describing the geometry of the regression update, but the study does not establish calibrated predictive uncertainty or anomaly probabilities.</p>
+<p>Its main contribution is causal evaluation and adaptation robustness.</p>
+</dd>
+<dt><strong>Reproducibility</strong></dt><dd>
+<p>The authors release their evaluation harness, integration patches and cached experimental results.</p>
+<p>This makes the work particularly useful as a reference for building a leakage-resistant online forecasting benchmark. <a href="https://arxiv.org/html/2610.12232v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Why it matters for maneuver detection</strong></dt><dd>
+<p>Your application has an additional complication beyond ordinary forecasting.</p>
+<p>There are potentially three different timestamps:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-068.png" alt="t,measurement t,available t.OD update " style="width:5.9829em;height:8.6766em" loading="lazy"></div>
+<p>An observation acquired at time <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-069.png" alt="t" style="width:0.6868em;height:1.4600em" loading="lazy"></span> may not be available to the detector until considerably later.</p>
+<p>Likewise, a corrected orbital state may only become available after orbit determination has incorporated additional measurements.</p>
+<p>A detector evaluated using measurement timestamps alone can therefore appear faster than it would be operationally.</p>
+<p>This paper reinforces the need to distinguish:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-070.png" alt="physical event time=measurement time=information availability time " style="width:38.6953em;height:1.4600em" loading="lazy"></div>
+<p>It also suggests that online fine-tuning should not be enabled without demonstrating that it improves maneuver detection under realistic delayed-data conditions.</p>
+<p><strong>Research priority: High for experimental methodology.</strong></p>
+</dd>
+</dl>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Ranked reading priority</strong></h2>
+<div class="table-scroll"><table><tr><th><strong>Rank</strong></th><th><strong>Paper</strong></th><th><strong>Scientific value for your</strong> <strong>work</strong></th><th><strong>Recommended action</strong></th></tr><tr><td><strong>1</strong></td><td><strong>Normality Constraint</strong> <strong>Learning</strong></td><td>Very high</td><td>Test nominal-subspace scoring on your forecasting model</td></tr><tr><td><strong>2</strong></td><td><strong>MORA</strong></td><td>Very high</td><td>Evaluate contextual correction against nominal orbital drift and genuine maneuvers</td></tr><tr><td><strong>3</strong></td><td><strong>Diffusion-Integrated</strong> <strong>Score CUSUM</strong></td><td>High</td><td>Compare sequential detection at matched ARL</td></tr><tr><td><strong>4</strong></td><td><strong>Training on the Future</strong></td><td>High</td><td>Audit timestamp causality and adaptation protocols</td></tr><tr><td><strong>5</strong></td><td><strong>Anlu</strong></td><td>Medium-high</td><td>Investigate object-conditioned nominal references</td></tr></table></div>
+<p>The distinction between reading and implementation priorities matters here. NCL and MORA provide the most directly relevant modeling ideas, while the delay-aware audit may be the quickest way to eliminate a serious methodological weakness.</p>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Recommended experiments</strong></h2>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Experiment A — Does nominal-subspace restriction improve maneuver detection?</strong></h2>
+<p><strong>Objective:</strong> Determine whether constraining the representation to nominal dynamics improves detection beyond ordinary forecasting residuals.</p>
+<p>Keep your current forecasting backbone fixed.</p>
+<p>Compare:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-071.png" alt="2Str()=∥∥,t1  ⊤−1Strr()=Σ,t2t0    ⊤2StIVVzμ()=∥(−)(−)∥,3ktNk     " style="width:17.3852em;height:8.9261em" loading="lazy"></div>
+<p>and a combination of <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-072.png" alt="S2 " style="width:1.4912em;height:1.6141em" loading="lazy"></span> and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-073.png" alt="S3 " style="width:1.4912em;height:1.6141em" loading="lazy"></span>.</p>
+<p>Estimate <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-10-11-math-074.png" alt="VμΣkN0   " style="width:5.4971em;height:1.6141em" loading="lazy"></span>, ,  and combination parameters using training/validation data only.</p>
+<p><strong>Evaluation:</strong> VUS-PR, pAUC at low FPR, event recall and detection delay at fixed false alarms per object-day.</p>
+<p><strong>Most important ablation:</strong> Stratify by maneuver magnitude and direction. A nominal-subspace score may help particularly when an anomalous multivariate relationship is not reflected in a large individual residual.</p>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Experiment B — Can contextual correction distinguish natural orbital evolution from</strong> <strong>maneuvers?</strong></h2>
+<p><strong>Objective:</strong> Test MORA&#x27;s central hypothesis in an orbital setting.</p>
+<p>Use the same residual history with two context lengths:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-075.png" alt="LL&lt;.sl  " style="width:4.6342em;height:1.5683em" loading="lazy"></div>
+<p>Compare the local score, contextual score and conservative correction.</p>
+<p>Evaluate separately on nominal drift, impulsive maneuvers and low-thrust maneuvers.</p>
+<p>The critical failure mode is:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-076.png" alt="persistent post-maneuver regime→contextual explanation→suppressed alarm." style="width:42.3598em;height:1.4600em" loading="lazy"></div>
+<p>Measure both initial detection and persistence of the alarm signal.</p>
+<p>A method that reduces nominal false alarms but rapidly normalizes genuine maneuvers may be unsuitable for your application.</p>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Experiment C — Separate anomaly scoring from sequential decisions</strong></h2>
+<p><strong>Objective:</strong> Determine whether a better alarm rule improves detection more than changing the forecasting model.</p>
+<p>Keep the forecasting backbone and residual score fixed.</p>
+<p>Compare:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-077.png" alt="Static threshold" style="width:8.5639em;height:1.4600em" loading="lazy"></div>
+<p>against</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-078.png" alt="CUSUM" style="width:4.7209em;height:1.4600em" loading="lazy"></div>
+<p>and</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-079.png" alt="DI-SCUSUM." style="width:7.4946em;height:1.4600em" loading="lazy"></div>
+<p>Use synthetic maneuver examples to estimate post-change distributions, but reserve independent real maneuvers for final evaluation.</p>
+<p>Report:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-080.png" alt="PkvPτtkv(;Δ)=(−≤∣Δ)Dm  " style="width:17.4150em;height:1.5683em" loading="lazy"></div>
+<p>for:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-081.png" alt="k∈{1,2,3,5,10}." style="width:9.7309em;height:1.5253em" loading="lazy"></div>
+<p>All methods must be calibrated to comparable false-alarm budgets.</p>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Experiment D — Audit operational latency and temporal leakage</strong></h2>
+<p><strong>Objective:</strong> Ensure every input used by the detector would actually have been available when the decision was issued.</p>
+<p>For each observation, record:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-082.png" alt="(t,t,t,t).acquisitionavailabilityODdecision    " style="width:17.4946em;height:1.6141em" loading="lazy"></div>
+<p>For every forecast, record the issue time and the earliest time at which its target becomes available for model updating.</p>
+<p>Run two evaluations:</p>
+<p><strong>Idealized:</strong> Measurements become available immediately.</p>
+<p><strong>Operational:</strong> Measurements, OD products and adaptation labels become available only after their respective delays.</p>
+<p>Report the difference in maneuver-detection latency and recall.</p>
+<p>This provides a direct estimate of how much performance is lost to the observation and processing pipeline rather than to the ML model.</p>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Research conclusion</strong></h2>
+<p>The most important development this week is the convergence of three ideas.</p>
+<p><strong>First, forecasting accuracy is not the correct objective for maneuver detection.</strong> NCL provides new experimental evidence that restricting a pretrained model to nominal behavior can make anomalies more distinguishable, even without improving the underlying forecasting backbone.</p>
+<p><strong>Second, nominal orbital evolution and anomalous behavior must be distinguished explicitly.</strong> MORA offers one approach, but its contextual correction must be tested carefully because real maneuvers can themselves produce coherent changes in orbital dynamics.</p>
+<p><strong>Third, operational detection is a sequential statistical problem.</strong> DI-SCUSUM provides a promising decision mechanism, while the delay-aware audit demonstrates why causal data availability must be enforced before any reported online improvement can be trusted.</p>
+<p>For your research, I would prioritize <strong>Experiment A first</strong>, followed by <strong>Experiment D</strong>. Together, they address two fundamental questions:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-10-11-math-083.png" alt="Does the model produce a genuinely informative maneuver signal? Can that signal be obtained and acted upon causally, with controlled false alarms? " style="width:43.4512em;height:5.3975em" loading="lazy"></div>
+<p>Those questions are more consequential at this stage than selecting another forecasting architecture.</p>
+</article>

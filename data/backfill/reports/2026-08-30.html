@@ -1,0 +1,219 @@
+<article class="panel transcribed-report">
+<h2><strong>SSA / satellite-maneuver ML briefing — 24–30 August 2026</strong></h2>
+<p>This was a relatively thin week for <strong>direct ML-based satellite maneuver detection</strong>. I found one new operational maneuver-detection source, one particularly relevant online change-point paper, and three adjacent works worth reading for evaluation, latency, robustness, or heterogeneous sensing. I have excluded ordinary satellite-anomaly notices, generic TSAD papers with weak evaluation, and announcements without technical content.</p>
+<p>The strongest methodological result this week is not a new neural architecture: it is a better way of thinking about the <strong>fundamental trade-off between observation time, statistical confidence, and false</strong> <strong>alarms</strong>.</p>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>1. </strong><em><strong>Online Change-Point Detection Based on Mann-Whitney U Statistic</strong></em></h2>
+<p><strong>Tianle Wang, Guanna Huang, Hongbin Zhu, Weichao Xu</strong> <strong>27 August 2026 — peer-reviewed/online-first journal article, Journal of Guangdong University of</strong> <strong>Technology</strong></p>
+<p><a href="https://xbzrb.gdut.edu.cn/en/article/doi/10.12052/gdutxb.260059?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source</a></p>
+<dl class="summary-grid">
+<dt><strong>Technical contribution</strong></dt><dd>
+<p>This is the most directly useful paper of the week for your <strong>maneuver-onset detector</strong>.</p>
+<p>The starting point is the sliding-window Mann–Whitney U statistic, a non-parametric detector attractive when the nominal/error distribution is not Gaussian. The authors identify a subtle calibration issue: overlapping sliding windows make consecutive MWU statistics dependent, so thresholds derived from their marginal distribution do <strong>not actually control the online false-alarm rate</strong>. <a href="https://xbzrb.gdut.edu.cn/en/article/doi/10.12052/gdutxb.260059" target="_blank" rel="noreferrer">Gdut</a></p>
+<p>They derive the power spectral density of the MWU statistic sequence under <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-001.png" alt="H0 " style="width:1.7549em;height:1.5516em" loading="lazy"></span> and show that:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>null fluctuations have a band-pass-like spectral structure;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a genuine change point produces predominantly low-frequency energy.</div></li></ul>
+<p>They therefore introduce <strong>LPFMWUS</strong>, filtering the statistic before decision. More importantly, they derive a multivariate joint distribution for consecutive filtered statistics and use it to obtain a <strong>dynamic threshold</strong> <strong>explicitly designed to control false alarms</strong>. <a href="https://xbzrb.gdut.edu.cn/en/article/doi/10.12052/gdutxb.260059" target="_blank" rel="noreferrer">Gdut</a></p>
+</dd>
+<dt><strong>Methods and data</strong></dt><dd>
+<p>The work is statistical rather than ML-based. Its key comparison is against:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>conventional MWU sliding-window detection;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>parametric CUSUM;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>NUNCL non-parametric change detection.</div></li></ul>
+<p>Validation is simulation-based rather than SSA-based. The paper reports improved localization accuracy together with controlled false-alarm behavior. <a href="https://xbzrb.gdut.edu.cn/en/article/doi/10.12052/gdutxb.260059" target="_blank" rel="noreferrer">Gdut</a></p>
+</dd>
+<dt><strong>Detection latency</strong></dt><dd>
+<p>Localization accuracy is evaluated, but the accessible material does not establish an operational distribution such as</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-002.png" alt="Pttτ(−≤)alarmmaneuver " style="width:12.8125em;height:1.6141em" loading="lazy"></div>
+<p>at several prescribed FAR levels.</p>
+<p>That remains a gap.</p>
+</dd>
+<dt><strong>Uncertainty/calibration</strong></dt><dd>
+<p>This is where the paper is particularly valuable: the threshold is derived from the <strong>joint null behavior of the</strong> <strong>sequential statistic</strong>, rather than tuned to maximize test F1.</p>
+<p>That is materially better aligned with deployment than the usual</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-003.png" alt="∗τFDτ=argmax(,).1test   τ" style="width:13.5434em;height:2.3011em" loading="lazy"></div>
+</dd>
+<dt><strong>Why it matters for maneuver detection</strong></dt><dd>
+<p>Your residual sequence will almost certainly have temporal correlation. Therefore, even if the marginal nominal residual distribution is perfectly calibrated,</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-004.png" alt="−3PSτ(&gt;)=10,t " style="width:9.8276em;height:1.7386em" loading="lazy"></div>
+<p>it does <strong>not</strong> follow that sequential alarms behave like independent Bernoulli events with probability <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-005.png" alt="−310" style="width:2.5436em;height:1.6331em" loading="lazy"></span>.</p>
+<p>That matters when converting a per-sample FPR into something operational such as:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-006.png" alt="PFA/day,ARL,(at least one false alarm in 24 h).0 " style="width:31.3442em;height:1.6141em" loading="lazy"></div>
+<p>I would use LPFMWUS or a closely related sequential rank statistic as a serious baseline against any ML residual detector.</p>
+<p><strong>Evidence strength:</strong> good statistical motivation; weak SSA realism.</p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>2. </strong><em><strong>Real-Time Edge-based Detection of Correlated AI Data-Center</strong></em> <em><strong>Load Episodes</strong></em></h2>
+<p><strong>Chandan Chaudhary, Abanish Tiwari, Yansong Pei, Mohammed Ben-Idris, Joydeep Mitra — Michigan</strong> <strong>State University</strong> <strong>24 August 2026 — arXiv preprint, submitted to IEEE PES Grid Edge 2027</strong></p>
+<p><a href="https://arxiv.org/abs/2608.22719?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
+<p>This is not aerospace, but it contains perhaps the cleanest new treatment this week of something extremely important for maneuver detection:</p>
+<p><strong>how much temporal evidence must accumulate before a regime change can be detected reliably?</strong></p>
+<dl class="summary-grid">
+<dt><strong>Detection formulation</strong></dt><dd>
+<p>The authors distinguish two operating regimes through cross-channel correlation and derive an effective independent sample count</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-007.png" alt="TN≈,eff τ c " style="width:5.4360em;height:3.1933em" loading="lazy"></div>
+<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-008.png" alt="T" style="width:0.9566em;height:1.4600em" loading="lazy"></span>  is the observation duration and <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-009.png" alt="τc " style="width:1.2217em;height:1.5683em" loading="lazy"></span> is the intrinsic correlation time of the process. <a href="https://arxiv.org/html/2608.22719v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Using a Fisher-transformed correlation statistic, they derive approximately</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-010.png" alt="TcTAUC()=Φ,() " style="width:11.6333em;height:2.2380em" loading="lazy"></div>
+<p>with</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-011.png" alt="atanh(ρ)sc= .τ 2c  " style="width:8.0639em;height:3.2558em" loading="lazy"></div>
+<p>Thus the information gained is controlled by <strong>process timescale</strong>, not computational speed. <a href="https://arxiv.org/html/2608.22719v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>This distinction is directly relevant to maneuver detection:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-012.png" alt="model inference latency≪statistically necessary observation latency." style="width:36.5620em;height:1.4600em" loading="lazy"></div>
+<p>Making TSMixer 100× faster would accomplish nothing if two or three post-maneuver observations are intrinsically required to establish a reliable change.</p>
+</dd>
+<dt><strong>Representation experiment</strong></dt><dd>
+<p>Their detector uses only three pairwise correlation coefficients feeding a tiny one-hidden-layer NN.</p>
+<p>The important ablation is a raw-waveform temporal convolutional network. Within one realization, it achieved about <strong>74.5% accuracy</strong>; when evaluated leave-one-seed-out, accuracy dropped to <strong>0.34</strong>, essentially chance for their three-class setup. The correlation representation transferred substantially better. <a href="https://arxiv.org/html/2608.22719v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>That is a strong warning against assuming that raw high-capacity sequence models discover physically invariant signatures.</p>
+</dd>
+<dt><strong>Evaluation design</strong></dt><dd>
+<p>They use <strong>leave-one-seed-out cross-validation</strong> over independently generated realizations rather than randomly splitting overlapping time windows. This is exactly the direction needed in maneuver detection: test on unseen trajectories/objects, not merely unseen windows from trajectories already present during training. <a href="https://arxiv.org/html/2608.22719v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Reported binary performance increases with window length:</p>
+<div class="table-scroll"><table><tr><th><strong>Window</strong></th><th><strong>Accuracy</strong></th><th><strong>AUC</strong></th></tr><tr><td>3.2 s</td><td>0.673</td><td>0.706</td></tr><tr><td>15 s</td><td>0.691</td><td>0.759</td></tr><tr><td>30 s</td><td>0.742</td><td>0.774</td></tr><tr><td>60 s</td><td>0.768</td><td>0.842</td></tr></table></div>
+</dd>
+<dt><strong>Actual detection latency</strong></dt><dd>
+<p>In closed loop, after an independent-to-correlated transition, the output settles within approximately <strong>60 s</strong>, i.e. roughly one observation window. <a href="https://arxiv.org/html/2608.22719v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>By comparison, inference itself takes:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-013.png" alt="0.054 ms median" style="width:8.9286em;height:1.4600em" loading="lazy"></div>
+<p>on a Jetson Orin Nano, and complete packet-to-decision latency is about: 1.16\text{ ms median},\qquad 1.50\text{ ms P99}. \] :chatgpt-content-reference{index=&quot;11&quot;} This is an unusually good empirical illustration of why **compute latency and detection delay must never be reported interchangeably**. ### Limitations Only three random seeds are used for offline evaluation, with a fourth for the closed-loop demonstration. The anomalous regime is generated by a simulation model rather than an observed multi-facility event. :chatgpt-content-reference{index=&quot;12&quot;} ### Why it matters for your work I would explicitly construct the maneuver equivalent: \[ P_D(T,\Delta v)</p>
+<p>or preferably</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-014.png" alt="Pkv(,Δ),D" style="width:5.9360em;height:1.5253em" loading="lazy"></div>
+<p>where <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-015.png" alt="k" style="width:0.8804em;height:1.4600em" loading="lazy"></span> is the number of post-maneuver measurements available.</p>
+<p>This produces an <strong>information-acquisition curve</strong>:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-016.png" alt="kPf=1,2,3,…⟶∣FAR=.D " style="width:17.8696em;height:1.5683em" loading="lazy"></div>
+<p>That would tell you whether failure on weak maneuvers is a model problem or simply insufficient post-burn information.</p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>3. </strong><em><strong>TraceBench: Controlled Evaluation of LLM Agents for Time-Series</strong></em> <em><strong>Root-Cause Attribution</strong></em></h2>
+<p><strong>Tommaso Bendinelli, Artur Dox, Christian Holz</strong> <strong>27 August 2026 — arXiv preprint</strong></p>
+<p><a href="https://arxiv.org/abs/2608.27182?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
+<p>This is relevant principally as an <strong>evaluation-framework paper</strong>, not because I recommend an LLM maneuver detector.</p>
+<dl class="summary-grid">
+<dt><strong>Core idea</strong></dt><dd>
+<p>TraceBench generates time series from three interpretable physical dynamical systems. For every sample, ground truth is known by construction:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>nominal trajectory; or</div></li><li><span class="original-label" aria-hidden="true">•</span><div>exactly one altered physical parameter.</div></li></ul>
+<p>It independently varies:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>domain/physics information supplied to the algorithm;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>observation noise;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>availability of labelled examples;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>direct versus programmatic output. <a href="https://arxiv.org/html/2608.27182v1" target="_blank" rel="noreferrer">arXiv +1</a></div></li></ul>
+<p>That clean factorization is valuable for SSA simulation studies.</p>
+</dd>
+<dt><strong>Main findings</strong></dt><dd>
+<p>Providing physical domain context produces large improvements. Removing it lowers mean performance by roughly <strong>20–32 percentage points</strong> depending on condition. <a href="https://arxiv.org/html/2608.27182v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>Noise predictably reduces performance. More surprisingly, requiring the agent to convert its reasoning into a reusable classifier function hurts held-out generalization relative to direct per-case classification. <a href="https://arxiv.org/html/2608.27182v1" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>The paper also includes classical baselines such as Euclidean 1-NN, DTW and MiniRocket+ridge. Importantly, their performance is often poor unless granted a <strong>privileged paired nominal trajectory</strong>, illustrating the value of having a physically matched counterfactual. <a href="https://arxiv.org/html/2608.27182v1" target="_blank" rel="noreferrer">arXiv</a></p>
+</dd>
+<dt><strong>Reproducibility</strong></dt><dd>
+<p>This is one of the strongest aspects:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>experimental code is public;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>generated dataset is public;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>agent trajectories are public;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>a leaderboard is provided. <a href="https://arxiv.org/html/2608.27182v1" target="_blank" rel="noreferrer">arXiv</a></div></li></ul>
+</dd>
+<dt><strong>Latency / FAR / calibration</strong></dt><dd>
+<p>This is not an online anomaly detector.</p>
+<p>Therefore it provides essentially no useful evidence for:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-017.png" alt="FAR,ARL,t,0detect  " style="width:12.4643em;height:1.6141em" loading="lazy"></div>
+<p>and should not be cited as evidence that LLM agents are appropriate for operational anomaly detection.</p>
+</dd>
+<dt><strong>Why it matters</strong></dt><dd>
+<p>The useful idea is the <strong>controlled simulator benchmark</strong>.</p>
+<p>For maneuver research, one could generate paired trajectories:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-018.png" alt="Xθ()nominal " style="width:5.8203em;height:1.6141em" loading="lazy"></div>
+<p>and</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-019.png" alt="^Xθvt(,Δ,,d),maneuverm  " style="width:12.0610em;height:1.8661em" loading="lazy"></div>
+<p>with exactly the same:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>initial state;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>environmental realization;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>sensor schedule;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>noise process,</div></li></ul>
+<p>changing only the maneuver.</p>
+<p>That gives you a clean way to quantify which part of the detection difficulty comes from:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-020.png" alt="Δv,direction,orbital phase,noise,missing measurements." style="width:34.9487em;height:1.5253em" loading="lazy"></div>
+<p>TraceBench is therefore much more useful as inspiration for a <strong>ManeuverBench</strong> than as a candidate algorithm.</p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>4. Starlink Stargaze / Space Safety platform expansion</strong></h2>
+<p><strong>SpaceX / Starlink — operational SSA system; external-operator rollout reported 25 August 2026.</strong></p>
+<p><a href="https://docs.space-safety.starlink.com/docs/tutorial-basics/stargaze/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Official Stargaze documentation</a></p>
+<p>The underlying Stargaze system predates this week, so this is <strong>not a new algorithm</strong>. What changed is the operational expansion of its external space-safety service. I include it because it gives a valuable reality check on what a production maneuver-detection system can exploit.</p>
+<dl class="summary-grid">
+<dt><strong>Sensor architecture</strong></dt><dd>
+<p>SpaceX states that Stargaze uses nearly <strong>30,000 star trackers</strong> distributed over Starlink spacecraft and processes about <strong>30 million optical transits per day</strong>. Observations are aggregated into orbit estimates and position/velocity predictions in near-real time. <a href="https://docs.space-safety.starlink.com/docs/tutorial-basics/stargaze/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Space Safety Plat… +1</a></p>
+<p>SpaceX explicitly claims that Stargaze can detect maneuvers more quickly than existing operational systems. This is a <strong>vendor claim</strong>, not an independently benchmarked result. <a href="https://docs.space-safety.starlink.com/docs/tutorial-basics/stargaze/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Space Safety Plat…</a></p>
+<p>The platform feeds those orbit solutions into conjunction screening and CDM generation.</p>
+</dd>
+<dt><strong>Timeliness</strong></dt><dd>
+<p>SpaceX&#x27;s technical material states that conjunction-screening results are generated within <strong>minutes</strong>, rather than the several-hour cadence typical of existing processes. <a href="https://starlink.com/ar/updates/stargaze?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Starlink</a></p>
+<p>The company also emphasizes that operator-provided ephemerides remain preferable because an operator can disclose a maneuver <strong>before execution</strong>, whereas observation-based systems necessarily detect it afterwards. <a href="https://docs.space-safety.starlink.com/docs/tutorial-basics/stargaze/?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Space Safety Plat…</a></p>
+<p>That distinction is important:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-021.png" alt="t→t→t→t.burnfirst observationODdetection    " style="width:20.6313em;height:1.6141em" loading="lazy"></div>
+<p>An ML detector can only reduce the last part of this chain.</p>
+</dd>
+<dt><strong>Uncertainty and false alarms</strong></dt><dd>
+<p>Public documentation does not provide:</p>
+<ul class="report-list"><li><span class="original-label" aria-hidden="true">•</span><div>ROC curves;</div></li><li><span class="original-label" aria-hidden="true">•</span><div><span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-022.png" alt="P(Δv)D " style="width:4.3926em;height:1.5683em" loading="lazy"></span>;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>FAR;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>covariance-consistency tests;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>maneuver-detection confusion matrices;</div></li><li><span class="original-label" aria-hidden="true">•</span><div>externally reproduced evaluations.</div></li></ul>
+<p>Therefore no quantitative claim about detection accuracy can currently be treated as validated evidence.</p>
+</dd>
+<dt><strong>Operational comparison: TLE-only detector</strong></dt><dd>
+<p>A separate public system, Orbital Radar, currently monitors about <strong>29,000 objects</strong> by comparing consecutive TLEs and applying perturbation-aware orbital-element thresholds. Its documentation explicitly acknowledges detection latency of hours to more than a day depending on TLE cadence, and missed weak maneuvers below threshold. <a href="https://orbitalradar.com/satellite-maneuver-tracker" target="_blank" rel="noreferrer">Orbital Radar</a></p>
+<p>That provides a useful contrast:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-023.png" alt="TLE-driven detection" style="width:11.5816em;height:1.4600em" loading="lazy"></div>
+<p>versus</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-024.png" alt="high-cadence space-based observations." style="width:20.7495em;height:1.4600em" loading="lazy"></div>
+<p>The dominant bottleneck may therefore be <strong>measurement cadence</strong>, not detector sophistication.</p>
+</dd>
+<dt><strong>Why it matters</strong></dt><dd>
+<p>Any synthetic benchmark for ML maneuver detection should include at least two observation regimes:</p>
+<ul class="report-list"><li><span class="original-label"><strong>1. </strong></span><div><strong>TLE-like sparse / irregular observations</strong>;</div></li><li><span class="original-label"><strong>2. </strong></span><div><strong>high-cadence tracking</strong> representative of future commercial SSA networks.</div></li></ul>
+<p>Otherwise an algorithm optimized for one regime can misleadingly appear universally superior.</p>
+</dd>
+</dl>
+</article>
+<article class="panel paper-card transcribed-report">
+<h2><strong>5. </strong><em><strong>Multi-Modal Anomaly Detection: A Survey</strong></em></h2>
+<p><strong>Xudong Mou, Zexin Wu, Chuan Luo, Shiru Chen, Xudong Liu, Chunming Hu, Renyu Yang</strong> <strong>24 August 2026 — preprint, accepted in IEEE Transactions on Big Data</strong></p>
+<p><a href="https://arxiv.org/abs/2608.24937?utm_source=chatgpt.com" target="_blank" rel="noreferrer">Direct source — arXiv</a></p>
+<p>This is the weakest of the five in direct relevance, but I include it because it addresses a likely later-stage SSA problem: <strong>heterogeneous evidence fusion</strong>.</p>
+<p>The survey organizes anomaly detection not primarily by backbone but by the assumptions used to separate abnormal from normal data. It distinguishes:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-025.png" alt="normality-assumption methods" style="width:16.5426em;height:1.4600em" loading="lazy"></div>
+<p>that model normal cross-modal relationships, from</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-026.png" alt="anomaly-assumption methods" style="width:15.8663em;height:1.4600em" loading="lazy"></div>
+<p>that inject or construct anomalies to learn stronger boundaries. <a href="https://arxiv.org/abs/2608.24937" target="_blank" rel="noreferrer">arXiv</a></p>
+<p>It covers representation learning, cross-modal alignment, knowledge augmentation, structural anomaly injection and foundation-model approaches, and compiles evaluation protocols and benchmarks. <a href="https://arxiv.org/abs/2608.24937" target="_blank" rel="noreferrer">arXiv</a></p>
+<dl class="summary-grid">
+<dt><strong>Relevance to SSA</strong></dt><dd>
+<p>A realistic SSA detector may eventually receive heterogeneous evidence:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-027.png" alt="{radar,optical,TLE/OD state,operator ephemeris,context}." style="width:32.0659em;height:1.4600em" loading="lazy"></div>
+<p>The crucial design question becomes whether modalities should be fused into one latent space or first generate independently calibrated evidence:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-028.png" alt="opticaldynamicsradarS,S,Sttt   " style="width:14.3145em;height:1.9261em" loading="lazy"></div>
+<p>and only then undergo evidence fusion.</p>
+<p>Given the earlier finding that more information can sometimes let reconstruction models explain away anomalies, I would strongly prefer the latter as an initial SSA architecture.</p>
+</dd>
+<dt><strong>Evaluation / uncertainty</strong></dt><dd>
+<p>Because this is a survey, it contributes no new maneuver-detection evidence, latency result, or calibration guarantee.</p>
+<p>Its importance is architectural, not empirical.</p>
+</dd>
+</dl>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Reading priority</strong></h2>
+<div class="table-scroll"><table><tr><th><strong>Rank</strong></th><th><strong>Item</strong></th><th><strong>Relevance</strong></th></tr><tr><td><strong>1</strong></td><td><strong>LPFMWUS — online Mann–Whitney</strong> <strong>change detection</strong></td><td>Directly useful for FAR-controlled maneuver onset detection</td></tr><tr><td><strong>2</strong></td><td><strong>Real-Time Edge Detection of Correlated</strong> <strong>Episodes</strong></td><td>Excellent treatment of observation-time vs detection-confidence trade-off</td></tr><tr><td><strong>3</strong></td><td><strong>TraceBench</strong></td><td>Strong blueprint for physically controlled synthetic maneuver benchmarks</td></tr><tr><td><strong>4</strong></td><td><strong>Stargaze operational expansion</strong></td><td>Critical realism check on observation cadence and actual SSA pipelines</td></tr><tr><td><strong>5</strong></td><td><strong>Multi-Modal Anomaly Detection survey</strong></td><td>Useful later for heterogeneous sensor fusion</td></tr></table></div>
+</article>
+<article class="panel transcribed-report">
+<h2><strong>Experiments I would add now</strong></h2>
+<p>The first addition should be an <strong>observation-count detection curve</strong>. For each maneuver, freeze the detector threshold on nominal calibration data and measure:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-029.png" alt="thPkvPalarm by the k post-maneuver observation.(,Δ)=()D " style="width:32.9331em;height:1.8358em" loading="lazy"></div>
+<p>Report <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-030.png" alt="k=1,2,3,5,10" style="width:8.3164em;height:1.5253em" loading="lazy"></span> and stratify by <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-031.png" alt="Δv" style="width:1.8456em;height:1.5253em" loading="lazy"></span>, direction and orbital regime. This answers a much more meaningful question than a global F1: <strong>how quickly does usable evidence accumulate?</strong></p>
+<p>Second, evaluate false alarms sequentially rather than pointwise. At minimum report</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-032.png" alt="FA/object/day,ARL,P(≥1 FA in 24h).0 " style="width:27.0688em;height:1.6141em" loading="lazy"></div>
+<p>Compare the current thresholding scheme with <strong>CUSUM, MWU/LPFMWUS and Mahalanobis-based</strong> <strong>sequential scoring</strong>, all calibrated on nominal-only data.</p>
+<p>Third, add a representation ablation inspired by the edge-detection paper:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-033.png" alt="raw orbital historyvsforecast residualvsphysically structured residual features." style="width:45.7583em;height:1.4600em" loading="lazy"></div>
+<p>For the last category I would test, for example,</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-034.png" alt="aeiω[Δ,Δ,Δ,ΔΩ,Δ]" style="width:11.4116em;height:1.5253em" loading="lazy"></div>
+<p>plus standardized derivatives and covariance-normalized innovations. Evaluate on <strong>entirely unseen RSOs</strong>, not random windows.</p>
+<p>Fourth, build paired counterfactual simulations:</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-035.png" alt="(0)X=same orbit + same sensors + no maneuver,(1)(0)XXmaneuver.=+" style="width:26.3969em;height:5.2679em" loading="lazy"></div>
+<p>Then independently sweep maneuver amplitude, direction, epoch, observation gaps, sensor noise and OD error. This would give you a much cleaner estimate of the detector&#x27;s physical sensitivity than aggregate benchmark scores.</p>
+<p>Finally, I would explicitly separate</p>
+<div class="math-display"><img class="math-display-image" src="../assets/backfill/2026-08-30-math-036.png" alt="ttttt=+++totalobservationOD/datastatisticalcompute      " style="width:25.3467em;height:1.6141em" loading="lazy"></div>
+<p>in future results. The new evidence this week reinforces that <span class="math-wrapper"><img class="math-inline" src="../assets/backfill/2026-08-30-math-037.png" alt="tstatistical " style="width:4.3477em;height:1.6141em" loading="lazy"></span><strong> and observation cadence are</strong> <strong>likely much more important than neural-network inference latency</strong> for satellite maneuver detection.</p>
+</article>
