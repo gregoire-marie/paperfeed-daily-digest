@@ -65,21 +65,20 @@ it or use the existing `S2_API_KEY` value.
 
 For contribution rules and product boundaries, see [`AGENTS.md`](AGENTS.md).
 
-## Future work
+## Roadmap
 
-Add optional LLM enrichment for **Why it matters**, **Limitations**, and
-**Relevance to my research** only, using a hosted API with a free tier where
-available. Ground these assessments in the candidate abstract, seed-paper
-abstracts, and a short description of the research goals. Distinguish stated
-limitations from inferred concerns, and mark insufficient evidence explicitly.
+- [ ] **Add selective LLM enrichment** for Why it matters, Limitations, and
+  Relevance to my research, using a hosted API with a free tier where available.
+  Ground assessments in candidate and seed abstracts plus the research goals;
+  distinguish stated limitations from inferred concerns and flag insufficient
+  evidence. Keep Main idea, Method, and Key results on the deterministic
+  extraction path, with discovery and selection based on Semantic Scholar.
+- [ ] **Improve the digest site's visual design**: refine typography, spacing,
+  paper cards, and the archive layout for comfortable reading on iPhone, while
+  keeping the site static and lightweight.
 
-Keep **Main idea**, **Method**, and **Key results** on the existing deterministic
-extraction path using abstracts supplied by Semantic Scholar. Keep **Basis** tied
-to the source material actually used. Paper discovery and selection remain based
-on Semantic Scholar recommendations.
-
-This selective enrichment is planned, not implemented; the existing optional
-LLM backend generates all six summary sections.
+The existing optional LLM backend generates all six summary sections; selective
+enrichment is still planned.
 
 ## Appendix
 
@@ -162,15 +161,16 @@ but does not prove the key was accepted.
 
 ### Historical archive
 
-Twelve imported ChatGPT briefings retain their original prose and formatting;
-they do not follow the generated-summary schema. Their titles are included in
-`seen.json`. Sources, date mapping, and fidelity checks are documented in
+Twelve imported ChatGPT briefings are published as 58 concise paper cards using
+the same six fields as generated digests. Two non-paper updates are excluded.
+Archive summaries are based on the supplied briefings, not independently reviewed
+papers. Original source transcriptions and date mapping are documented in
 [`data/backfill/README.md`](data/backfill/README.md).
 
 ```bash
 python -m paperfeed.backfill
 ```
 
-This rebuilds the archive from versioned transcriptions without a PDF or LLM,
+This rebuilds the archive from checked, curated card data without a PDF or LLM,
 preserves the five original repository papers in the October 11 report, and
 aborts on checksum mismatches before writing reports.
