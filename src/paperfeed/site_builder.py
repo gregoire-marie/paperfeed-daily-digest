@@ -8,6 +8,16 @@ from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 from paperfeed.models import Digest, DigestEntry, Paper
 
 
+_FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#315c72"/>
+  <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round">
+    <path d="M16 9c-3-2-6-2-10-1v16c4-1 7-1 10 1 3-2 6-2 10-1V8c-4-1-7-1-10 1Z"/>
+    <path d="M16 9v16M9 12h4M9 16h4M19 12h4M19 16h4"/>
+  </g>
+</svg>
+"""
+
+
 # Palette and typography shared with gregoire-marie.github.io/src/styles/global.css.
 _SITE_STYLE = """
     :root {
@@ -178,9 +188,11 @@ _SITE_STYLE = """
 
 
 def write_digest_site(digest: Digest, site_dir: str | Path) -> Path:
+    """Write a digest, the refreshed homepage, and the shared favicon."""
     site_path = Path(site_dir)
     digest_dir = site_path / "digests"
     digest_dir.mkdir(parents=True, exist_ok=True)
+    (site_path / "favicon.svg").write_text(_FAVICON_SVG, encoding="utf-8")
 
     digest_path = digest_dir / f"{digest.digest_date.isoformat()}.html"
     digest_path.write_text(build_digest_page(digest), encoding="utf-8")
@@ -257,6 +269,7 @@ def build_digest_page(digest: Digest) -> str:
     return _page_shell(
         title=f"PaperFeed digest for {digest.digest_date.isoformat()}",
         description=f"Weekly digest for {digest.digest_date.isoformat()}",
+        favicon_href="../favicon.svg",
         body=f"""
         <header class="hero">
           <p class="eyebrow">PaperFeed digest</p>
@@ -357,7 +370,7 @@ def _format_citations(paper: Paper) -> str | None:
     return f"{paper.citation_count} {label}"
 
 
-def _page_shell(*, title: str, description: str, body: str) -> str:
+def _page_shell(*, title: str, description: str, body: str, favicon_href: str = "favicon.svg") -> str:
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -367,6 +380,7 @@ def _page_shell(*, title: str, description: str, body: str) -> str:
   <meta name="description" content="{escape(description)}">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#315c72">
+  <link rel="icon" type="image/svg+xml" href="{escape(favicon_href)}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
