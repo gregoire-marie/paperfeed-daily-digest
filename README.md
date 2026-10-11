@@ -67,12 +67,17 @@ For contribution rules and product boundaries, see [`AGENTS.md`](AGENTS.md).
 
 ## Roadmap
 
-- [ ] **Add selective LLM enrichment** for Why it matters, Limitations, and
-  Relevance to my research, using a hosted API with a free tier where available.
+- [ ] **Add relevance screening and selective LLM enrichment**, using a hosted
+  API with a free tier where available. Before selecting up to `top_k` papers,
+  assess each candidate against explicit research goals using its abstract and
+  the seed abstracts. Require an evidence-backed reason for inclusion; exclude
+  weak or uncertain matches, allow fewer papers, and skip publishing when none
+  qualify. Preserve Semantic Scholar order among accepted candidates.
+  Enrich Why it matters, Limitations, and Relevance to my research.
   Ground assessments in candidate and seed abstracts plus the research goals;
   distinguish stated limitations from inferred concerns and flag insufficient
   evidence. Keep Main idea, Method, and Key results on the deterministic
-  extraction path, with discovery and selection based on Semantic Scholar.
+  extraction path, with discovery based on Semantic Scholar recommendations.
 - [x] **Improve the digest site's visual design**: refine typography, spacing,
   paper cards, and the archive layout for comfortable reading on desktop and mobile, while
   keeping the site static and lightweight. Include a dark mode.
