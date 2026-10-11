@@ -1,6 +1,10 @@
 positive_seeds:
-  - doi: "10.2514/6.2025-98101"
-  - doi: "10.13009/EUCASS2025-284"
+  # Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO
+  # DOI: 10.13009/EUCASS2025-284
+  - paper_id: "a961442d9f0549d44b4de9dc2fc5161f0b150936"
+  # TLE Prediction using Machine Learning for Satellite Maneuver Detection
+  # DOI: 10.2514/6.2025-98101
+  - paper_id: "c4391c40afe3e48003b7aba47c47ced809dc3c15"
 
 negative_seeds: []
 

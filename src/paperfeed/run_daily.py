@@ -45,9 +45,14 @@ def run_daily(
     client: DiscoveryClient | None = None,
     summarizer: PaperSummarizer | None = None,
 ) -> DailyRunResult:
+    """Retrieve, select, summarize, and publish a digest with discovery diagnostics."""
     run_date = digest_date or date.today()
     config = load_config(config_path)
     config = _apply_top_k_override(config, top_k)
+    LOGGER.info(
+        "event=seeds_loaded positive=%d negative=%d",
+        len(config.positive_seeds), len(config.negative_seeds),
+    )
 
     discovery_client = client or SemanticScholarClient()
     resolved_positive_seeds = _resolve_seeds(
@@ -75,6 +80,12 @@ def run_daily(
     seen_store = SeenStore.load(seen_path)
     unseen_candidates = filter_unseen_papers(filtered_candidates, seen_store)
     selected_papers = unseen_candidates[: config.preferences.top_k]
+    filtered_count = len(candidates) - len(filtered_candidates)
+    duplicate_count = len(filtered_candidates) - len(unseen_candidates)
+    LOGGER.info(
+        "event=candidates_selected retrieved=%d date_filtered=%d duplicates_removed=%d selected=%d",
+        len(candidates), filtered_count, duplicate_count, len(selected_papers),
+    )
 
     digest = Digest(
         digest_date=run_date,
@@ -83,10 +94,23 @@ def run_daily(
             resolved_positive_seeds,
             summarizer=summarizer,
         ),
+        empty_reason=_empty_digest_reason(
+            candidate_count=len(candidates),
+            filtered_count=filtered_count,
+            duplicate_count=duplicate_count,
+            selected_count=len(selected_papers),
+            min_publication_year=config.preferences.min_publication_year,
+        ),
     )
+    LOGGER.info("event=summaries_generated count=%d", len(digest.entries))
+    if digest.empty_reason:
+        LOGGER.info("event=empty_digest reason=%s", digest.empty_reason)
     digest_path = write_digest_site(digest, site_dir)
+    previous_seen = seen_store.path.read_text(encoding="utf-8") if seen_store.path.exists() else None
     seen_store.mark_summarized(selected_papers, run_date.isoformat())
     seen_store.save()
+    seen_changed = previous_seen != seen_store.path.read_text(encoding="utf-8")
+    LOGGER.info("event=output_written path=%s seen_changed=%s", digest_path, seen_changed)
 
     return DailyRunResult(
         digest=digest,
@@ -147,6 +171,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Run the daily CLI with concise discovery and output logs."""
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
     parser = build_parser()
     args = parser.parse_args(argv)
     run_date = date.fromisoformat(args.date) if args.date else None
@@ -205,7 +231,12 @@ def _resolve_seeds(
 
     for seed in seeds:
         try:
-            resolved.append(discovery_client.resolve_seed(seed))
+            paper = discovery_client.resolve_seed(seed)
+            resolved.append(paper)
+            LOGGER.info(
+                "event=seed_resolved role=%s identifier=%s paper_id=%s title=%s",
+                role, seed.identifier, paper.paper_id, paper.title,
+            )
         except SeedResolutionError as exc:
             unresolved.append(seed)
             LOGGER.warning("Skipping %s seed '%s': %s", role, seed.identifier, exc)
@@ -215,7 +246,7 @@ def _resolve_seeds(
         raise NoUsablePositiveSeedsError(
             "None of the configured positive seeds could be resolved in Semantic Scholar. "
             f"Unresolved seeds: {unresolved_labels}. "
-            "A DOI can exist at doi.org without being indexed by Semantic Scholar yet. "
+            "A DOI lookup can fail even if the paper is indexed under a Semantic Scholar paper_id. "
             "Use a Semantic Scholar paper_id or another indexed seed."
         )
 
@@ -224,6 +255,27 @@ def _resolve_seeds(
 
 def _describe_seed(seed: PaperSeed) -> str:
     return f"{seed.identifier_kind}={seed.identifier}"
+
+
+def _empty_digest_reason(
+    *, candidate_count: int, filtered_count: int, duplicate_count: int,
+    selected_count: int, min_publication_year: int | None,
+) -> str | None:
+    if selected_count:
+        return None
+    if candidate_count == 0:
+        return "Semantic Scholar returned no recommendations for the resolved seed papers."
+    noun = "recommendation" if candidate_count == 1 else "recommendations"
+    reasons = [f"Semantic Scholar returned {candidate_count} {noun}."]
+    if filtered_count:
+        reasons.append(
+            f"{filtered_count} {'was' if filtered_count == 1 else 'were'} excluded by the publication-year filter: "
+            f"papers must be from {min_publication_year} or later; papers with no publication year are also excluded."
+        )
+    if duplicate_count:
+        noun = "paper" if duplicate_count == 1 else "papers"
+        reasons.append(f"{duplicate_count} eligible {noun} had already appeared in previous digests.")
+    return " ".join(reasons)
 
 
 if __name__ == "__main__":

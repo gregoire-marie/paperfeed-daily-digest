@@ -15,6 +15,33 @@ from paperfeed.semantic_scholar import (
 
 
 class SemanticScholarClientTests(unittest.TestCase):
+    def test_recommendations_require_an_explicit_array_of_paper_objects(self) -> None:
+        for payload in ({}, {"error": "Unavailable"}, {"recommendedPapers": None}, {"recommendedPapers": {}}, {"recommendedPapers": [None]}):
+            with self.subTest(payload=payload):
+                client = SemanticScholarClient()
+                with mock.patch.object(client, "_request_json", return_value=payload):
+                    with self.assertRaisesRegex(SemanticScholarError, "recommendedPapers array"):
+                        client.get_recommendations(["seed-1"], [], 5)
+
+    def test_recommendations_log_explicit_empty_response_and_seed_ids(self) -> None:
+        client = SemanticScholarClient()
+        with (
+            mock.patch.object(client, "_request_json", return_value={"recommendedPapers": []}) as request,
+            self.assertLogs("paperfeed.semantic_scholar", level="INFO") as logs,
+        ):
+            self.assertEqual(client.get_recommendations(["seed-1", "seed-2"], [], 40), [])
+        self.assertEqual(request.call_args.kwargs["body"]["positivePaperIds"], ["seed-1", "seed-2"])
+        self.assertIn("positive_ids=seed-1,seed-2", logs.output[0])
+        self.assertIn("returned=0", logs.output[0])
+
+    def test_non_object_json_response_fails_clearly(self) -> None:
+        client = SemanticScholarClient()
+        response = mock.MagicMock()
+        response.__enter__.return_value.read.return_value = b'[]'
+        with mock.patch("paperfeed.semantic_scholar.urlopen", return_value=response):
+            with self.assertRaisesRegex(SemanticScholarError, "JSON object"):
+                client.get_recommendations(["seed-1"], [], 5)
+
     def test_transient_429_retries_get_and_post_without_changing_request(self) -> None:
         for method in ("GET", "POST"):
             with self.subTest(method=method):
@@ -199,7 +226,7 @@ class SemanticScholarClientTests(unittest.TestCase):
         ):
             with self.assertRaisesRegex(
                 SeedResolutionError,
-                "doi.org without being indexed by Semantic Scholar",
+                "indexed under its Semantic Scholar paper_id without a working DOI lookup",
             ):
                 client.resolve_seed(PaperSeed(doi="10.13009/EUCASS2025-284"))
 

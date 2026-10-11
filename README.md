@@ -175,9 +175,11 @@ preferences:
 ```
 
 Keep the seed set small and high quality. A few excellent seeds are better than a large noisy list.
-When you use a DOI seed, that paper still needs to exist in Semantic Scholar's index. A DOI
-that resolves at `doi.org` can still be missing from Semantic Scholar; in that case, use the
-Semantic Scholar `paper_id` for that paper or replace the seed with another indexed paper.
+When you use a DOI seed, Semantic Scholar must be able to resolve that DOI to a paper.
+A DOI can resolve at `doi.org` while its Semantic Scholar DOI lookup returns 404, even
+when the paper has a Semantic Scholar page. Prefer the `paper_id` from the last segment
+of that page's URL in this case. The two configured seeds use these IDs directly, with
+their titles and DOIs kept as comments for readability.
 
 ## `data/seen.json`
 
@@ -249,6 +251,36 @@ export LLAMA_CPP_API_KEY="..."
 ```
 
 ## Running locally
+
+### Check your Semantic Scholar key locally
+
+From the repository directory, run this in an interactive terminal (Python 3.11+;
+no installation or third-party dependencies required):
+
+```bash
+PYTHONPATH=src python3 -m paperfeed.check_s2
+```
+
+Paste the key value from your email at the hidden prompt. The command uses this
+value directly rather than an existing `S2_API_KEY` environment variable. It does
+not save the key, add it to shell history, or change `site/` or `data/seen.json`.
+It tests a known indexed paper independently of your seeds, using the same client,
+headers, pacing, and retries as the daily pipeline.
+
+To also test your seeds and a recommendations request:
+
+```bash
+PYTHONPATH=src python3 -m paperfeed.check_s2 --config seeds.yaml
+```
+
+A successful request shows that API access works from your computer with the
+supplied key. These endpoints are public, so it does not independently prove the
+key was accepted. HTTP 401/403 indicate an authentication or access problem; HTTP
+429 indicates throttling and is not conclusive about key validity. HTTP 404 on a
+configured seed means its identifier could not be resolved; a DOI lookup failure
+does not prove the paper is absent from Semantic Scholar. If the local check works while CI
+fails, compare the repository secret with the exact value you entered and start a
+fresh workflow run on the latest `main` commit, rather than rerunning an old job.
 
 Run the full daily pipeline:
 
@@ -342,6 +374,18 @@ five attempts return 429, check that the secret contains only the key value (no
 quotes or email label), check for other applications using the same key, and
 retry later. A masked secret in an Actions log confirms it was supplied, but does
 not prove Semantic Scholar accepted it.
+
+The runner logs each successfully resolved seed (identifier, paper ID, and title),
+then sends one combined recommendations request for the resolved seed set. The
+response log records the seed IDs, requested limit, and returned count. Raw
+response bodies and request headers are not dumped. A response missing the
+`recommendedPapers` array is an error rather than an empty digest.
+
+Empty digest pages distinguish no returned recommendations, candidates excluded
+by the publication-year rule (including missing years), and eligible papers that
+already appeared in previous digests. If both filtering and deduplication removed
+papers, the page shows both counts. API failures stop the run before publishing a
+new page.
 
 For LLM summaries, the optional `llama-cpp` backend sends requests to an
 OpenAI-compatible `/chat/completions` endpoint. A local server only needs to run

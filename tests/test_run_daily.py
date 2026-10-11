@@ -7,6 +7,7 @@ from datetime import date
 from pathlib import Path
 
 from paperfeed.models import Paper, PaperAuthor, PaperSeed, PaperSummary
+from paperfeed.dedup import SeenStore
 from paperfeed.run_daily import NoUsablePositiveSeedsError, run_daily
 from paperfeed.semantic_scholar import SeedResolutionError
 
@@ -97,6 +98,49 @@ class UnresolvableDiscoveryClient(FakeDiscoveryClient):
 
 
 class RunDailyTests(unittest.TestCase):
+    def test_empty_pages_explain_each_selection_outcome(self) -> None:
+        recent = Paper(paper_id="recent", title="Recent candidate", year=2026)
+        older = Paper(paper_id="older", title="Older candidate", year=2022)
+        undated = Paper(paper_id="undated", title="Undated candidate")
+        cases = [
+            ([], [], ["returned no recommendations"], ["filter", "already appeared"]),
+            ([older, undated], [], ["2 recommendations", "2 were excluded", "2023 or later", "no publication year"], ["already appeared"]),
+            ([recent], [recent], ["1 recommendation", "1 eligible paper had already appeared"], ["publication-year filter"]),
+            ([older, recent], [recent], ["2 recommendations", "1 was excluded", "1 eligible paper had already appeared"], []),
+        ]
+        for candidates, seen, expected, absent in cases:
+            with self.subTest(expected=expected), tempfile.TemporaryDirectory() as temp_dir:
+                root = Path(temp_dir)
+                config_path = root / "seeds.yaml"
+                config_path.write_text(
+                    'positive_seeds:\n  - paper_id: "seed-1"\n'
+                    'negative_seeds: []\npreferences:\n  min_publication_year: 2023\n',
+                    encoding="utf-8",
+                )
+                store = SeenStore(root / "data" / "seen.json")
+                store.mark_summarized(seen, "2026-03-22")
+                store.save()
+                original_seen = store.path.read_bytes()
+                client = FakeDiscoveryClient()
+                client.candidates = candidates
+
+                with self.assertLogs("paperfeed.run_daily", level="INFO") as logs:
+                    result = run_daily(
+                        config_path=config_path, seen_path=store.path, site_dir=root / "site",
+                        digest_date=date(2026, 3, 23), client=client,
+                    )
+
+                self.assertEqual(result.selected_count, 0)
+                page = result.digest_path.read_text(encoding="utf-8")
+                for text in expected:
+                    self.assertIn(text, result.digest.empty_reason)
+                    self.assertIn(text, page)
+                for text in absent:
+                    self.assertNotIn(text, result.digest.empty_reason)
+                self.assertEqual(store.path.read_bytes(), original_seen)
+                self.assertIn("event=seed_resolved", " ".join(logs.output))
+                self.assertIn("seen_changed=False", " ".join(logs.output))
+
     def test_run_daily_builds_digest_and_updates_seen_state(self) -> None:
         fake_client = FakeDiscoveryClient()
 
@@ -132,6 +176,7 @@ preferences:
             self.assertEqual(result.candidate_count, 2)
             self.assertEqual(result.unseen_count, 1)
             self.assertEqual(result.selected_count, 1)
+            self.assertIsNone(result.digest.empty_reason)
             self.assertTrue((site_dir / "index.html").exists())
             self.assertTrue((site_dir / "digests" / "2026-03-23.html").exists())
 

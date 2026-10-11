@@ -112,7 +112,15 @@ class SemanticScholarClient:
                 "negativePaperIds": negative_paper_ids,
             },
         )
-        recommended = payload.get("recommendedPapers", [])
+        recommended = payload.get("recommendedPapers")
+        if not isinstance(recommended, list) or any(not isinstance(item, dict) for item in recommended):
+            raise SemanticScholarError(
+                "Semantic Scholar recommendations response must contain a recommendedPapers array of paper objects."
+            )
+        LOGGER.info(
+            "event=recommendations_received positive_ids=%s negative_ids=%s requested=%d returned=%d",
+            ",".join(positive_paper_ids), ",".join(negative_paper_ids), capped_limit, len(recommended),
+        )
         return [_paper_from_api_payload(item) for item in recommended]
 
     def _request_json(
@@ -144,7 +152,10 @@ class SemanticScholarClient:
             self._wait_for_rate_limit()
             try:
                 with urlopen(request, timeout=self.timeout_seconds) as response:
-                    return json.loads(response.read().decode("utf-8"))
+                    payload = json.loads(response.read().decode("utf-8"))
+                if not isinstance(payload, dict):
+                    raise SemanticScholarError("Semantic Scholar response must be a JSON object.")
+                return payload
             except HTTPError as exc:
                 with exc:
                     details = exc.read().decode("utf-8", errors="replace")
@@ -205,7 +216,8 @@ def _build_seed_not_found_message(seed: PaperSeed, details: str) -> str:
     if seed.doi:
         return (
             f"Configured DOI seed '{seed.doi}' could not be resolved in Semantic Scholar. "
-            "The DOI may exist at doi.org without being indexed by Semantic Scholar yet. "
+            "The paper may still be indexed under its Semantic Scholar paper_id without a working DOI lookup. "
+            "Use that paper_id when available. "
             f"API response: {details}"
         )
     return (

@@ -76,13 +76,15 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
 
 
 def build_digest_page(digest: Digest) -> str:
+    """Render a daily page using its recorded explanation for an empty result."""
     if digest.entries:
         content = "".join(build_entry_card(entry) for entry in digest.entries)
     else:
-        content = """
+        reason = digest.empty_reason or "No papers were selected. Discovery details were not recorded for this digest."
+        content = f"""
         <section class="panel empty-state">
           <h2>No new papers today</h2>
-          <p>All retrieved candidates were already seen or filtered out. The site will update again on the next run.</p>
+          <p>{escape(reason)}</p>
         </section>
         """
 
