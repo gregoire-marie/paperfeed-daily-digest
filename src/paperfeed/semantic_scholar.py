@@ -1,14 +1,19 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Protocol
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
 from paperfeed.models import Paper, PaperAuthor, PaperSeed
+
+LOGGER = logging.getLogger(__name__)
 
 
 class SemanticScholarError(RuntimeError):
@@ -131,19 +136,43 @@ class SemanticScholarClient:
             headers["x-api-key"] = self.api_key
 
         request = Request(request_url, headers=headers, method=method, data=data)
-        self._wait_for_rate_limit()
-        try:
-            with urlopen(request, timeout=self.timeout_seconds) as response:
-                return json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            details = exc.read().decode("utf-8", errors="replace")
-            if exc.code == 404:
-                raise SemanticScholarNotFoundError(request_url, details) from exc
-            raise SemanticScholarError(
-                f"Semantic Scholar request failed with HTTP {exc.code}: {details}"
-            ) from exc
-        except URLError as exc:
-            raise SemanticScholarError(f"Semantic Scholar request failed: {exc.reason}") from exc
+        return self._send_with_retries(request)
+
+    def _send_with_retries(self, request: Request) -> dict[str, object]:
+        attempt = 1
+        while True:
+            self._wait_for_rate_limit()
+            try:
+                with urlopen(request, timeout=self.timeout_seconds) as response:
+                    return json.loads(response.read().decode("utf-8"))
+            except HTTPError as exc:
+                with exc:
+                    details = exc.read().decode("utf-8", errors="replace")
+                if exc.code == 429 and attempt < 5:
+                    retry_after = exc.headers.get("Retry-After") if exc.headers else None
+                    delay = _retry_delay(retry_after, attempt)
+                    LOGGER.warning(
+                        "Semantic Scholar HTTP 429; retrying in %.1f seconds (attempt %d/5).",
+                        delay,
+                        attempt + 1,
+                    )
+                    time.sleep(delay)
+                    attempt += 1
+                    continue
+                if exc.code == 404:
+                    raise SemanticScholarNotFoundError(request.full_url, details) from exc
+                advice = (
+                    " After 5 attempts, the API is still rate-limiting this request. "
+                    "Verify S2_API_KEY contains only the key value, check whether other "
+                    "applications use the same key, and retry later."
+                    if exc.code == 429
+                    else ""
+                )
+                raise SemanticScholarError(
+                    f"Semantic Scholar request failed with HTTP {exc.code}: {details}{advice}"
+                ) from exc
+            except URLError as exc:
+                raise SemanticScholarError(f"Semantic Scholar request failed: {exc.reason}") from exc
 
     def _wait_for_rate_limit(self) -> None:
         # The 1 request/second allowance is cumulative across all endpoints.
@@ -153,6 +182,23 @@ class SemanticScholarClient:
             if remaining > 0:
                 time.sleep(remaining)
         self._last_request_started = time.monotonic()
+
+
+def _retry_delay(retry_after: str | None, attempt: int) -> float:
+    default_delay = float(5 * 2 ** (attempt - 1))
+    if not retry_after:
+        return default_delay
+    value = retry_after.strip()
+    if value.isascii() and value.isdigit():
+        return max(default_delay, float(value))
+    try:
+        retry_at = parsedate_to_datetime(value)
+        if retry_at.tzinfo is None:
+            retry_at = retry_at.replace(tzinfo=timezone.utc)
+        seconds = (retry_at - datetime.now(timezone.utc)).total_seconds()
+        return max(default_delay, seconds)
+    except (TypeError, ValueError, OverflowError):
+        return default_delay
 
 
 def _build_seed_not_found_message(seed: PaperSeed, details: str) -> str:

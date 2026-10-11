@@ -335,6 +335,14 @@ and Recommendations endpoints, respecting the key's cumulative one-request-per-s
 limit. This pacing applies to a single client/run; other applications using the
 same key share its allowance.
 
+HTTP 429 responses are retried up to four times, with delays of 5, 10, 20, and
+40 seconds. A longer `Retry-After` value from the API takes precedence. Each retry
+also uses the shared request pacing. Other HTTP errors fail immediately. If all
+five attempts return 429, check that the secret contains only the key value (no
+quotes or email label), check for other applications using the same key, and
+retry later. A masked secret in an Actions log confirms it was supplied, but does
+not prove Semantic Scholar accepted it.
+
 For LLM summaries, the optional `llama-cpp` backend sends requests to an
 OpenAI-compatible `/chat/completions` endpoint. A local server only needs to run
 while a local digest command is executing. A GitHub-hosted runner cannot reach
