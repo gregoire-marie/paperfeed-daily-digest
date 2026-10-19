@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PaperFeed digest for 2026-10-18</title>
+  <meta name="description" content="Weekly digest for 2026-10-18">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#315c72">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --sunken: #efefea;
+      --ink: #171b1f;
+      --muted: #4d555c;
+      --line: #d5d7d3;
+      --line-strong: #aeb4b3;
+      --accent: #315c72;
+      --accent-soft: #e5ecef;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #111416;
+        --panel: #181c1e;
+        --sunken: #0d1012;
+        --ink: #e7e9e7;
+        --muted: #abb2b5;
+        --line: #2b3033;
+        --line-strong: #495157;
+        --accent: #8ab0c0;
+        --accent-soft: #1e2b31;
+      }
+    }
+    * { box-sizing: border-box; }
+    html {
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.65 var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body { margin: 0; min-height: 100vh; }
+    ::selection { background: var(--accent-soft); color: var(--ink); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    a:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .hero, .stack {
+      width: min(960px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .hero { padding: 80px 0 36px; }
+    .eyebrow {
+      color: var(--accent);
+      font: 500 .78rem/1.4 var(--font-mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+    }
+    h1 {
+      font: 700 clamp(2.2rem, 6vw, 4.2rem)/1.05 var(--font-display);
+      letter-spacing: -.045em;
+      margin: 0;
+      max-width: 18ch;
+    }
+    .lede {
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 22px 0;
+    }
+    .stack { display: grid; gap: 28px; padding-bottom: 64px; }
+    .panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 32px;
+    }
+    h2 {
+      font: 600 1.5rem/1.3 var(--font-display);
+      letter-spacing: -.025em;
+      margin: 0 0 16px;
+      overflow-wrap: anywhere;
+    }
+    .digest-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .digest-card {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .digest-card:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+    .digest-card strong { font: 600 1rem/1.4 var(--font-display); }
+    .digest-card span {
+      color: var(--muted);
+      font: 400 1rem/1.4 var(--font-mono);
+      white-space: nowrap;
+    }
+    .meta { color: var(--muted); font-size: 1rem; margin: 10px 0; }
+    .abstract {
+      margin: 24px 0;
+      padding-block: 16px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .abstract summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+    .abstract p {
+      color: var(--muted);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin-bottom: 0;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
+      gap: 20px 28px;
+      margin: 0;
+    }
+    .summary-grid dt {
+      min-width: 0;
+      color: var(--accent);
+      font: 500 1rem/1.65 var(--font-mono);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding-top: 3px;
+    }
+    .summary-grid dd { min-width: 0; margin: 0; color: var(--muted); }
+    .summary-grid dd, .meta, .empty-state p { overflow-wrap: anywhere; }
+    .link-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0; }
+    .link-row a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 1rem;
+    }
+    .link-row a:hover { background: var(--accent-soft); border-color: var(--accent); }
+    .back-link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; }
+    .empty-state { padding: 32px; }
+    .empty-state p { color: var(--muted); }
+    code { font: 1em var(--font-mono); background: var(--sunken); padding: .1rem .35rem; }
+    @media (max-width: 640px) {
+      .hero, .stack { width: calc(100% - 32px); }
+      .hero { padding: 48px 0 24px; }
+      .stack { gap: 20px; padding-bottom: 40px; }
+      .panel { padding: 22px 18px; }
+      .summary-grid { grid-template-columns: 1fr; gap: 8px; }
+      .summary-grid dd { margin-bottom: 16px; }
+      .summary-grid dd:last-child { margin-bottom: 0; }
+      .digest-list { grid-template-columns: 1fr; }
+      .digest-card { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  
+        <header class="hero">
+          <p class="eyebrow">PaperFeed digest</p>
+          <h1>October 18, 2026</h1>
+          <p class="lede">5 papers selected for the week.</p>
+          <p><a class="back-link" href="../index.html">Back to index</a></p>
+        </header>
+        <main class="stack">
+          
+    <article class="panel paper-card">
+      <h2>FSPNet: Uncertainty-Aware Vehicle Trajectory Prediction With a Four-Stage Prediction Network</h2>
+      <p class="meta">Xun-Hao Li, Jian Zhang, Yu Qian, Xue-Jian Yao +1 more · IEEE transactions on intelligent transportation systems (Print) · 2026-09-01 · 0 citations</p>
+      <p class="meta">Matched seeds: Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO, TLE Prediction using Machine Learning for Satellite Maneuver Detection</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/723fde8897edaedf1672aed0fd756a473892a357?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>No abstract available.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>The title suggests a focus on FSPNet: Uncertainty-Aware Vehicle Trajectory Prediction With a Four-Stage Prediction Network.</dd><dt>Method</dt><dd>The abstract does not expose enough detail to state the method confidently.</dd><dt>Key results</dt><dd>The abstract does not report enough concrete results to summarize them reliably.</dd><dt>Limitations</dt><dd>No abstract was available, so this entry is based on title and metadata only.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Physics-Informed Enhanced TCN-Transformer Hybrid Model for Predicting Moored Vessel Motion Responses</h2>
+      <p class="meta">Wen-Yuan Wang, Jia-Kang Li, Bo-Chi Liu, Ke-Ke Liu +3 more · IEEE Transactions on Automation Science and Engineering · 2026 · 0 citations</p>
+      <p class="meta">Matched seeds: TLE Prediction using Machine Learning for Satellite Maneuver Detection, Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/ea7bf7f6bec121f447b11b1415df1a9917aaff2d?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Under environmental loads, moored vessels experience complex six-degree-of-freedom (6-DOF) motions, directly affecting port operation safety and efficiency. Accurate and efficient prediction of vessel motion responses is essential for dynamic assessment and risk early warning. However, the strong nonlinearity, multi-DOF coupling, and multi-time-scale characteristics of vessel-mooring line-fender systems pose significant challenges to prediction accuracy and reliability. To address these issues, this study proposes a physics-informed enhanced TCN-Transformer hybrid model (PITT), which integrates the physical constraints of physics-informed neural networks with the temporal feature extraction capabilities of TCN and Transformer. By embedding the governing equations of 6-DOF vessel motion into the loss function, PITT captures multi-scale dynamic characteristics while maintaining physical consistency. The model is trained on simulation data from three operating conditions and compared with several machine learning methods. Results show that PITT achieves superior overall performance. In the time domain, it accurately reproduces vessel motion responses, reducing the average relative error by approximately 10%–38% compared with TCN-Transformer and LSTM-Transformer. In the frequency domain, it effectively captures dominant frequency characteristics and spectral energy distribution, with yaw-related errors reduced by approximately 71% and 40%, respectively. Condition-wise testing on an unseen operating condition demonstrates strong generalization capability, while tests with three levels of Gaussian white noise confirm its robustness under noisy conditions. Overall, PITT provides accurate, efficient, and robust prediction of complex coupled vessel motions. Note to Practitioners—Excessive vessel movement during port loading due to wind, waves, and currents often forces costly work stoppages. While fast prediction is needed for decision support, pure simulation is too slow, and standard machine learning can produce physically unreliable results. We address this by developing a prediction model that embeds fundamental vessel motion physics directly into a neural network. This hybrid method provides operators with a fast, dependable forecast of six-degree-of-freedom motions. Our tests show it reduces prediction error by 10–50% for complex motions like yaw and roll compared to conventional data-driven methods. The key practical contribution is a more trustworthy, real-time risk assessment tool to help port managers decide whether to suspend or continue cargo operations safely. Current limitations include reliance on simulation data for a single vessel type. Future work will integrate real sensor data and cargo handling effects. Beyond ports, this physics-guided method can also support motion forecasting for offshore installation and floating wind platforms.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27; and &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Under environmental loads, moored vessels experience complex six-degree-of-freedom (6-DOF) motions, directly affecting port operation safety and efficiency.</dd><dt>Method</dt><dd>To address these issues, this study proposes a physics-informed enhanced TCN-Transformer hybrid model (PITT), which integrates the physical constraints of physics-informed neural networks with the temporal feature extraction capabilities of TCN and Transformer.</dd><dt>Key results</dt><dd>Results show that PITT achieves superior overall performance.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27; and &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Neural network-based clock bias prediction for low earth orbit satellites with a reconstruction fine-tuning mechanism</h2>
+      <p class="meta">Tian-Hao Wu, Bofeng Li, Hai-Bo Ge · Satellite Navigation · 2026-09-07 · 0 citations</p>
+      <p class="meta">Matched seeds: Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO, TLE Prediction using Machine Learning for Satellite Maneuver Detection</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/6d21712f0a019d2a8d0233d33d9cde07e46b7f1c?utm_source=api" target="_blank" rel="noreferrer">Source</a> <a href="https://link.springer.com/content/pdf/10.1186/s43020-026-00215-x.pdf" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Accurate prediction of Satellite Clock Bias (SCB) for Low Earth Orbit (LEO) satellites is critical for real-time LEO-enhanced Global Navigation Satellite System (LeGNSS) applications. However, the inherent instability of LEO onboard oscillators results in complex SCB variations that are difficult for conventional prediction models to capture. While deep learning methods offer a promising alternative, their effectiveness can be limited by two key issues: the pronounced high-order trends in LEO SCB, which are not completely removed by the conventional single differencing; and the potential biased error accumulation that occurs when reconstructing predictions from the differenced domain. To address these challenges, we propose a novel neural network-based framework featuring two key innovations: (1) advanced differencing strategies—single-differencing with segment-wise standardization and direct double-differencing—to suppress high-order trends without performing external fitting, thereby preserving prediction independence; and (2) a reconstruction fine-tuning mechanism to explicitly mitigate directional error accumulation. Validated with Gravity Recovery and Climate Experiment Follow-On (GRACE-FO) data, the fine-tuning mechanism reduces overall prediction errors by 6%–16% with reconstruction biases mitigated. Compared to the conventional spectrum analysis model, the proposed framework improves overall prediction accuracy by approximately 90% and 94% for the 60 min and the 10 min prediction horizons, respectively. Specifically, for the prediction length of 60 min, the prediction errors for the GRACE-FO C and D satellites decrease to 0.84 ns and 1.42 ns, respectively; for the prediction length of 10 min, they decrease to 0.10 ns and 0.15 ns, respectively. These results indicate the framework’s potential for high-precision real-time applications from the inference-efficiency perspective.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Accurate prediction of Satellite Clock Bias (SCB) for Low Earth Orbit (LEO) satellites is critical for real-time LEO-enhanced Global Navigation Satellite System (LeGNSS) applications.</dd><dt>Method</dt><dd>However, the inherent instability of LEO onboard oscillators results in complex SCB variations that are difficult for conventional prediction models to capture.</dd><dt>Key results</dt><dd>Compared to the conventional spectrum analysis model, the proposed framework improves overall prediction accuracy by approximately 90% and 94% for the 60 min and the 10 min prediction horizons, respectively.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Transformer-Enhanced Adaptive NMPC for Underactuated Autonomous Surface Vehicles</h2>
+      <p class="meta">Francesco Dal Santo, Francesco Trotti, Alessandro Farinelli · IEEE Robotics and Automation Letters · 2026-10-01 · 0 citations</p>
+      <p class="meta">Matched seeds: Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO, TLE Prediction using Machine Learning for Satellite Maneuver Detection</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/c9be0b17fa4b79d127c413686e210bbbf3f7238c?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>The increasing demand for autonomous vehicles operating in dynamic and uncertain environments highlights the need for robust control strategies that can model and anticipate external disturbances. This paper presents a comprehensive pipeline for six-degree-of-freedom disturbance forecasting and adaptive nonlinear model predictive control (NMPC) tailored to an Autonomous Surface Vehicle (ASV), with a primary focus on the application of Transformer-based architectures in the marine domain. Departing from traditional sequence learning approaches, we evaluate the performance of transformer architectures by benchmarking them against established state-of-the-art models such as Recurrent Neural Networks (RNNs), Long Short-Term Memory (LSTMs), and Temporal Convolutional Networks (TCNs). These horizon-ahead disturbance estimates are integrated as feed-forward terms into an NMPC framework, applied over the prediction window while maintaining real-time feasibility. Validated in simulation and on a real-world ASV, our results demonstrate that the Transformer-based approach enhances trajectory-tracking accuracy and robustness, outperforming traditional architectures in compensating for environmental perturbations while maintaining acceptable computational requirements for real-time deployment.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>The increasing demand for autonomous vehicles operating in dynamic and uncertain environments highlights the need for robust control strategies that can model and anticipate external disturbances.</dd><dt>Method</dt><dd>The increasing demand for autonomous vehicles operating in dynamic and uncertain environments highlights the need for robust control strategies that can model and anticipate external disturbances.</dd><dt>Key results</dt><dd>Validated in simulation and on a real-world ASV, our results demonstrate that the Transformer-based approach enhances trajectory-tracking accuracy and robustness, outperforming traditional architectures in compensating for environmental perturbations while maintaining acceptable computational requirements for real-time deployment.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>MSGate: A Multi-Scale Gated Temporal Network for Radar Tracking of Highly Maneuverable UAVs</h2>
+      <p class="meta">Qin Rao, Yu-Qi Gao, Ji-Hong Zhu, Xia-Ming Yuan · Drones · 2026-08-28 · 0 citations</p>
+      <p class="meta">Matched seeds: Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO, TLE Prediction using Machine Learning for Satellite Maneuver Detection</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/44431d1cd05c7f797095ae9febf3a6c2608057e9?utm_source=api" target="_blank" rel="noreferrer">Source</a> <a href="https://doi.org/10.3390/drones10090659" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Accurate radar tracking of highly maneuverable unmanned aerial vehicles (UAVs) is a key enabling technology for low-altitude airspace surveillance, counter-UAS defense, and UAS traffic management (UTM). Once a non-cooperative UAV has been detected, estimating its motion state must cope with nonlinear polar-coordinate observations, unknown maneuver-mode switching, and multi-scale state variations driven by agile drone flight, making it difficult for classical IMM/UKF filters and deep sequence models to preserve local maneuver response and long-term temporal consistency. We propose MSGate, a multi-scale gated temporal network organized along an “observation-representation-fusion-constraint” pipeline. A non-learnable physical front end maps polar measurements into a Cartesian observation trajectory of the same dimension as the UAV state. Multi-scale gated convolution and RoPE-Transformer encoding extract local maneuver responses and long-range dependencies. A shared gated dual-path decoder fuses the two paths adaptively at each time step and channel, and velocity-smoothness and position-velocity kinematic consistency terms regularize the predicted trajectory. On the real-UAV datasets UZH-FPV, EuRoC MAV, and NeuroBEM, under a unified range-azimuth observation protocol, MSGate attains the lowest average position and velocity errors (Pos-RMSE 0.0486m; Vel-RMSE 0.1767m/s), outperforming the strongest time-series baseline TimeMixer, and generalizes to a separate nano-quadrotor dataset (NanoBench). MSGate provides an accurate, maneuver-robust solution for radar state estimation of highly maneuverable UAVs.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Accurate radar tracking of highly maneuverable unmanned aerial vehicles (UAVs) is a key enabling technology for low-altitude airspace surveillance, counter-UAS defense, and UAS traffic management (UTM).</dd><dt>Method</dt><dd>Once a non-cooperative UAV has been detected, estimating its motion state must cope with nonlinear polar-coordinate observations, unknown maneuver-mode switching, and multi-scale state variations driven by agile drone flight, making it difficult for classical IMM/UKF filters and deep sequence models to preserve local maneuver response and long-term temporal consistency.</dd><dt>Key results</dt><dd>On the real-UAV datasets UZH-FPV, EuRoC MAV, and NeuroBEM, under a unified range-azimuth observation protocol, MSGate attains the lowest average position and velocity errors (Pos-RMSE 0.0486m; Vel-RMSE 0.1767m/s), outperforming the strongest time-series baseline TimeMixer, and generalizes to a separate nano-quadrotor dataset (NanoBench).</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO&#x27; and &#x27;TLE Prediction using Machine Learning for Satellite Maneuver Detection&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+        </main>
+        
+</body>
+</html>

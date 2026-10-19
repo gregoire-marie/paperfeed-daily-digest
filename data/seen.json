@@ -328,6 +328,41 @@
       "first_seen_date": "2026-10-11",
       "last_summarized_date": "2026-10-11",
       "title_hash": "8fdcc0dff7f063cc30c7f37ffce43431b9583dcaab9ab0e208bfc212ad83c2a6"
+    },
+    {
+      "doi": "10.1109/tits.2026.3687264",
+      "first_seen_date": "2026-10-18",
+      "last_summarized_date": "2026-10-18",
+      "paper_id": "723fde8897edaedf1672aed0fd756a473892a357",
+      "title_hash": "75505b82eaeb5bd0f1c0bc521a0a8866ccf0139ae040538ef06ad847e43b9c57"
+    },
+    {
+      "doi": "10.1109/tase.2026.3738365",
+      "first_seen_date": "2026-10-18",
+      "last_summarized_date": "2026-10-18",
+      "paper_id": "ea7bf7f6bec121f447b11b1415df1a9917aaff2d",
+      "title_hash": "c928e01b2f15399b420c7fa450edc55e2967d83d89b8933d50fdd80e9c595ac7"
+    },
+    {
+      "doi": "10.1186/s43020-026-00215-x",
+      "first_seen_date": "2026-10-18",
+      "last_summarized_date": "2026-10-18",
+      "paper_id": "6d21712f0a019d2a8d0233d33d9cde07e46b7f1c",
+      "title_hash": "df66f3861950aacdcf9eac417d8e4e7a8b81a099c0ecfc8e613aec320a30e40a"
+    },
+    {
+      "doi": "10.1109/lra.2026.3728281",
+      "first_seen_date": "2026-10-18",
+      "last_summarized_date": "2026-10-18",
+      "paper_id": "c9be0b17fa4b79d127c413686e210bbbf3f7238c",
+      "title_hash": "8e54a0568e61dfa60235887776b00f00de7b64eb28b2caf013a9f626ee17c17f"
+    },
+    {
+      "doi": "10.3390/drones10090659",
+      "first_seen_date": "2026-10-18",
+      "last_summarized_date": "2026-10-18",
+      "paper_id": "44431d1cd05c7f797095ae9febf3a6c2608057e9",
+      "title_hash": "d2790201b48d623e758d015e47c98deb62e5ed9401b9735c565f6ce8eca6fd8b"
     }
   ]
 }
