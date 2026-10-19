@@ -208,7 +208,8 @@ def build_index_page(site_dir: Path, latest_digest: Digest | None = None) -> str
     cards = []
     for path in digest_paths:
         digest_date = date.fromisoformat(path.stem)
-        count_label = f"{path.read_text(encoding='utf-8').count('<article class=\"panel paper-card')} items"
+        paper_count = path.read_text(encoding="utf-8").count('<article class="panel paper-card')
+        count_label = f"{paper_count} items"
         if latest_digest and latest_digest.digest_date == digest_date:
             count_label = f"{len(latest_digest.entries)} items"
         cards.append(
