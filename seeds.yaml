@@ -1,10 +1,65 @@
 positive_seeds:
+  # Original library seeds
   # Deep Learning-Based Orbit Prediction for Satellite Maneuver Detection in LEO
   # DOI: 10.13009/EUCASS2025-284
   - paper_id: "a961442d9f0549d44b4de9dc2fc5161f0b150936"
   # TLE Prediction using Machine Learning for Satellite Maneuver Detection
   # DOI: 10.2514/6.2025-98101
   - paper_id: "c4391c40afe3e48003b7aba47c47ced809dc3c15"
+  # Precise and Efficient Orbit Prediction in LEO with Machine Learning using Exogenous Variables
+  - paper_id: "75b4c809b569a441b697a817df86d5c820baae2a"
+  # Real-time optimal control via Deep Neural Networks: study on landing problems
+  - paper_id: "b212907afd24c0186e8d374fceb8d67e81b110c3"
+
+  # Ranked recommendations from the October 24, 2026 reading list
+  # GPU-Accelerated Astrodynamics World Models for Spacecraft Rendezvous and Proximity Operations
+  - paper_id: "64dfd54d157756c58792e2f9e9f350fd560251b2"
+  # Orbit-Planner: Towards Latent World Models for On-Orbit Obstacle Avoidance of Satellite Agents
+  - paper_id: "140561bc8b48c479338e55ce139d48eed74cf4c9"
+  # Neural Operator Learning for Collision-Aware Trajectory Planning of Spacecraft Swarms
+  - paper_id: "395253a4bc2240af62bf7c31c64acb56608605bc"
+  # Continuous-Time Probabilistic Correctors for Uncertainty-Aware Physics-Based Spacecraft Trajectory Forecasting
+  - paper_id: "128b45b6dee3fbf590604bf98c23ea4380bd4395"
+  # Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots
+  - paper_id: "98ec742d242bec551ed8bef1504127de1b82e7d7"
+  # SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors
+  - paper_id: "41620e8f40ae6f6103a3c1d4eab59f5830c963dd"
+  # Neural Backward Reach-Avoid Tubes with MPC Supervision for High-Dimensional Systems: An Application to Safe Spacecraft Docking
+  - paper_id: "895545db03e78b6b3cfca663f14afc5fa49945bd"
+  # Pretrained Approximators for Low-Thrust Trajectory Cost and Reachability
+  - paper_id: "bdfdb36a857465bda1bcec827f96bf05f8642545"
+  # Optimality-Informed Neural Networks for Lunar Landing Trajectory Optimization
+  - paper_id: "1a1e07c15c388455352106d8c4f7fdef491c77d9"
+  # Energy-based Regularization for Learning Residual Dynamics in Neural MPC for Omnidirectional Aerial Robots
+  - paper_id: "8146b6cb871bcec17b458bd39a48a8e2390bd263"
+  # Mitigating Data Scarcity in Spaceflight Applications for Offline Reinforcement Learning Using Physics-Informed Deep Generative Models
+  - paper_id: "10c5de09b39314ffb84908ed6021dd947806799e"
+  # Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations
+  - paper_id: "883975d55096ac9c889928c78a427514a9ff1c28"
+  # Learning-Based Adaptive MPC for Magnetorquer-Only Satellite Attitude Control
+  - paper_id: "1a7e64709a00ae0db99a2c7c5a5c295f8063848d"
+  # GCImOpt: Learning efficient goal-conditioned policies by imitating optimal trajectories
+  - paper_id: "03bad31756e6545afd2dbeb708621863903c8505"
+  # An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints
+  - paper_id: "e61cc176439aba71463ee2a36ce3301e05d7afa4"
+
+  # Additional close matches from the reading list (provisional assessment)
+  # Fast Design of Fuel-Optimal Maneuver Trajectories for Satellite Constellations via a Hybrid Binary Classification and Physics-Regularized Neural Network
+  - paper_id: "24f4c7d3f23743d9f6b5f3b500f23e2b14f24504"
+  # Hybrid Neural Orbit Propagation Under Sparse Space-Based Observations
+  - paper_id: "9662e9b8b531773d764a10cac018b6ff2950c033"
+  # Integrated DNN-SMC Control With CLF-QP Stability Monitoring for Lunar Landing
+  - paper_id: "50d1b516124cfd357ee61fff48c29cd5db374d2f"
+  # AutoOrbit: Physics-Informed Satellite Orbit Prediction
+  - paper_id: "d09b08c70ba5e2ca13854c55660a203fec30f096"
+
+  # Practical follow-ups from the reading list
+  # Learning in Orbit: Onboard Training and Closed-Loop Attitude Control with a Thermal Segmentation Model on a Spacecraft
+  - paper_id: "4364f8fb455717cf7e43d2c28ec7e305ceba2c60"
+  # Adapting Neural Robot Dynamics on the Fly for Predictive Control
+  - paper_id: "afe56f79d3d275727c1eb2d1a16f813bd274bf5c"
+  # Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems
+  - paper_id: "a9f15e688c2206474b855480c0f7a29314a589c8"
 
 negative_seeds: []
 

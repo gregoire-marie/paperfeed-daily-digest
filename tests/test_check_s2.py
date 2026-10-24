@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import os
 from pathlib import Path
+import tempfile
 import unittest
 from unittest import mock
 
@@ -58,6 +59,7 @@ class CheckS2Tests(unittest.TestCase):
     def test_configured_discovery_skips_unindexed_seed_and_checks_recommendations(self) -> None:
         output = io.StringIO()
         with (
+            tempfile.TemporaryDirectory() as temp_dir,
             mock.patch("paperfeed.check_s2.sys.stdin.isatty", return_value=True),
             mock.patch("paperfeed.check_s2.getpass", return_value="supplied-secret"),
             mock.patch("paperfeed.check_s2.SemanticScholarClient") as client_class,
@@ -70,7 +72,11 @@ class CheckS2Tests(unittest.TestCase):
                 Paper(paper_id="seed-2", title="Indexed seed"),
             ]
             client.get_recommendations.return_value = []
-            config_path = Path(__file__).resolve().parents[1] / "seeds.yaml"
+            config_path = Path(temp_dir) / "seeds.yaml"
+            config_path.write_text(
+                'positive_seeds:\n  - paper_id: "seed-1"\n  - paper_id: "seed-2"\n',
+                encoding="utf-8",
+            )
             result = main(["--config", str(config_path)])
 
         self.assertEqual(result, 0)
