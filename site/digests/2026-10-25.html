@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PaperFeed digest for 2026-10-25</title>
+  <meta name="description" content="Weekly digest for 2026-10-25">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#315c72">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --sunken: #efefea;
+      --ink: #171b1f;
+      --muted: #4d555c;
+      --line: #d5d7d3;
+      --line-strong: #aeb4b3;
+      --accent: #315c72;
+      --accent-soft: #e5ecef;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #111416;
+        --panel: #181c1e;
+        --sunken: #0d1012;
+        --ink: #e7e9e7;
+        --muted: #abb2b5;
+        --line: #2b3033;
+        --line-strong: #495157;
+        --accent: #8ab0c0;
+        --accent-soft: #1e2b31;
+      }
+    }
+    * { box-sizing: border-box; }
+    html {
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.65 var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body { margin: 0; min-height: 100vh; }
+    ::selection { background: var(--accent-soft); color: var(--ink); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    a:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .hero, .stack {
+      width: min(960px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .hero { padding: 80px 0 36px; }
+    .eyebrow {
+      color: var(--accent);
+      font: 500 .78rem/1.4 var(--font-mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+    }
+    h1 {
+      font: 700 clamp(2.2rem, 6vw, 4.2rem)/1.05 var(--font-display);
+      letter-spacing: -.045em;
+      margin: 0;
+      max-width: 18ch;
+    }
+    .lede {
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 22px 0;
+    }
+    .stack { display: grid; gap: 28px; padding-bottom: 64px; }
+    .panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 32px;
+    }
+    h2 {
+      font: 600 1.5rem/1.3 var(--font-display);
+      letter-spacing: -.025em;
+      margin: 0 0 16px;
+      overflow-wrap: anywhere;
+    }
+    .digest-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .digest-card {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .digest-card:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+    .digest-card strong { font: 600 1rem/1.4 var(--font-display); }
+    .digest-card span {
+      color: var(--muted);
+      font: 400 1rem/1.4 var(--font-mono);
+      white-space: nowrap;
+    }
+    .meta { color: var(--muted); font-size: 1rem; margin: 10px 0; }
+    .abstract {
+      margin: 24px 0;
+      padding-block: 16px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .abstract summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+    .abstract p {
+      color: var(--muted);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin-bottom: 0;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
+      gap: 20px 28px;
+      margin: 0;
+    }
+    .summary-grid dt {
+      min-width: 0;
+      color: var(--accent);
+      font: 500 1rem/1.65 var(--font-mono);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding-top: 3px;
+    }
+    .summary-grid dd { min-width: 0; margin: 0; color: var(--muted); }
+    .summary-grid dd, .meta, .empty-state p { overflow-wrap: anywhere; }
+    .link-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0; }
+    .link-row a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 1rem;
+    }
+    .link-row a:hover { background: var(--accent-soft); border-color: var(--accent); }
+    .back-link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; }
+    .empty-state { padding: 32px; }
+    .empty-state p { color: var(--muted); }
+    code { font: 1em var(--font-mono); background: var(--sunken); padding: .1rem .35rem; }
+    @media (max-width: 640px) {
+      .hero, .stack { width: calc(100% - 32px); }
+      .hero { padding: 48px 0 24px; }
+      .stack { gap: 20px; padding-bottom: 40px; }
+      .panel { padding: 22px 18px; }
+      .summary-grid { grid-template-columns: 1fr; gap: 8px; }
+      .summary-grid dd { margin-bottom: 16px; }
+      .summary-grid dd:last-child { margin-bottom: 0; }
+      .digest-list { grid-template-columns: 1fr; }
+      .digest-card { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  
+        <header class="hero">
+          <p class="eyebrow">PaperFeed digest</p>
+          <h1>October 25, 2026</h1>
+          <p class="lede">5 papers selected for the week.</p>
+          <p><a class="back-link" href="../index.html">Back to index</a></p>
+        </header>
+        <main class="stack">
+          
+    <article class="panel paper-card">
+      <h2>BarrierFormer: Transformer-Guided Predictive Barrier Enforcement for Safe Robot Control</h2>
+      <p class="meta">Anandsingh Chauhan, Kunal Garg · 2026-09-20 · 0 citations</p>
+      <p class="meta">Matched seeds: Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems, An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/4465e7fe34a1ed26a03a4c5b4010b6672db4b798?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Control barrier functions (CBFs) have become one of the most popular tools for encoding and enforcing state constraints in safety-critical robotics. Standard CBF approaches are inherently myopic in nature as they enforce safety only at the current time step. Consequently, the system can be driven toward the boundary of the safe set where no feasible safe control exists at a future timestep. Model predictive control (MPC) based approaches address this by enforcing state constraints over a receding horizon. However, such approaches generally require the model to be known for solving a constrained optimization problem at every step, which is computationally expensive for real-time deployment. We propose BarrierFormer, a barrier-supervised transformer framework that addresses these limitations by encoding rollout-level CBF constraints in learning a model-free safe policy. A causal transformer encodes observation-action history, autoregressively generates a predictive rollout through the dynamics head to replace the model, and provides a residual correction to a nominal controller through the action head to replace the online computation. A barrier critic operating on local observations evaluates CBF constraint violations along this rollout, and a safety teacher computes barrier-consistent actions satisfying these constraints as direct supervision targets for the learned control policy. During inference, the policy maps observation-action history to control actions without any online optimization or model knowledge, enabling real-time model-free predictive safety enforcement. Evaluations across linear and nonlinear, 2D and 3D dynamical systems for safe goal-directed navigation demonstrate that BarrierFormer outperforms existing reinforcement learning (RL)-based, diffusion-based, MPC-based, and transformer-based approaches in safety rate and inference latency.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Control barrier functions (CBFs) have become one of the most popular tools for encoding and enforcing state constraints in safety-critical robotics.</dd><dt>Method</dt><dd>Standard CBF approaches are inherently myopic in nature as they enforce safety only at the current time step.</dd><dt>Key results</dt><dd>Evaluations across linear and nonlinear, 2D and 3D dynamical systems for safe goal-directed navigation demonstrate that BarrierFormer outperforms existing reinforcement learning (RL)-based, diffusion-based, MPC-based, and transformer-based approaches in safety rate and inference latency.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Direct state-to-command control for autonomous quadrotor navigation using deep reinforcement learning</h2>
+      <p class="meta">S. K. Saraswat, Ibraheem Al-Tarawneh, Mahendrasinh R. Chauhan, Rfqa Abdulkareem Shukur +4 more · Journal of the Brazilian Society of Mechanical Sciences and Engineering · 2026-10-01 · 0 citations</p>
+      <p class="meta">Matched seeds: Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations, Mitigating Data Scarcity in Spaceflight Applications for Offline Reinforcement Learning Using Physics-Informed Deep Generative Models</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/de5b8d329961adbb991144ed4d6bf0be8e9bd8db?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>No abstract available.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations&#x27; and &#x27;Mitigating Data Scarcity in Spaceflight Applications for Offline Reinforcement Learning Using Physics-Informed Deep Generative Models&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>The title suggests a focus on Direct state-to-command control for autonomous quadrotor navigation using deep reinforcement learning.</dd><dt>Method</dt><dd>The abstract does not expose enough detail to state the method confidently.</dd><dt>Key results</dt><dd>The abstract does not report enough concrete results to summarize them reliably.</dd><dt>Limitations</dt><dd>No abstract was available, so this entry is based on title and metadata only.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations&#x27; and &#x27;Mitigating Data Scarcity in Spaceflight Applications for Offline Reinforcement Learning Using Physics-Informed Deep Generative Models&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>DiffDreamer: Coupling World Models with Differentiable Simulation for Agile Quadrotor Control</h2>
+      <p class="meta">Fan-Xing Li, Yu-Xiang Huang, Sheng-Yang Wang, Fang-Yu Sun +6 more · 2026-10-22 · 0 citations</p>
+      <p class="meta">Matched seeds: SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors, An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/6f16b0482db2db9ec0d8699abddd4d45066e6838?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Tasks such as quadrotor dynamic-gate racing require agents to anticipate external motion while maintaining precise high-frequency control. World-model-based reinforcement learning provides a natural solution by learning latent dynamics for future imagination, yet it often entangles environmental evolution and the robot&#x27;s own dynamics in a single learned rollout, where model bias can affect policy optimization efficiency. We propose DiffDreamer, a differentiable reinforcement learning framework that tightly couples a learned world model with differentiable simulation for actor optimization. In one optimization step, the learned world model propagates latent states that capture external dynamics and history-dependent features, while the differentiable simulator propagates the robot&#x27;s explicit physical state. We further decompose the actor objective into a critic-driven pathway for non-differentiable task rewards and a simulator-driven pathway for differentiable motion rewards. Experiments on aggressive tracking and dynamic-gate racing show that DiffDreamer improves training convergence over the model-free, model-based, and differentiable-RL baselines, and final performance over these baselines and classical planning and control methods. Additional experiments assess reward decomposition and the odometry-conditioned relative-state representation through ablations. We also provide proof-of-concept real-world flight experiments for validation.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Tasks such as quadrotor dynamic-gate racing require agents to anticipate external motion while maintaining precise high-frequency control.</dd><dt>Method</dt><dd>World-model-based reinforcement learning provides a natural solution by learning latent dynamics for future imagination, yet it often entangles environmental evolution and the robot&#x27;s own dynamics in a single learned rollout, where model bias can affect policy optimization efficiency.</dd><dt>Key results</dt><dd>Experiments on aggressive tracking and dynamic-gate racing show that DiffDreamer improves training convergence over the model-free, model-based, and differentiable-RL baselines, and final performance over these baselines and classical planning and control methods.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>From Orbit Matching to Docking: A Hierarchical Reinforcement-Learning Approach to Multiphase Rendezvous Trajectory Design</h2>
+      <p class="meta">Mariko A. Storey-Matsutani, Anatoly V. Zlotnik, Lee Holguin, Zigfried Hampel-Arias +1 more · 2026-10-12 · 0 citations</p>
+      <p class="meta">Matched seeds: Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations, Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/ef7e72cc9d38d7d7fd45a828d607f34015fd2b90?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>As the complexity of space missions increases, autonomous spacecraft guidance must accommodate transitions between mission phases with distinct dynamics, objectives, and constraints. Rendezvous and proximity operations (RPO) are particularly challenging because they span multiple operating regimes, from orbital-scale matching and far-range approach to close-range maneuvering and terminal docking. Existing reinforcement-learning approaches generally address only a subset of this sequence or rely on manually defined switching conditions between controllers. This study presents a hierarchical reinforcement-learning framework for autonomous, three-degree-of-freedom RPO that spans the complete trajectory from orbit matching to docking. Five specialized policies are trained for orbit matching, far-range approach, mid-range approach, close-range approach, and docking. A learned high-level manager policy then selects among these phase-specific controllers based on the evolving spacecraft state. The hierarchical approach is evaluated over the full end-to-end rendezvous sequence and compared with a fixed sequential-invocation heuristic to assess trajectory performance and transition behavior. Training and inference metrics are also analyzed for the individual phase policies and the complete hierarchical system.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations&#x27; and &#x27;Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>As the complexity of space missions increases, autonomous spacecraft guidance must accommodate transitions between mission phases with distinct dynamics, objectives, and constraints.</dd><dt>Method</dt><dd>Rendezvous and proximity operations (RPO) are particularly challenging because they span multiple operating regimes, from orbital-scale matching and far-range approach to close-range maneuvering and terminal docking.</dd><dt>Key results</dt><dd>Existing reinforcement-learning approaches generally address only a subset of this sequence or rely on manually defined switching conditions between controllers.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Meta-Reinforcement Learning for Robust and Non-greedy Control Barrier Functions in Spacecraft Proximity Operations&#x27; and &#x27;Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Transformer-Informed Trajectory Optimization for Relative Motion in Cislunar Orbits</h2>
+      <p class="meta">Walter J. Manuel, Yuji Takubo, Simone D&#x27;Amico · 2026-09-21 · 0 citations</p>
+      <p class="meta">Matched seeds: Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots, An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/fe2975454c3db9d10f0c199abe60177defe9af1c?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Autonomous spacecraft guidance and control requires a fast solution to non-convex trajectory optimization, which can be accelerated by providing a near-optimal initial guess to an optimization protocol, i.e., warm-starting. A robust warm starting method is especially useful for rendezvous, proximity operations, and docking (RPOD) in cislunar space, where the underlying dynamics become severely nonlinear and chaotic compared to those in Earth orbit, especially at perilune. This paper extends the Autonomous Rendezvous Transformer (ART), a transformer-based warm-start trajectory generation method, to cislunar RPOD scenarios for the first time. To accurately and reliably solve the nonconvex optimal control problems (OCPs) posed by these scenarios, a new and enhanced version of ART, ART-TWIN (Two-Way INference), is introduced. Inspired by forward-backward shooting methods used in other trajectory design applications, ART-TWIN autoregressively generates two arcs, one from the initial state and one from the desired terminal state, that are patched together at the midpoint of the timeseries. When evaluated on a set of simulated rendezvous scenarios that are initialized at perilune, ART-TWIN is demonstrated to substantially accelerate convergence and increase feasibility guarantees when used as a warm-start to sequential convex programming (SCP), compared to convex relaxations and the original ART. These results illustrate the necessity of ART-TWIN&#x27;s dual-arc generation to enable the viability of and gain benefits from using transformer-based warm-start methods in the most challenging areas of the cislunar dynamical regime.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Autonomous spacecraft guidance and control requires a fast solution to non-convex trajectory optimization, which can be accelerated by providing a near-optimal initial guess to an optimization protocol, i.e., warm-starting.</dd><dt>Method</dt><dd>A robust warm starting method is especially useful for rendezvous, proximity operations, and docking (RPOD) in cislunar space, where the underlying dynamics become severely nonlinear and chaotic compared to those in Earth orbit, especially at perilune.</dd><dt>Key results</dt><dd>When evaluated on a set of simulated rendezvous scenarios that are initialized at perilune, ART-TWIN is demonstrated to substantially accelerate convergence and increase feasibility guarantees when used as a warm-start to sequential convex programming (SCP), compared to convex relaxations and the original ART.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Conditioned Sequence Models for Warm-Starting Sequential Convex Trajectory Optimization in Space Robots&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+        </main>
+        
+</body>
+</html>
