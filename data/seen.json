@@ -394,6 +394,38 @@
       "last_summarized_date": "2026-10-25",
       "paper_id": "fe2975454c3db9d10f0c199abe60177defe9af1c",
       "title_hash": "ccdda221697cfb36114fc61a5e546507471ed11a8c6054318623938e7e3559bc"
+    },
+    {
+      "first_seen_date": "2026-11-08",
+      "last_summarized_date": "2026-11-08",
+      "paper_id": "e5c64ad1519bb99fc714e59a47d8f6456099f646",
+      "title_hash": "c96a9518c79f7f4cbc4e78046918bacd31c6e893184013eca4a76789af677a7b"
+    },
+    {
+      "doi": "10.1109/tase.2026.3742469",
+      "first_seen_date": "2026-11-08",
+      "last_summarized_date": "2026-11-08",
+      "paper_id": "a3746bae297a12857f237c89fe30f451cd013364",
+      "title_hash": "1e4cd0eb9a38d4c09ac4a4bad64a7ba7e833d05a4102a1e8d263a230e23d5f8b"
+    },
+    {
+      "first_seen_date": "2026-11-08",
+      "last_summarized_date": "2026-11-08",
+      "paper_id": "73241d9062cdf9a13495a4a7d6349bac9fc4b75b",
+      "title_hash": "c6f63e86bafcad507763636aa971d17dcab341d405334de56a2c1b71d7a84792"
+    },
+    {
+      "first_seen_date": "2026-11-08",
+      "last_summarized_date": "2026-11-08",
+      "paper_id": "44b34ed191ccb7bbce0619abcfd74ff6f0781d58",
+      "title_hash": "ba8868561182b474766aa2c82e49101c49f8cc5db9a154d2e8484e3295ce7771"
+    },
+    {
+      "doi": "10.1109/access.2026.3741643",
+      "first_seen_date": "2026-11-08",
+      "last_summarized_date": "2026-11-08",
+      "paper_id": "135e3306e5f14f8f8a170c0587e8201eb4d3e3e0",
+      "title_hash": "1b7dd906b521aa866c09061f108dbc1a189836b2b14269aa00c51f5530b37201"
     }
   ]
 }

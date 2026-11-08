@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PaperFeed digest for 2026-11-08</title>
+  <meta name="description" content="Weekly digest for 2026-11-08">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#315c72">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --sunken: #efefea;
+      --ink: #171b1f;
+      --muted: #4d555c;
+      --line: #d5d7d3;
+      --line-strong: #aeb4b3;
+      --accent: #315c72;
+      --accent-soft: #e5ecef;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #111416;
+        --panel: #181c1e;
+        --sunken: #0d1012;
+        --ink: #e7e9e7;
+        --muted: #abb2b5;
+        --line: #2b3033;
+        --line-strong: #495157;
+        --accent: #8ab0c0;
+        --accent-soft: #1e2b31;
+      }
+    }
+    * { box-sizing: border-box; }
+    html {
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.65 var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body { margin: 0; min-height: 100vh; }
+    ::selection { background: var(--accent-soft); color: var(--ink); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    a:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .hero, .stack {
+      width: min(960px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .hero { padding: 80px 0 36px; }
+    .eyebrow {
+      color: var(--accent);
+      font: 500 .78rem/1.4 var(--font-mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+    }
+    h1 {
+      font: 700 clamp(2.2rem, 6vw, 4.2rem)/1.05 var(--font-display);
+      letter-spacing: -.045em;
+      margin: 0;
+      max-width: 18ch;
+    }
+    .lede {
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 22px 0;
+    }
+    .stack { display: grid; gap: 28px; padding-bottom: 64px; }
+    .panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 32px;
+    }
+    h2 {
+      font: 600 1.5rem/1.3 var(--font-display);
+      letter-spacing: -.025em;
+      margin: 0 0 16px;
+      overflow-wrap: anywhere;
+    }
+    .digest-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .digest-card {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .digest-card:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+    .digest-card strong { font: 600 1rem/1.4 var(--font-display); }
+    .digest-card span {
+      color: var(--muted);
+      font: 400 1rem/1.4 var(--font-mono);
+      white-space: nowrap;
+    }
+    .meta { color: var(--muted); font-size: 1rem; margin: 10px 0; }
+    .abstract {
+      margin: 24px 0;
+      padding-block: 16px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .abstract summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+    .abstract p {
+      color: var(--muted);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin-bottom: 0;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 170px) minmax(0, 1fr);
+      gap: 20px 28px;
+      margin: 0;
+    }
+    .summary-grid dt {
+      min-width: 0;
+      color: var(--accent);
+      font: 500 1rem/1.65 var(--font-mono);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding-top: 3px;
+    }
+    .summary-grid dd { min-width: 0; margin: 0; color: var(--muted); }
+    .summary-grid dd, .meta, .empty-state p { overflow-wrap: anywhere; }
+    .link-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0; }
+    .link-row a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 1rem;
+    }
+    .link-row a:hover { background: var(--accent-soft); border-color: var(--accent); }
+    .back-link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; }
+    .empty-state { padding: 32px; }
+    .empty-state p { color: var(--muted); }
+    code { font: 1em var(--font-mono); background: var(--sunken); padding: .1rem .35rem; }
+    @media (max-width: 640px) {
+      .hero, .stack { width: calc(100% - 32px); }
+      .hero { padding: 48px 0 24px; }
+      .stack { gap: 20px; padding-bottom: 40px; }
+      .panel { padding: 22px 18px; }
+      .summary-grid { grid-template-columns: 1fr; gap: 8px; }
+      .summary-grid dd { margin-bottom: 16px; }
+      .summary-grid dd:last-child { margin-bottom: 0; }
+      .digest-list { grid-template-columns: 1fr; }
+      .digest-card { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  
+        <header class="hero">
+          <p class="eyebrow">PaperFeed digest</p>
+          <h1>November 08, 2026</h1>
+          <p class="lede">5 papers selected for the week.</p>
+          <p><a class="back-link" href="../index.html">Back to index</a></p>
+        </header>
+        <main class="stack">
+          
+    <article class="panel paper-card">
+      <h2>Optimal Control with Learned Critics under Unmodeled State Dependencies</h2>
+      <p class="meta">P. Schöch, Markus Ryll · 2026-10-04 · 0 citations</p>
+      <p class="meta">Matched seeds: Learning in Orbit: Onboard Training and Closed-Loop Attitude Control with a Thermal Segmentation Model on a Spacecraft, SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/e5c64ad1519bb99fc714e59a47d8f6456099f646?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Model Predictive Control (MPC) provides a structured and constraint-aware mechanism for decision-making, but its reliance on optimization-friendly analytical dynamics models limits its use in tasks with contacts and other hard-to-model state dependencies. Model-free reinforcement learning avoids explicit modeling assumptions but typically requires large amounts of interaction data. We present a learning-based MPC framework that combines the data efficiency and structure of local model-based planning with learned components that compensate for incomplete dynamics and finite-horizon myopia. The method augments a nominal analytical model with a residual dynamics network that learns missing state-dependent effects from data and combines the resulting planner with a learned action-value critic that injects long-horizon MDP structure into the local iLQR optimization. To make this practical at reinforcement-learning scale, we develop a GPU-accelerated batched iLQR solver that evaluates learned dynamics and critic networks inside the optimal-control loop and solves thousands of trajectory-optimization problems in parallel. The complete system is integrated into a robotics simulator, enabling scalable model-based reinforcement learning under incomplete dynamics. Experiments on biased and incompletely modeled control tasks show that the approach improves closed-loop control performance while preserving the model-based structure needed for efficient constrained trajectory optimization.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Learning in Orbit: Onboard Training and Closed-Loop Attitude Control with a Thermal Segmentation Model on a Spacecraft&#x27; and &#x27;SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Model Predictive Control (MPC) provides a structured and constraint-aware mechanism for decision-making, but its reliance on optimization-friendly analytical dynamics models limits its use in tasks with contacts and other hard-to-model state dependencies.</dd><dt>Method</dt><dd>Model Predictive Control (MPC) provides a structured and constraint-aware mechanism for decision-making, but its reliance on optimization-friendly analytical dynamics models limits its use in tasks with contacts and other hard-to-model state dependencies.</dd><dt>Key results</dt><dd>The method augments a nominal analytical model with a residual dynamics network that learns missing state-dependent effects from data and combines the resulting planner with a learned action-value critic that injects long-horizon MDP structure into the local iLQR optimization.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Learning in Orbit: Onboard Training and Closed-Loop Attitude Control with a Thermal Segmentation Model on a Spacecraft&#x27; and &#x27;SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>FALCON: A Fast and Feasible End-to-End Trajectory Planner via a Cascaded Bernstein Decoder</h2>
+      <p class="meta">Yi-Nuo Xu, Zhan Chen, Hao-Wen Gao, Meng-Yun Wang +1 more · IEEE Transactions on Automation Science and Engineering · 2026 · 0 citations</p>
+      <p class="meta">Matched seeds: SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors, An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/a3746bae297a12857f237c89fe30f451cd013364?utm_source=api" target="_blank" rel="noreferrer">Source</a> <a href="https://doi.org/10.1109/tase.2026.3742469" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Navigation in cluttered environments with dynamic obstacles remains a major challenge for uncrewed aerial vehicles (UAVs), especially when both fast response and reliable trajectory generation are required. Traditional modular planners suffer from the latency introduced by mapping and iterative optimization, whereas end-to-end methods, despite their efficient inference, often lack explicit feasibility constraints on the generated trajectories. To address these limitations, we propose a self-supervised end-to-end UAV planning framework that combines Bernstein polynomial-based feasible trajectory generation with point-cloud-based differentiable supervision for collision-aware learning. Specifically, the perception network predicts unconstrained latent variables, which are subsequently transformed into executable trajectories by a carefully designed differentiable cascaded decoder. By leveraging the properties of Bernstein polynomials, the decoder generates trajectories that naturally satisfy velocity and acceleration constraints, thus requiring no back-end optimization. Meanwhile, the supervision module uses raw point clouds as privileged information and extracts differentiable distance and gradient cues through local quadratic surface fitting. Because local quadratic surfaces can be fitted efficiently online as the scene changes, this approach enables training in dynamic environments. Extensive simulation and real-world experiments validate the effectiveness, real-time performance, and zero-shot sim-to-real capability of the proposed method. Note to Practitioners—In indoor inspection, warehouse navigation, emergency response, and other cluttered workspace applications, practitioners often need small aerial robots to react quickly to nearby static and moving obstacles while producing motions that can be reliably executed by the vehicle. For practical deployment, a local planner is expected to operate with limited onboard computation, handle changes in the surrounding environment, and output trajectories that are compatible with downstream tracking controllers. This work presents an end-to-end local planning framework that directly generates short-horizon trajectories from onboard depth observations and vehicle state measurements. By training the planner in changing simulated scenes with moving obstacles and point-cloud-based collision supervision, the system learns to generate collision-aware motions under moving-obstacle interference. The proposed system is designed to provide low-latency local obstacle avoidance while keeping the generated trajectories within prescribed velocity and acceleration limits. This property can facilitate integration with downstream tracking controllers and reduce the risk of infeasible motion commands. During deployment, the planner only requires onboard depth sensing and state measurements, making it suitable for resource-constrained aerial platforms. The current implementation is intended for local planning and does not replace global mission planning, state estimation, or low-level control. Its performance may depend on sensing quality and training-scene coverage. Future extensions may include stronger uncertainty handling, richer dynamic-obstacle prediction, and multi-robot coordination. The same idea may also be useful for other automated mobile platforms that require fast and feasible local motion generation.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Navigation in cluttered environments with dynamic obstacles remains a major challenge for uncrewed aerial vehicles (UAVs), especially when both fast response and reliable trajectory generation are required.</dd><dt>Method</dt><dd>Traditional modular planners suffer from the latency introduced by mapping and iterative optimization, whereas end-to-end methods, despite their efficient inference, often lack explicit feasibility constraints on the generated trajectories.</dd><dt>Key results</dt><dd>To address these limitations, we propose a self-supervised end-to-end UAV planning framework that combines Bernstein polynomial-based feasible trajectory generation with point-cloud-based differentiable supervision for collision-aware learning.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;SkyJEPA: Learning Long-Horizon World Models for Zero-Shot Sim-to-Real Control of Quadrotors&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Spacecraft Rendezvous Trajectory Generation with Modular Constraints via Diffusion Model Composition</h2>
+      <p class="meta">Mariko A. Storey-Matsutani, Richard Linares · 2026-10-05 · 0 citations</p>
+      <p class="meta">Matched seeds: GPU-Accelerated Astrodynamics World Models for Spacecraft Rendezvous and Proximity Operations, Orbit-Planner: Towards Latent World Models for On-Orbit Obstacle Avoidance of Satellite Agents</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/73241d9062cdf9a13495a4a7d6349bac9fc4b75b?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Emerging mission classes such as on-orbit servicing, satellite inspection, and active debris removal require trajectory design methods that are adaptable to a variety of mission scenarios. We present a diffusion-based trajectory generation approach for rendezvous and proximity operations (RPO) that enables flexible configuration of mission constraints. First, individual energy-based diffusion models are trained to satisfy distinct constraints such as approach cone and sensor line-of-sight from a set of optimized trajectories. Then, at inference time, the learned energy models can be composed with one another, or with an analytically defined energy field, to enforce specific constraint combinations. We validate this framework with the composition of a learned approach cone model and a learned sensor line-of-sight model, as well as a learned approach cone model and synthetic obstacle avoidance model, both of which yield constraint satisfaction rates that are within 1 percentage point of the single-constraint models or higher. These results indicate that our compositional diffusion framework can provide a modular approach to RPO trajectory design and enable reconfiguration for new constraint combinations without requiring model retraining.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;GPU-Accelerated Astrodynamics World Models for Spacecraft Rendezvous and Proximity Operations&#x27; and &#x27;Orbit-Planner: Towards Latent World Models for On-Orbit Obstacle Avoidance of Satellite Agents&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Emerging mission classes such as on-orbit servicing, satellite inspection, and active debris removal require trajectory design methods that are adaptable to a variety of mission scenarios.</dd><dt>Method</dt><dd>Emerging mission classes such as on-orbit servicing, satellite inspection, and active debris removal require trajectory design methods that are adaptable to a variety of mission scenarios.</dd><dt>Key results</dt><dd>These results indicate that our compositional diffusion framework can provide a modular approach to RPO trajectory design and enable reconfiguration for new constraint combinations without requiring model retraining.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;GPU-Accelerated Astrodynamics World Models for Spacecraft Rendezvous and Proximity Operations&#x27; and &#x27;Orbit-Planner: Towards Latent World Models for On-Orbit Obstacle Avoidance of Satellite Agents&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Reinforcement learning for control of partial differential equations</h2>
+      <p class="meta">Nicolò Botteghi, Matteo Tomasetto, Andrea Manzoni · 2026-10-29 · 0 citations</p>
+      <p class="meta">Matched seeds: Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems, An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/44b34ed191ccb7bbce0619abcfd74ff6f0781d58?utm_source=api" target="_blank" rel="noreferrer">Source</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Controlling dynamical systems governed by partial differential equations (PDEs) remains a challenging task in scientific computing, owing to high-dimensional state spaces, distributed actuation, nonlinear dynamics, and stringent real-time constraints. Reinforcement learning (RL) has emerged as a promising paradigm for synthesizing feedback controllers that adapt to varying operating conditions and can be deployed efficiently in real-time. This review provides a unified perspective on RL and PDE-constrained optimization, and surveys model-free, model-based, and multi-agent RL approaches to PDE control, with particular emphasis on sample efficiency, generalization across parametric variations, and scalability to high-dimensional problems. Two demonstrative examples, the stabilization of a chaotic system and a flow control problem, illustrate the performance and pitfalls of RL agents in practice. Finally, we discuss evaluation and benchmarking practices, current limitations, and open research directions toward reliable, data-efficient, and scalable RL for scientific computing.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Controlling dynamical systems governed by partial differential equations (PDEs) remains a challenging task in scientific computing, owing to high-dimensional state spaces, distributed actuation, nonlinear dynamics, and stringent real-time constraints.</dd><dt>Method</dt><dd>This review provides a unified perspective on RL and PDE-constrained optimization, and surveys model-free, model-based, and multi-agent RL approaches to PDE control, with particular emphasis on sample efficiency, generalization across parametric variations, and scalability to high-dimensional problems.</dd><dt>Key results</dt><dd>Reinforcement learning (RL) has emerged as a promising paradigm for synthesizing feedback controllers that adapt to varying operating conditions and can be deployed efficiently in real-time.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems&#x27; and &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+    <article class="panel paper-card">
+      <h2>Impact of Reward Function Design on PPO-Based Quadcopter Trajectory Tracking Performance</h2>
+      <p class="meta">Ly Thi Pham, Hoang Vinh Nguyen · IEEE Access · 2026 · 0 citations</p>
+      <p class="meta">Matched seeds: An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints, Learning-Based Adaptive MPC for Magnetorquer-Only Satellite Attitude Control</p>
+      <p class="link-row"><a href="https://www.semanticscholar.org/paper/135e3306e5f14f8f8a170c0587e8201eb4d3e3e0?utm_source=api" target="_blank" rel="noreferrer">Source</a> <a href="https://doi.org/10.1109/access.2026.3741643" target="_blank" rel="noreferrer">PDF</a></p>
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>Reward-function design plays a critical role in reinforcement-learning-based quadcopter control because it directly influences both learning dynamics and the resulting control behavior. This study presents a controlled empirical investigation of reward-function design for quadcopter trajectory tracking using Proximal Policy Optimization (PPO). Four PPO configurations are evaluated under identical state and action spaces, Actor–Critic architecture, training hyperparameters, simulation environment, and training budget, differing only in reward-function structure. The baseline combines waypoint-reaching, safety-constraint, and waypoint-progress rewards. Two intermediate configurations independently introduce velocity-alignment and waypoint-transition rewards, while the final configuration incorporates both, enabling their individual and combined effects to be examined. All configurations are trained for 500,000 interaction timesteps on a square trajectory containing 40 waypoints and are subsequently evaluated on the training trajectory and an elliptical trajectory not used during training. The results reveal a clear speed–accuracy trade-off. Adding the velocity-alignment reward reduces completion time while preserving tracking accuracy, with root mean square errors of 0.066 m and 0.074 m on the square and elliptical trajectories, respectively. The waypoint-transition reward produces a larger reduction in completion time but increases tracking error. Combining both additional rewards yields the shortest completion times of 17.24 s and 13.40 s, with corresponding root mean square errors of 0.113 m and 0.115 m. These findings show that reward-function composition systematically influences the balance between trajectory-completion efficiency and tracking accuracy, providing practical guidance for selecting reward components according to the desired control-performance trade-off.</p>
+      </details>
+      <dl class="summary-grid">
+        <dt>Why it matters</dt><dd>Semantic Scholar linked it to seeds such as &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27; and &#x27;Learning-Based Adaptive MPC for Magnetorquer-Only Satellite Attitude Control&#x27;. Publication year: 2026. Citations: 0.</dd><dt>Main idea</dt><dd>Reward-function design plays a critical role in reinforcement-learning-based quadcopter control because it directly influences both learning dynamics and the resulting control behavior.</dd><dt>Method</dt><dd>This study presents a controlled empirical investigation of reward-function design for quadcopter trajectory tracking using Proximal Policy Optimization (PPO).</dd><dt>Key results</dt><dd>Reward-function design plays a critical role in reinforcement-learning-based quadcopter control because it directly influences both learning dynamics and the resulting control behavior.</dd><dt>Limitations</dt><dd>This summary is based on the abstract only; implementation details, evaluation setup, and failure modes may be missing.</dd><dt>Relevance to my research</dt><dd>The strongest title overlap is with &#x27;An Adjoint-based Neural Regulator for Real-Time Optimal Control with State Constraints&#x27; and &#x27;Learning-Based Adaptive MPC for Magnetorquer-Only Satellite Attitude Control&#x27;. The shared problem setting or method needs to be assessed against my current research.</dd>
+      </dl>
+    </article>
+
+
+        </main>
+        
+</body>
+</html>
